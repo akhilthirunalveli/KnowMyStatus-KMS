@@ -60,13 +60,13 @@ CREATE TABLE `user_form` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 
-### 5. Run the server
+### 3. Run the server
 
 ```shell
 using Apache and SQL 
 ```
 
-### 6. Open the app in your browser
+### 4. Open the app in your browser
 
 
 ### Thank you so much.
