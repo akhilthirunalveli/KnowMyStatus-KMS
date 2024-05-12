@@ -21,7 +21,7 @@ Know My Status is QR-Enabled Teacher Status Monitoring System
 
 ## Intro
 
-![KMS Welcome GIF](.KMS%(1).gif)
+![KMS Welcome GIF](.github/KMS%(1).gif)
 
 ## Demo
 
