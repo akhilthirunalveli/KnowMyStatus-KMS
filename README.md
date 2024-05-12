@@ -19,6 +19,10 @@ Know My Status is QR-Enabled Teacher Status Monitoring System
 - **Custom Status - Feature:** Apart from available options, there is Custom Status to update and reflect.
 - **Self-hosted, open-source:** Host it yourself and hack on it
 
+## Intro
+
+![KMS Welcome GIF](.KMS%(1).gif)
+
 ## Demo
 
 ![Papermark Welcome GIF](.github/images/papermark-welcome.gif)
