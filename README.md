@@ -21,11 +21,11 @@ Know My Status is QR-Enabled Teacher Status Monitoring System
 
 ## Intro
 
-![KMS Welcome GIF](.github/KMS (1).gif)
+![KMS Welcome GIF](./demo.gif)
 
 ## Demo
 
-![Papermark Welcome GIF](.github/images/papermark-welcome.gif)
+![Papermark Welcome GIF](./intro.gif)
 
 ## Getting Started
 
