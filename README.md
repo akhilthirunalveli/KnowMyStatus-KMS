@@ -31,7 +31,7 @@ Know My Status is QR-Enabled Teacher Status Monitoring System
 
 ### Prerequisites
 
-Here's what you need to be able to run Papermark:
+Here's what you need to be able to run KMS:
 
 - PHP
 - PostgreSQL Database / MYSQL
