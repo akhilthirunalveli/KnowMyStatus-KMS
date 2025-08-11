@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { Mail, Copy, User, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import '../index.css';
 
 const TeacherAuth = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [tab, setTab] = useState('login');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -36,15 +40,15 @@ const TeacherAuth = () => {
     e.preventDefault();
     setError(''); setSuccess(''); setLoading(true);
     try {
-      const res = await axios.post('/api/auth/login', {
-        email: loginEmail,
-        password: loginPassword
-      });
-      setSuccess('Login successful!');
-      localStorage.setItem('token', res.data.token);
-      // Optionally redirect or update app state here
+      const result = await login(loginEmail, loginPassword);
+      if (result.success) {
+        setSuccess('Login successful!');
+        navigate('/teacher/dashboard');
+      } else {
+        setError('Invalid email or password');
+      }
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      setError('Login failed');
     } finally {
       setLoading(false);
     }
@@ -72,7 +76,7 @@ const TeacherAuth = () => {
       });
       setSuccess('Registration successful!');
       localStorage.setItem('token', res.data.token);
-      // Optionally redirect or update app state here
+      navigate('/teacher/dashboard');
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');
     } finally {
@@ -81,8 +85,11 @@ const TeacherAuth = () => {
   };
 
   return (
-    <div className="login-bg-stars min-h-screen w-full flex items-center justify-center p-4">
-      <div className="glass-card w-full max-w-md rounded-2xl shadow-2xl border border-gray-800 p-8 flex flex-col items-center relative bg-black/95 animate-slide-up">
+    <div className="min-h-screen bg-black text-white">
+      <div className="flex h-screen">
+        {/* Left Side - Login/Register Form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+          <div className="glass-card w-full max-w-md rounded-2xl shadow-2xl border border-gray-800 p-8 flex flex-col items-center relative bg-black/95 animate-slide-up">
         {/* Logo */}
         <div className="flex flex-col items-center mb-6">
           <span className="text-4xl font-bold cabinet-grotesk text-white tracking-tight">
@@ -277,6 +284,17 @@ const TeacherAuth = () => {
             <button disabled={loading} className="btn-red mt-1">{loading ? 'Registering…' : 'Register'}</button>
           </form>
         )}
+          </div>
+        </div>
+
+        {/* Right Side - KnowMyStatus Text */}
+        <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center border-l border-gray-800">
+          <div className="text-center">
+            <span className="text-6xl font-bold navbar-brand text-white tracking-tight">
+              KnowMyStatus<span className="navbar-red-dot">.</span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

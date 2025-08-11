@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { 
-  QrCode, 
-  Download, 
-  BarChart3, 
-  Users, 
-  Eye, 
+import {
+  QrCode,
+  Download,
+  BarChart3,
+  Users,
+  Eye,
   Calendar,
   Settings,
   RefreshCw,
@@ -16,12 +16,20 @@ import {
   CheckCircle,
   Clock,
   StickyNote,
-  Save
+  Save,
+  LogOut,
+  ArrowUpRight,
+  TrendingUp,
+  User,
+  Activity
 } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const TeacherDashboard = () => {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, logout } = useAuth();
+  const navigate = useNavigate();
+  
+  // All state variables
   const [qrCode, setQrCode] = useState(null);
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,6 +40,7 @@ const TeacherDashboard = () => {
   const [statusUntil, setStatusUntil] = useState(user?.status_until ? user.status_until.slice(0, 16) : '');
   const [statusLoading, setStatusLoading] = useState(false);
 
+  // Initialize state when user data changes
   useEffect(() => {
     fetchQRCode();
     fetchAnalytics();
@@ -40,6 +49,13 @@ const TeacherDashboard = () => {
     setStatusUntil(user?.status_until ? user.status_until.slice(0, 16) : '');
   }, [user]);
 
+  // Logout handler
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+
+  // API Functions
   const fetchQRCode = async () => {
     try {
       const response = await axios.get('/api/qr/my-qr');
@@ -111,273 +127,387 @@ const TeacherDashboard = () => {
     }
   };
 
+  // Helper function for status colors
+  const getStatusColor = (currentStatus) => {
+    switch(currentStatus) {
+      case 'available': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      case 'not_available': return 'bg-red-100 text-red-800 border-red-200';
+      case 'on_leave': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'lunch': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'in_meeting': return 'bg-purple-100 text-purple-800 border-purple-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  // Stats configuration
   const stats = [
     {
       title: 'Total Scans',
       value: analytics?.totalScans || 0,
-      icon: <Eye className="h-6 w-6" />,
-      color: 'text-app-accent',
-      bgColor: 'bg-app-surface'
+      icon: <Eye className="h-5 w-5" />,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
+      change: '+12%',
+      changeType: 'positive'
     },
     {
       title: 'Today\'s Scans',
       value: analytics?.todayScans || 0,
-      icon: <Calendar className="h-6 w-6" />,
-      color: 'text-app-success',
-      bgColor: 'bg-app-surface'
+      icon: <Calendar className="h-5 w-5" />,
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50',
+      change: '+8%',
+      changeType: 'positive'
     },
     {
       title: 'Weekly Scans',
       value: analytics?.weeklyScans || 0,
-      icon: <BarChart3 className="h-6 w-6" />,
-      color: 'text-app-accent-dark',
-      bgColor: 'bg-app-surface'
+      icon: <BarChart3 className="h-5 w-5" />,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50',
+      change: '+23%',
+      changeType: 'positive'
     }
   ];
 
   return (
-    <div className="animate-fade-in">
+    <div className="min-h-screen bg-black cabinet-grotesk">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-app-text-primary mb-2">
-          Teacher Dashboard
-        </h1>
-        <p className="text-app-text-secondary">
-          Welcome back, {user?.name}! Manage your QR code and view analytics.
-        </p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {stats.map((stat, index) => (
-          <div key={index} className="card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-app-text-muted">{stat.title}</p>
-                <p className="text-2xl font-bold text-app-text-primary">{stat.value}</p>
-              </div>
-              <div className={`p-3 rounded-full ${stat.bgColor} ${stat.color}`}>
-                {stat.icon}
-              </div>
+      <header className="bg-black/80 backdrop-blur-lg border-b border-gray-800 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            {/* Brand */}
+            <div className="text-white text-2xl navbar-brand font-bold tracking-tight">
+              KnowMyStatus<span className="navbar-red-dot">.</span>
+            </div>
+            {/* Welcome Message */}
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                Welcome, {user?.name?.split(' ')[0] || 'Teacher'}
+              </h1>
+              <p className="text-gray-400 text-sm">{user?.subject} • {user?.department}</p>
             </div>
           </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* QR Code Section */}
-        <div className="card">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-app-text-primary">Your QR Code</h2>
+          
+          {/* Quick Stats */}
+          <div className="flex items-center gap-8">
             <button
-              onClick={fetchAnalytics}
-              disabled={analyticsLoading}
-              className="p-2 text-app-text-muted hover:text-app-accent transition-colors disabled:opacity-50"
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors"
             >
-              <RefreshCw className={`h-5 w-5 ${analyticsLoading ? 'animate-spin' : ''}`} />
+              <LogOut className="h-4 w-4" />
+              Logout
             </button>
           </div>
+        </div>
+      </header>
 
-          {qrCode ? (
-            <div className="text-center">
-              <div className="bg-app-surface p-4 rounded-lg border-2 border-app-border inline-block mb-4">
-                <img 
-                  src={`http://localhost:5000${qrCode.qrCodeUrl}`} 
-                  alt="Teacher QR Code"
-                  className="w-48 h-48"
-                />
+      {/* Main Content */}
+      <main className="p-6">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          {/* Left Column */}
+          <div className="lg:col-span-8 space-y-6">
+            
+            {/* Status Update Card */}
+            <div className="bg-gradient-to-br from-red-900/20 to-red-800/30 backdrop-blur-lg rounded-2xl border border-red-700/30 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-red-800/50 rounded-lg">
+                    <Activity className="h-5 w-5 text-red-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold text-white">Status Update</h2>
+                    <p className="text-sm text-gray-400">Update your availability status</p>
+                  </div>
+                </div>
+                
+                {/* Current Status Badge */}
+                <div className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
+                  {status.replace('_', ' ').toUpperCase()}
+                </div>
+              </div>
+
+              <form onSubmit={handleStatusUpdate} className="space-y-6">
+                {/* Status Selection Pills */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-3">Status</label>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setStatus('available')}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        status === 'available' 
+                          ? 'bg-emerald-600 text-white border-emerald-500' 
+                          : 'bg-emerald-900/30 text-emerald-400 border border-emerald-700/50 hover:bg-emerald-800/40'
+                      }`}
+                    >
+                      Available
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStatus('not_available')}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        status === 'not_available' 
+                          ? 'bg-red-600 text-white border-red-500' 
+                          : 'bg-red-900/30 text-red-400 border border-red-700/50 hover:bg-red-800/40'
+                      }`}
+                    >
+                      Not Available
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStatus('on_leave')}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        status === 'on_leave' 
+                          ? 'bg-orange-600 text-white border-orange-500' 
+                          : 'bg-orange-900/30 text-orange-400 border border-orange-700/50 hover:bg-orange-800/40'
+                      }`}
+                    >
+                      On Leave
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStatus('lunch')}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        status === 'lunch' 
+                          ? 'bg-blue-600 text-white border-blue-500' 
+                          : 'bg-blue-900/30 text-blue-400 border border-blue-700/50 hover:bg-blue-800/40'
+                      }`}
+                    >
+                      Lunch
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStatus('in_meeting')}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        status === 'in_meeting' 
+                          ? 'bg-purple-600 text-white border-purple-500' 
+                          : 'bg-purple-900/30 text-purple-400 border border-purple-700/50 hover:bg-purple-800/40'
+                      }`}
+                    >
+                      In Meeting
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Note (optional)</label>
+                    <input
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white placeholder-gray-400"
+                      type="text"
+                      value={statusNote}
+                      onChange={e => setStatusNote(e.target.value)}
+                      placeholder="Add a note"
+                      maxLength={100}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Expected Return</label>
+                    <input
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white"
+                      type="datetime-local"
+                      value={statusUntil}
+                      onChange={e => setStatusUntil(e.target.value)}
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2"
+                    disabled={statusLoading}
+                  >
+                    {statusLoading ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    {statusLoading ? 'Updating...' : 'Update Status'}
+                  </button>
+                </div>
+              </form>
+
+              {/* Current Status Display */}
+              {(statusNote || statusUntil) && (
+                <div className="mt-4 p-3 bg-black/30 rounded-lg border border-gray-700">
+                  <p className="text-sm text-gray-400 mb-1">Current Status Details:</p>
+                  <div className="flex flex-col gap-1">
+                    {statusNote && <span className="text-xs text-gray-300">Note: {statusNote}</span>}
+                    {statusUntil && <span className="text-xs text-gray-300">Until: {new Date(statusUntil).toLocaleString()}</span>}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Analytics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {stats.map((stat, idx) => (
+                <div key={idx} className="bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-lg rounded-2xl border border-gray-700/50 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                      <div className={stat.color}>{stat.icon}</div>
+                    </div>
+                    <span className={`text-sm font-medium ${stat.changeType === 'positive' ? 'text-emerald-400' : 'text-red-400'} flex items-center gap-1`}>
+                      <TrendingUp className="h-3 w-3" />
+                      {stat.change}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-1">{stat.value}</h3>
+                  <p className="text-gray-400 text-sm font-medium">{stat.title}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-gradient-to-br from-blue-900/20 to-blue-800/30 backdrop-blur-lg rounded-2xl border border-blue-700/30 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-semibold text-white">Recent Activity</h2>
+                <ArrowUpRight className="h-5 w-5 text-gray-400" />
               </div>
               
-              <div className="space-y-3">
+              {analyticsLoading ? (
+                <div className="flex justify-center py-8">
+                  <LoadingSpinner size="small" text="Loading..." />
+                </div>
+              ) : analytics?.recentScans?.length > 0 ? (
+                <div className="space-y-4">
+                  {analytics.recentScans.slice(0, 5).map((scan, index) => (
+                    <div key={index} className="flex items-center gap-4 p-4 bg-black/30 rounded-lg border border-gray-700">
+                      <div className="p-2 bg-blue-800/50 rounded-lg">
+                        <Eye className="h-4 w-4 text-blue-400" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-white">QR Code Scanned</p>
+                        <p className="text-sm text-gray-400">
+                          {new Date(scan.scanned_at).toLocaleDateString()} at{' '}
+                          {new Date(scan.scanned_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Users className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                  <p className="text-gray-400">No recent activity</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="lg:col-span-4 space-y-6">
+          {/* QR Code Card */}
+          <div className="bg-gradient-to-br from-purple-900/20 to-purple-800/30 backdrop-blur-lg rounded-2xl border border-purple-700/30 p-6">
+            <h2 className="text-lg font-semibold text-white mb-6">Your QR Code</h2>
+            {qrCode ? (
+              <div className="text-center">
+                <div className="bg-black/30 p-2 rounded-xl inline-block mb-4 border-2 border-dashed border-purple-500/50 font-cabinet-grotesk">
+                  <img 
+                    src={qrCode?.qrCodeUrl?.startsWith('http') ? qrCode.qrCodeUrl : `http://localhost:5000${qrCode.qrCodeUrl}`} 
+                    alt="Teacher QR Code"
+                    className="w-32 h-32 object-contain"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <button
+                    onClick={downloadQRCode}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download QR Code
+                  </button>
+                  <button
+                    onClick={copyQRData}
+                    className="w-full border border-purple-500/50 hover:bg-purple-900/30 text-gray-300 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle className="h-4 w-4 text-emerald-600" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-4 w-4" />
+                        Copy QR Data
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-black/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <QrCode className="h-8 w-8 text-purple-400" />
+                </div>
+                <h3 className="font-medium text-white mb-2">No QR Code Generated</h3>
+                <p className="text-sm text-gray-400 mb-4">Generate your personal QR code to share with students.</p>
                 <button
-                  onClick={downloadQRCode}
-                  className="btn-primary flex items-center justify-center space-x-2 w-full"
+                  onClick={generateQRCode}
+                  disabled={loading}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 mx-auto"
                 >
-                  <Download className="h-5 w-5" />
-                  <span>Download QR Code</span>
-                </button>
-                
-                <button
-                  onClick={copyQRData}
-                  className="btn-outline flex items-center justify-center space-x-2 w-full"
-                >
-                  {copied ? (
+                  {loading ? (
                     <>
-                      <CheckCircle className="h-5 w-5" />
-                      <span>Copied!</span>
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                      Generating...
                     </>
                   ) : (
                     <>
-                      <Copy className="h-5 w-5" />
-                      <span>Copy QR Data</span>
+                      <QrCode className="h-4 w-4" />
+                      Generate QR Code
                     </>
                   )}
                 </button>
               </div>
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <QrCode className="h-16 w-16 text-app-text-muted mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-app-text-primary mb-2">
-                No QR Code Generated
-              </h3>
-              <p className="text-app-text-secondary mb-6">
-                Generate your personal QR code to share with students.
-              </p>
-              <button
-                onClick={generateQRCode}
-                disabled={loading}
-                className="btn-primary flex items-center justify-center space-x-2 mx-auto"
-              >
-                {loading ? (
-                  <>
-                    <RefreshCw className="h-5 w-5 animate-spin" />
-                    <span>Generating...</span>
-                  </>
-                ) : (
-                  <>
-                    <QrCode className="h-5 w-5" />
-                    <span>Generate QR Code</span>
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="space-y-6">
-          {/* Current Status Card */}
-          <div className="card">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-app-text-primary">Current Status</h3>
-              <Clock className="h-5 w-5 text-app-text-muted" />
-            </div>
-            <form onSubmit={handleStatusUpdate} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-app-text-secondary mb-1">Status</label>
-                <select
-                  className="input-field"
-                  value={status}
-                  onChange={e => setStatus(e.target.value)}
-                >
-                  <option value="available">Available</option>
-                  <option value="not_available">Not Available</option>
-                  <option value="on_leave">On Leave</option>
-                  <option value="lunch">Lunch</option>
-                  <option value="in_meeting">In Meeting</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-app-text-secondary mb-1 flex items-center gap-1">
-                  <StickyNote className="h-4 w-4 text-app-text-muted" /> Note (optional)
-                </label>
-                <input
-                  className="input-field"
-                  type="text"
-                  value={statusNote}
-                  onChange={e => setStatusNote(e.target.value)}
-                  placeholder="Add a note (e.g. 'Back at 2pm')"
-                  maxLength={100}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-app-text-secondary mb-1">Expected Return (optional)</label>
-                <input
-                  className="input-field"
-                  type="datetime-local"
-                  value={statusUntil}
-                  onChange={e => setStatusUntil(e.target.value)}
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn-primary w-full flex items-center justify-center space-x-2"
-                disabled={statusLoading}
-              >
-                {statusLoading ? <LoadingSpinner size="small" /> : <Save className="h-4 w-4" />}
-                <span>{statusLoading ? 'Updating...' : 'Update Status'}</span>
-              </button>
-            </form>
-            {/* Display current status */}
-            <div className="mt-4 p-3 bg-app-surface rounded-lg">
-              <p className="text-sm text-app-text-muted mb-1">Current:</p>
-              <div className="flex flex-col gap-1">
-                <span className="font-medium capitalize">{status.replace('_', ' ')}</span>
-                {statusNote && <span className="text-xs text-app-text-muted">Note: {statusNote}</span>}
-                {statusUntil && <span className="text-xs text-app-text-muted">Until: {new Date(statusUntil).toLocaleString()}</span>}
-              </div>
-            </div>
-          </div>
-
-          {/* Profile Card */}
-          <div className="card">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-app-text-primary">Profile</h3>
-              <Settings className="h-5 w-5 text-app-text-muted" />
-            </div>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-app-text-muted">Name</p>
-                <p className="font-medium">{user?.name}</p>
-              </div>
-              <div>
-                <p className="text-sm text-app-text-muted">Subject</p>
-                <p className="font-medium">{user?.subject}</p>
-              </div>
-              <div>
-                <p className="text-sm text-app-text-muted">Department</p>
-                <p className="font-medium">{user?.department}</p>
-              </div>
-              {user?.office && (
-                <div>
-                  <p className="text-sm text-app-text-muted">Office</p>
-                  <p className="font-medium">{user.office}</p>
-                </div>
-              )}
-            </div>
-            <Link 
-              to="/teacher/profile" 
-              className="btn-outline w-full mt-4 flex items-center justify-center space-x-2"
-            >
-              <Settings className="h-4 w-4" />
-              <span>Edit Profile</span>
-            </Link>
-          </div>
-
-          {/* Recent Activity */}
-          <div className="card">
-            <h3 className="text-lg font-semibold text-app-text-primary mb-4">Recent Activity</h3>
-            {analyticsLoading ? (
-              <LoadingSpinner size="small" text="Loading..." />
-            ) : analytics?.recentScans?.length > 0 ? (
-              <div className="space-y-3">
-                {analytics.recentScans.slice(0, 5).map((scan, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 bg-app-surface rounded-lg">
-                    <div className="p-2 bg-app-accent-light rounded-full">
-                      <Eye className="h-4 w-4 text-app-accent" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-app-text-primary">QR Code Scanned</p>
-                      <p className="text-xs text-app-text-muted">
-                        {new Date(scan.scanned_at).toLocaleDateString()} at{' '}
-                        {new Date(scan.scanned_at).toLocaleTimeString()}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-6">
-                <Users className="h-8 w-8 text-app-text-muted mx-auto mb-2" />
-                <p className="text-app-text-muted text-sm">No recent activity</p>
-              </div>
             )}
           </div>
+
+            {/* Profile Card */}
+            <div className="bg-gradient-to-br from-green-900/20 to-green-800/30 backdrop-blur-lg rounded-2xl border border-green-700/30 p-6">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center">
+                  <User className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">{user?.name}</h3>
+                  <p className="text-sm text-gray-400">{user?.subject}</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Department</p>
+                  <p className="text-white font-medium">{user?.department}</p>
+                </div>
+                {user?.office && (
+                  <div>
+                    <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Office</p>
+                    <p className="text-white font-medium">{user.office}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Status</p>
+                  <div className="flex items-center gap-2">
+                    <div className={`px-2 py-1 rounded-md text-xs font-medium ${getStatusColor(status)}`}>
+                      {status.replace('_', ' ')}
+                    </div>
+                  </div>
+                  {statusNote && <p className="text-xs text-gray-400 mt-1">{statusNote}</p>}
+                </div>
+              </div>
+              <Link
+                to="/teacher/profile"
+                className="mt-6 w-full bg-green-800/50 hover:bg-green-700/50 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <Settings className="h-4 w-4" />
+                Edit Profile
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
 
-export default TeacherDashboard; 
+export default TeacherDashboard;

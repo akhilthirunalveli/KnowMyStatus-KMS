@@ -1,8 +1,9 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
-import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import TeacherAuth from './pages/TeacherLogin';
 import TeacherDashboard from './pages/TeacherDashboard';
 import StudentPage from './pages/StudentPage';
@@ -35,6 +36,8 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/teacher/login" element={<TeacherAuth />} />
           <Route 
             path="/teacher/dashboard" 
