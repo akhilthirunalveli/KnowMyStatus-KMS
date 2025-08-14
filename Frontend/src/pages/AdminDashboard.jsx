@@ -18,7 +18,8 @@ import {
   RefreshCw,
   User,
   Lock,
-  Unlock
+  Unlock,
+  Home
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -301,12 +302,21 @@ const AdminDashboard = () => {
             <div className="text-center">
               <Lock className="h-16 w-16 sm:h-20 sm:w-20 text-red-400 mx-auto mb-6" />
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 cabinet-grotesk">Admin Dashboard Locked</h2>
-              <button
-                onClick={handleUnlock}
-                className="px-6 sm:px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base"
-              >
-                Enter Password
-              </button>
+              <div className="flex items-center justify-center gap-3">
+                <Link
+                  to="/"
+                  className="flex items-center justify-center w-12 h-12 bg-black hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  title="Go to Home"
+                >
+                  <Home className="h-5 w-5" />
+                </Link>
+                <button
+                  onClick={handleUnlock}
+                  className="px-6 sm:px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base"
+                >
+                  Enter Password
+                </button>
+              </div>
             </div>
           </div>
         )}

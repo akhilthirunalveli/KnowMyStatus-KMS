@@ -274,3 +274,20 @@ button.bg-gray-900 {
   background: #1a1a1a !important;
   color: #fff !important;
 }
+
+/* QR Scanner Animations */
+@keyframes scan {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(190px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-scan {
+  animation: scan 2s linear infinite;
+}

@@ -28,14 +28,28 @@ const Home = () => {
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const width = window.innerWidth;
+      const userAgent = navigator.userAgent;
+      const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+      
+      // Consider it mobile if either width is small OR it's a mobile device
+      setIsMobile(width < 768 || isMobileUserAgent);
     };
     
+    // Initial check
     checkMobile();
+    
+    // Add event listener
     window.addEventListener('resize', checkMobile);
     
+    // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Debug log to check mobile state
+  useEffect(() => {
+    console.log('Is Mobile:', isMobile, 'Window Width:', window.innerWidth);
+  }, [isMobile]);
 
   // Timeline data
   const timelineData = [
@@ -133,42 +147,42 @@ const Home = () => {
 
   // Mobile-only component
   const MobileOnlyView = () => (
-    <div className="min-h-screen bg-app-background subtle-grid flex flex-col">
-      {/* Simple Mobile Header */}
-      <div className="bg-app-background px-4 py-6 text-center">
-        <h1 className="text-2xl font-bold text-white bitcount-grid-single">
+    <div className="h-screen bg-app-background subtle-grid flex flex-col overflow-hidden">
+      {/* Compact Mobile Header */}
+      <div className="bg-app-background px-4 py-4 text-center flex-shrink-0">
+        <h1 className="text-3xl font-bold text-white" style={{ fontFamily: 'Bitcount Grid Single, monospace' }}>
           KnowMyStatus<span className="text-red-500">.</span>
         </h1>
-        <p className="text-gray-400 text-sm mt-2">Quick Teacher Scan</p>
+        <p className="text-gray-400 text-xs mt-1" style={{ fontFamily: 'Bitcount Grid Single, monospace' }}>Quick Teacher Scan</p>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-        {/* Scan Card */}
-        <div className="w-full max-w-sm bg-gray-900/50 border border-gray-700 rounded-2xl p-6 text-center mb-6">
-          <div className="w-20 h-20 bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-red-500 border-dotted">
-            <QrCode className="h-10 w-10 text-red-400" />
+      {/* Main Content Area - Uses remaining space */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-4 space-y-4">
+        {/* Compact Scan Card */}
+        <div className="w-full max-w-sm bg-gray-900/50 border border-gray-700 rounded-xl p-4 text-center">
+          <div className="w-16 h-16 bg-red-900 rounded-full flex items-center justify-center mx-auto mb-3 border-2 border-red-500 border-dotted">
+            <QrCode className="h-8 w-8 text-red-400" />
           </div>
-          <h2 className="text-xl font-bold text-white mb-2 cabinet-grotesk">
+          <h2 className="text-lg font-bold text-white mb-2 cabinet-grotesk">
             Scan Teacher QR
           </h2>
-          <p className="text-gray-400 text-sm mb-6">
+          <p className="text-gray-400 text-xs mb-4">
             Quickly access teacher information and status
           </p>
           <button
             onClick={() => navigate('/student/scan')}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors cabinet-grotesk flex items-center justify-center space-x-2"
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors cabinet-grotesk flex items-center justify-center space-x-2 text-sm"
           >
-            <Camera className="h-5 w-5" />
+            <Camera className="h-4 w-4" />
             <span>Start Scanning</span>
           </button>
         </div>
 
-        {/* Quick Actions */}
-        <div className="w-full max-w-sm space-y-3">
+        {/* Compact Quick Actions */}
+        <div className="w-full max-w-sm space-y-2">
           <button
             onClick={() => navigate('/student')}
-            className="w-full bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 font-medium py-3 px-6 rounded-lg border border-gray-600 transition-colors cabinet-grotesk"
+            className="w-full bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 font-medium py-2.5 px-4 rounded-lg border border-gray-600 transition-colors cabinet-grotesk text-sm"
           >
             Browse All Teachers
           </button>
@@ -176,22 +190,20 @@ const Home = () => {
           {isAuthenticated ? (
             <button
               onClick={() => navigate('/teacher/dashboard')}
-              className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-medium py-3 px-6 rounded-lg border border-blue-500/30 transition-colors cabinet-grotesk"
+              className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-medium py-2.5 px-4 rounded-lg border border-blue-500/30 transition-colors cabinet-grotesk text-sm"
             >
               Teacher Dashboard
             </button>
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-medium py-3 px-6 rounded-lg border border-blue-500/30 transition-colors cabinet-grotesk"
+              className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-medium py-2.5 px-4 rounded-lg border border-blue-500/30 transition-colors cabinet-grotesk text-sm"
             >
               Teacher Login
             </button>
           )}
         </div>
       </div>
-
-      {/* Footer */}
     </div>
   );
 

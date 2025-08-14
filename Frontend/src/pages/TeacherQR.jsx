@@ -57,6 +57,7 @@ const TeacherQR = () => {
       link.href = qrCode;
       link.download = `${teacher?.name || 'teacher'}-qr-code.png`;
       link.click();
+      toast.success('QR Code downloaded successfully!');
     }
   };
 
@@ -89,114 +90,174 @@ const TeacherQR = () => {
 
   if (!teacher || !qrCode) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">QR Code Not Found</h2>
-        <p className="text-gray-600 mb-6">The QR code for this teacher is not available.</p>
-        <Link to="/student" className="btn-primary">
-          Back to Teachers
-        </Link>
+      <div className="min-h-screen bg-app-background subtle-grid">
+        <nav className="bg-app-background px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
+          <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
+            KnowMyStatus<span className="navbar-red-dot">.</span>
+          </Link>
+        </nav>
+        <div className="text-center py-12 px-4">
+          <QrCode className="h-16 w-16 text-red-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-4 cabinet-grotesk">QR Code Not Found</h2>
+          <p className="text-gray-400 mb-6 cabinet-grotesk">The QR code for this teacher is not available.</p>
+          <Link to="/student" className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors cabinet-grotesk">
+            Back to Teachers
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="animate-fade-in">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center mb-4">
+    <div className="min-h-screen bg-app-background subtle-grid">
+      {/* Navbar */}
+      <nav className="bg-app-background px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
+            KnowMyStatus<span className="navbar-red-dot">.</span>
+          </Link>
+          
+          <div className="flex items-center gap-3 lg:gap-4 navbar-brand text-lg lg:text-xl text-white">
+            <Link to="/student" className="nav-center-link">
+              Find Teacher
+            </Link>
+            <span className="nav-dot">•</span>
+            <Link to="/student/scan" className="nav-center-link">
+              Scan
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <div className="animate-fade-in px-4 sm:px-6 lg:px-10 py-4 sm:py-6">
+        {/* Header with Back Button */}
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate(`/student/teacher/${id}`)}
-            className="flex items-center space-x-2 text-gray-600 hover:text-primary-600 transition-colors mr-4"
+            className="bg-transparent hover:bg-red-900 text-red-400 font-bold py-2 px-3 sm:px-4 rounded-lg border-2 border-red-500 border-dotted transition-colors cabinet-grotesk flex items-center space-x-2 text-sm sm:text-base mb-4"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-4 w-4" />
             <span>Back to Details</span>
           </button>
-        </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          QR Code for {teacher.name}
-        </h1>
-        <p className="text-gray-600">
-          Scan this QR code to access contact information
-        </p>
-      </div>
-
-      <div className="max-w-2xl mx-auto">
-        {/* Teacher Info Card */}
-        <div className="card mb-8">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-              <User className="h-8 w-8 text-primary-600" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-gray-900 mb-1">
-                {teacher.name}
-              </h2>
-              <div className="flex items-center text-gray-600 mb-1">
-                <BookOpen className="h-4 w-4 mr-2" />
-                <span>{teacher.subject}</span>
-              </div>
-              <div className="flex items-center text-gray-600">
-                <Building className="h-4 w-4 mr-2" />
-                <span>{teacher.department}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* QR Code Display */}
-        <div className="card text-center">
-          <div className="mb-6">
-            <img 
-              src={qrCode} 
-              alt={`QR Code for ${teacher.name}`}
-              className="w-80 h-80 mx-auto border border-gray-200 rounded-lg shadow-lg"
-            />
-          </div>
           
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
-            Point your phone's camera at this QR code to quickly access {teacher.name}'s contact information and office details.
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 cabinet-grotesk">
+            QR Code for {teacher.name}
+          </h1>
+          <p className="text-gray-400 cabinet-grotesk">
+            Scan this QR code to access contact information instantly
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={handleDownload}
-              className="btn-outline flex items-center justify-center space-x-2"
-            >
-              <Download className="h-4 w-4" />
-              <span>Download QR Code</span>
-            </button>
-            
-            <button
-              onClick={handleShare}
-              className="btn-primary flex items-center justify-center space-x-2"
-            >
-              <Share2 className="h-4 w-4" />
-              <span>Share</span>
-            </button>
-          </div>
         </div>
 
-        {/* Instructions */}
-        <div className="mt-8 card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">How to Use</h3>
-          <div className="space-y-3 text-sm text-gray-600">
-            <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary-600 font-medium text-xs">1</span>
+        <div className="max-w-4xl mx-auto">
+          {/* Teacher Info Card */}
+          <div className="card mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-900 rounded-full flex items-center justify-center border-2 border-red-500 border-dotted">
+                <User className="h-8 w-8 sm:h-10 sm:w-10 text-red-400" />
               </div>
-              <p>Open your phone's camera app or any QR code scanner</p>
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 cabinet-grotesk">
+                  {teacher.name}
+                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                  <div className="flex items-center justify-center sm:justify-start text-gray-300">
+                    <BookOpen className="h-4 w-4 mr-2 text-red-400" />
+                    <span className="cabinet-grotesk">{teacher.subject}</span>
+                  </div>
+                  <div className="flex items-center justify-center sm:justify-start text-gray-300">
+                    <Building className="h-4 w-4 mr-2 text-red-400" />
+                    <span className="cabinet-grotesk">{teacher.department}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary-600 font-medium text-xs">2</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+            {/* QR Code Display */}
+            <div className="card text-center">
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-4 cabinet-grotesk flex items-center justify-center">
+                  <QrCode className="h-5 w-5 sm:h-6 sm:w-6 text-red-400 mr-3" />
+                  QR Code
+                </h3>
+                
+                <div className="p-4 sm:p-6 bg-white rounded-xl mx-auto inline-block border-2 border-red-500 border-dotted mb-4">
+                  <img 
+                    src={qrCode} 
+                    alt={`QR Code for ${teacher.name}`}
+                    className="w-48 h-48 sm:w-64 sm:h-64 lg:w-72 lg:h-72"
+                  />
+                </div>
               </div>
-              <p>Point the camera at this QR code</p>
+              
+              <p className="text-sm sm:text-base text-gray-400 mb-6 cabinet-grotesk">
+                Point your phone's camera at this QR code to quickly access {teacher.name}'s contact information.
+              </p>
+              
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={handleDownload}
+                  className="w-full bg-transparent hover:bg-red-900 text-red-400 font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg border-2 border-red-500 border-dotted transition-colors cabinet-grotesk flex items-center justify-center space-x-2"
+                >
+                  <Download className="h-4 w-4" />
+                  <span>Download QR Code</span>
+                </button>
+                
+                <button
+                  onClick={handleShare}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors cabinet-grotesk flex items-center justify-center space-x-2"
+                >
+                  <Share2 className="h-4 w-4" />
+                  <span>Share QR Code</span>
+                </button>
+              </div>
             </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary-600 font-medium text-xs">3</span>
+
+            {/* Instructions */}
+            <div className="card">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 cabinet-grotesk flex items-center">
+                <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                How to Use
+              </h3>
+              
+              <div className="space-y-4 sm:space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-red-500 border-dotted">
+                    <span className="text-red-400 font-bold text-sm cabinet-grotesk">1</span>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1 cabinet-grotesk">Open Camera</h4>
+                    <p className="text-sm sm:text-base text-gray-400 cabinet-grotesk">Open your phone's camera app or any QR code scanner application</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-red-500 border-dotted">
+                    <span className="text-red-400 font-bold text-sm cabinet-grotesk">2</span>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1 cabinet-grotesk">Point & Scan</h4>
+                    <p className="text-sm sm:text-base text-gray-400 cabinet-grotesk">Point your camera directly at this QR code until it's recognized</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-red-500 border-dotted">
+                    <span className="text-red-400 font-bold text-sm cabinet-grotesk">3</span>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1 cabinet-grotesk">Access Info</h4>
+                    <p className="text-sm sm:text-base text-gray-400 cabinet-grotesk">Tap the notification to view {teacher.name}'s contact information and status</p>
+                  </div>
+                </div>
               </div>
-              <p>Tap the notification to view {teacher.name}'s contact information</p>
+              
+              <div className="mt-6 p-4 bg-blue-900/30 rounded-lg border border-blue-500">
+                <p className="text-sm text-blue-300 cabinet-grotesk">
+                  💡 <strong>Tip:</strong> Save this QR code to your photos for quick access anytime!
+                </p>
+              </div>
             </div>
           </div>
         </div>

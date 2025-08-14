@@ -56,9 +56,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="flex flex-col lg:flex-row h-screen">
+      <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Left Side - Login Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 md:p-8">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 md:p-8 min-h-screen lg:min-h-0">
           <div className="w-full max-w-md">
             {/* Welcome Message */}
             <div className="mb-6 sm:mb-8">
@@ -133,7 +133,7 @@ const Login = () => {
               </button>
 
               {/* Test User Toggle */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg space-y-2 sm:space-y-0">
+              <div className="flex items-center justify-between p-3 rounded-lg">
                 <div className="flex items-center space-x-3">
                   <div className="w-6 h-6 sm:w-8 sm:h-8 bg-amber-600 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs sm:text-sm font-bold">T</span>
