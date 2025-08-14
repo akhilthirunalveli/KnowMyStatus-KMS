@@ -22,6 +22,7 @@ const corsOptions = {
     'http://localhost:3000',
     'http://localhost:5173',
     'https://knowmystatus-kms.onrender.com',
+    'https://knowmystatus.vercel.app',
     process.env.FRONTEND_URL
   ].filter(Boolean), // Remove any undefined values
   credentials: true,
