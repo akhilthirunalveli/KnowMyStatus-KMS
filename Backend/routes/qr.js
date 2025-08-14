@@ -1,16 +1,12 @@
 const express = require('express');
 const QRCode = require('qrcode');
 const path = require('path');
-const fs = require('fs').promises;
 const { v4: uuidv4 } = require('uuid');
 const { supabase } = require('../config/supabase');
 const { authenticateToken } = require('../utils/auth');
+const supabaseStorage = require('../utils/supabaseStorage');
 
 const router = express.Router();
-
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../uploads');
-fs.mkdir(uploadsDir, { recursive: true }).catch(console.error);
 
 // Generate QR code for teacher
 router.post('/generate', authenticateToken, async (req, res) => {
@@ -49,12 +45,8 @@ router.post('/generate', authenticateToken, async (req, res) => {
         : null
     };
 
-    // Generate unique filename
-    const filename = `teacher_${teacherId}_${uuidv4()}.png`;
-    const filepath = path.join(uploadsDir, filename);
-
-    // Generate QR code
-    await QRCode.toFile(filepath, JSON.stringify(qrData), {
+    // Generate QR code as buffer
+    const qrBuffer = await QRCode.toBuffer(JSON.stringify(qrData), {
       color: {
         dark: '#000000',
         light: '#FFFFFF'
@@ -63,10 +55,17 @@ router.post('/generate', authenticateToken, async (req, res) => {
       margin: 2
     });
 
-    // Update teacher record with QR code path
+    // Upload to Supabase Storage
+    const uploadResult = await supabaseStorage.uploadQRCode(qrBuffer, teacherId);
+    
+    if (!uploadResult.success) {
+      return res.status(500).json({ error: 'Failed to upload QR code' });
+    }
+
+    // Update teacher record with QR code URL
     const { error: updateError } = await supabase
       .from('teachers')
-      .update({ qr_code: filename })
+      .update({ qr_code: uploadResult.data.publicUrl })
       .eq('id', teacherId);
 
     if (updateError) {
@@ -76,7 +75,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
 
     res.json({
       message: 'QR code generated successfully',
-      qrCodeUrl: `/uploads/${filename}`,
+      qrCodeUrl: uploadResult.data.publicUrl,
       qrData
     });
 
@@ -129,7 +128,7 @@ router.get('/teacher/:teacherId', async (req, res) => {
 
     res.json({
       teacher: qrData,
-      qrCodeUrl: `/uploads/${teacher.qr_code}`
+      qrCodeUrl: teacher.qr_code
     });
 
   } catch (error) {
@@ -239,7 +238,7 @@ router.get('/my-qr', authenticateToken, async (req, res) => {
     };
 
     res.json({
-      qrCodeUrl: `/uploads/${teacher.qr_code}`,
+      qrCodeUrl: teacher.qr_code,
       qrData
     });
 

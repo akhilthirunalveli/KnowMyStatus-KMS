@@ -118,7 +118,7 @@ const TeacherDashboard = () => {
   const downloadQRCode = () => {
     if (qrCode?.qrCodeUrl) {
       const link = document.createElement('a');
-      link.href = `http://localhost:5000${qrCode.qrCodeUrl}`;
+      link.href = qrCode.qrCodeUrl;
       link.download = `teacher-qr-${user?.name}.png`;
       document.body.appendChild(link);
       link.click();
@@ -453,7 +453,7 @@ const TeacherDashboard = () => {
               <div className="text-center">
                 <div className="bg-black/30 p-2 rounded-xl inline-block mb-4 border-2 border-dashed border-purple-500/50 font-cabinet-grotesk">
                   <img 
-                    src={qrCode?.qrCodeUrl?.startsWith('http') ? qrCode.qrCodeUrl : `http://localhost:5000${qrCode.qrCodeUrl}`} 
+                    src={qrCode.qrCodeUrl} 
                     alt="Teacher QR Code"
                     className="w-24 h-24 sm:w-32 sm:h-32 object-contain"
                   />
