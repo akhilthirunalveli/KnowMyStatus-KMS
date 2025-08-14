@@ -1,6 +1,8 @@
 const express = require('express');
 const { supabase } = require('../config/supabase');
 const path = require('path');
+const https = require('https');
+const http = require('http');
 
 const router = express.Router();
 
@@ -140,20 +142,52 @@ router.get('/teacher/:id/qr', async (req, res) => {
       return res.status(404).json({ error: 'QR code not available for this teacher' });
     }
 
-    // Serve the QR code image file
-    const qrCodePath = path.join(__dirname, '../uploads', teacher.qr_code);
-    
-    // Check if file exists
-    if (!require('fs').existsSync(qrCodePath)) {
-      return res.status(404).json({ error: 'QR code file not found' });
-    }
+    // Check if QR code is a Supabase Storage URL
+    if (teacher.qr_code.startsWith('http')) {
+      // It's already a public URL from Supabase Storage, proxy it
+      try {
+        const url = new URL(teacher.qr_code);
+        const protocol = url.protocol === 'https:' ? https : http;
+        
+        const request = protocol.get(teacher.qr_code, (response) => {
+          if (response.statusCode !== 200) {
+            return res.status(404).json({ error: 'QR code not accessible' });
+          }
+          
+          // Set appropriate headers for image
+          res.setHeader('Content-Type', 'image/png');
+          res.setHeader('Content-Disposition', `inline; filename="teacher_${id}_qr.png"`);
+          res.setHeader('Cache-Control', 'public, max-age=3600');
+          
+          // Pipe the response directly
+          response.pipe(res);
+        });
+        
+        request.on('error', (error) => {
+          console.error('Error fetching QR from Supabase:', error);
+          return res.status(500).json({ error: 'Failed to fetch QR code' });
+        });
+        
+      } catch (fetchError) {
+        console.error('Error processing QR URL:', fetchError);
+        return res.status(500).json({ error: 'Failed to process QR code URL' });
+      }
+    } else {
+      // Legacy: serve from local uploads folder
+      const qrCodePath = path.join(__dirname, '../uploads', teacher.qr_code);
+      
+      // Check if file exists
+      if (!require('fs').existsSync(qrCodePath)) {
+        return res.status(404).json({ error: 'QR code file not found' });
+      }
 
-    // Set appropriate headers for image
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Content-Disposition', `inline; filename="${teacher.qr_code}"`);
-    
-    // Send the file
-    res.sendFile(qrCodePath);
+      // Set appropriate headers for image
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Disposition', `inline; filename="${teacher.qr_code}"`);
+      
+      // Send the file
+      res.sendFile(qrCodePath);
+    }
 
   } catch (error) {
     console.error('Teacher QR fetch error:', error);

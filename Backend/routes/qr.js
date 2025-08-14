@@ -11,6 +11,7 @@ const router = express.Router();
 // Generate QR code for teacher
 router.post('/generate', authenticateToken, async (req, res) => {
   try {
+    console.log('QR Generation request received for teacher:', req.user.id);
     const teacherId = req.user.id;
     
     // Get teacher details
@@ -21,8 +22,11 @@ router.post('/generate', authenticateToken, async (req, res) => {
       .single();
 
     if (teacherError || !teacher) {
+      console.error('Teacher not found:', teacherError);
       return res.status(404).json({ error: 'Teacher not found' });
     }
+
+    console.log('Teacher found:', teacher.name);
 
     // Create QR code data
     const qrData = {
@@ -46,6 +50,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
     };
 
     // Generate QR code as buffer
+    console.log('Generating QR code with data:', qrData);
     const qrBuffer = await QRCode.toBuffer(JSON.stringify(qrData), {
       color: {
         dark: '#000000',
@@ -55,12 +60,16 @@ router.post('/generate', authenticateToken, async (req, res) => {
       margin: 2
     });
 
+    console.log('QR code generated, uploading to Supabase...');
     // Upload to Supabase Storage
     const uploadResult = await supabaseStorage.uploadQRCode(qrBuffer, teacherId);
     
     if (!uploadResult.success) {
+      console.error('Upload failed:', uploadResult.error);
       return res.status(500).json({ error: 'Failed to upload QR code' });
     }
+
+    console.log('Upload successful:', uploadResult.data.publicUrl);
 
     // Update teacher record with QR code URL
     const { error: updateError } = await supabase
@@ -201,6 +210,7 @@ router.post('/scan', async (req, res) => {
 // Get current teacher's QR code
 router.get('/my-qr', authenticateToken, async (req, res) => {
   try {
+    console.log('My QR request for teacher:', req.user.id);
     const teacherId = req.user.id;
 
     const { data: teacher, error } = await supabase
@@ -210,10 +220,13 @@ router.get('/my-qr', authenticateToken, async (req, res) => {
       .single();
 
     if (error || !teacher) {
+      console.error('Teacher not found in my-qr:', error);
       return res.status(404).json({ error: 'Teacher not found' });
     }
 
+    console.log('Teacher QR code URL:', teacher.qr_code);
     if (!teacher.qr_code) {
+      console.log('No QR code found for teacher');
       return res.status(404).json({ error: 'QR code not generated yet' });
     }
 

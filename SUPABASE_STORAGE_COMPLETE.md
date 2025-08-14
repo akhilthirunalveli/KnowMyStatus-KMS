@@ -91,7 +91,7 @@ npm run build
 # Deploy to Vercel - ready to go!
 ```
 
-### 2. **Backend Deployment (Render/Railway)**
+### 2. **Backend Deployment (Render/Heroku/etc.)**
 ```bash
 cd Backend
 # Deploy to any Node.js hosting platform

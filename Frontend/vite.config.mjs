@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'https://knowmystatus-kms-production.up.railway.app'
+      '/api': 'http://localhost:5000'
     }
   }
 });

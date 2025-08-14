@@ -185,7 +185,7 @@ const TeacherDashboard = () => {
     {
       title: 'Today\'s Scans',
       value: analytics?.todayScans || 0,
-      icon: <Calendar className="h-5 w-5" />,
+      icon: <Calendar className="h-5 w-5 " />,
       color: 'text-emerald-600',
       bgColor: 'bg-emerald-50',
       change: '+8%',
@@ -325,36 +325,54 @@ const TeacherDashboard = () => {
                 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Note (optional)</label>
-                    <input
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white placeholder-gray-400 text-sm"
-                      type="text"
-                      value={statusNote}
-                      onChange={e => setStatusNote(e.target.value)}
-                      placeholder="Add a note"
-                      maxLength={100}
-                    />
+                    <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                      <StickyNote className="h-4 w-4 text-white" />
+                      Note (optional)
+                    </label>
+                    <div className="relative">
+                      <StickyNote className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        className="w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white placeholder-gray-400 text-sm"
+                        type="text"
+                        value={statusNote}
+                        onChange={e => setStatusNote(e.target.value)}
+                        placeholder="Add a note"
+                        maxLength={100}
+                      />
+                    </div>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Expected Return Date</label>
-                    <input
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white text-sm"
-                      type="date"
-                      value={statusUntilDate}
-                      onChange={e => setStatusUntilDate(e.target.value)}
-                      min={new Date().toISOString().split('T')[0]}
-                    />
+                    <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-white" />
+                      Expected Return Date
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        className="w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white text-sm"
+                        type="date"
+                        value={statusUntilDate}
+                        onChange={e => setStatusUntilDate(e.target.value)}
+                        min={new Date().toISOString().split('T')[0]}
+                      />
+                    </div>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Expected Return Time</label>
-                    <input
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white text-sm"
-                      type="time"
-                      value={statusUntilTime}
-                      onChange={e => setStatusUntilTime(e.target.value)}
-                    />
+                    <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-white" />
+                      Expected Return Time
+                    </label>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        className="w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-black/50 text-white text-sm"
+                        type="time"
+                        value={statusUntilTime}
+                        onChange={e => setStatusUntilTime(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
                 

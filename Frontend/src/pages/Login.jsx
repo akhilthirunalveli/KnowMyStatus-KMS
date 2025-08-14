@@ -25,7 +25,7 @@ const Login = () => {
     if (!testMode) {
       // Enable test mode - fill credentials
       setEmail('test@kms.com');
-      setPassword('Test@123');
+      setPassword('test2@123');
       toast.success('Test credentials loaded!');
     } else {
       // Disable test mode - clear credentials
