@@ -4,7 +4,6 @@ import { useAuth } from './contexts/AuthContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import TeacherAuth from './pages/TeacherLogin';
 import TeacherDashboard from './pages/TeacherDashboard';
 import StudentPage from './pages/StudentPage';
 import TeacherProfile from './pages/TeacherProfile';
@@ -64,14 +63,6 @@ function App() {
             element={
               <AuthRoute>
                 <Signup />
-              </AuthRoute>
-            } 
-          />
-          <Route 
-            path="/teacher/login" 
-            element={
-              <AuthRoute>
-                <TeacherAuth />
               </AuthRoute>
             } 
           />

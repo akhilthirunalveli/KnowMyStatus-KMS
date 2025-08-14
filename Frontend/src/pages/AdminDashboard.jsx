@@ -247,63 +247,63 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Navbar */}
-      <nav className="bg-black/80 backdrop-blur-lg border-b border-gray-800 px-8 py-4">
+      <nav className="bg-black/80 backdrop-blur-lg border-b border-gray-800 px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 lg:gap-8">
             {/* Brand Logo */}
-            <Link to="/" className="text-white text-2xl navbar-brand font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity cabinet-grotesk">
+            <Link to="/" className="text-white text-xl sm:text-2xl navbar-brand font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity cabinet-grotesk">
               KnowMyStatus<span className="navbar-red-dot">.</span>
             </Link>
             {/* Page Title */}
-            <div>
-              <h1 className="text-2xl font-bold text-white cabinet-grotesk">
+            <div className="hidden sm:block">
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white cabinet-grotesk">
                 Admin Dashboard
               </h1>
-              <p className="text-gray-400 text-sm">Manage all teacher registrations and data</p>
+              <p className="text-gray-400 text-xs sm:text-sm">Manage all teacher registrations and data</p>
             </div>
           </div>
           
           {/* Action Buttons */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={isLocked ? handleUnlock : handleLock}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full border-2 border-dashed transition-all duration-300 bg-transparent backdrop-blur-sm ${
+              className={`flex items-center gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 rounded-full border-2 border-dashed transition-all duration-300 bg-transparent backdrop-blur-sm text-sm sm:text-base ${
                 isLocked 
                   ? 'text-red-300 hover:text-red-200 hover:bg-red-600/20 border-red-500 hover:border-red-400'
                   : 'text-gray-300 hover:text-white hover:bg-gray-600/20 border-gray-500 hover:border-gray-400'
               }`}
             >
               {isLocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
-              {isLocked ? 'Locked' : 'Lock'}
+              <span className="hidden sm:inline">{isLocked ? 'Locked' : 'Lock'}</span>
             </button>
             <button
               onClick={fetchTeachers}
-              className="flex items-center gap-2 px-6 py-3 text-gray-300 hover:text-white hover:bg-blue-600/20 rounded-full border-2 border-dashed border-gray-500 hover:border-blue-400 transition-all duration-300 bg-transparent backdrop-blur-sm"
+              className="flex items-center gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-gray-300 hover:text-white hover:bg-blue-600/20 rounded-full border-2 border-dashed border-gray-500 hover:border-blue-400 transition-all duration-300 bg-transparent backdrop-blur-sm text-sm sm:text-base"
             >
               <RefreshCw className="h-4 w-4" />
-              Refresh
+              <span className="hidden sm:inline">Refresh</span>
             </button>
             <button
               onClick={exportToCSV}
-              className="flex items-center gap-2 px-6 py-3 text-gray-300 hover:text-white hover:bg-green-600/20 rounded-full border-2 border-dashed border-gray-500 hover:border-green-400 transition-all duration-300 bg-transparent backdrop-blur-sm"
+              className="flex items-center gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-gray-300 hover:text-white hover:bg-green-600/20 rounded-full border-2 border-dashed border-gray-500 hover:border-green-400 transition-all duration-300 bg-transparent backdrop-blur-sm text-sm sm:text-base"
             >
               <Download className="h-4 w-4" />
-              Export CSV
+              <span className="hidden sm:inline">Export CSV</span>
             </button>
           </div>
         </div>
       </nav>
 
-      <div className="w-full px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Lock Overlay */}
         {isLocked && !showPasswordModal && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center px-4">
             <div className="text-center">
-              <Lock className="h-20 w-20 text-red-400 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-white mb-4 cabinet-grotesk">Admin Dashboard Locked</h2>
+              <Lock className="h-16 w-16 sm:h-20 sm:w-20 text-red-400 mx-auto mb-6" />
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 cabinet-grotesk">Admin Dashboard Locked</h2>
               <button
                 onClick={handleUnlock}
-                className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
+                className="px-6 sm:px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base"
               >
                 Enter Password
               </button>
@@ -386,24 +386,24 @@ const AdminDashboard = () => {
 
         {/* Main Content */}
           {/* Filters and Search */}
-          <div className="flex flex-col xl:flex-row gap-6 mb-8">
+          <div className="flex flex-col sm:flex-row lg:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search by name, email, subject, or department..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-white placeholder-gray-400 text-sm"
+                  className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-white placeholder-gray-400 text-xs sm:text-sm"
                 />
               </div>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 text-white text-sm min-w-[140px]"
+                className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 text-white text-xs sm:text-sm min-w-[120px] sm:min-w-[140px]"
               >
                 <option value="all">All Status</option>
                 <option value="available">Available</option>
@@ -415,7 +415,7 @@ const AdminDashboard = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 text-white text-sm min-w-[140px]"
+                className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 text-white text-xs sm:text-sm min-w-[120px] sm:min-w-[140px]"
               >
                 <option value="created_at">Registration Date</option>
                 <option value="name">Name</option>
@@ -425,7 +425,7 @@ const AdminDashboard = () => {
               </select>
               <button
                 onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                className="px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors text-white text-sm min-w-[50px]"
+                className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors text-white text-xs sm:text-sm min-w-[40px] sm:min-w-[50px]"
               >
                 {sortOrder === 'asc' ? '↑' : '↓'}
               </button>
@@ -437,47 +437,48 @@ const AdminDashboard = () => {
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
-                <span className="ml-3 text-gray-400">Loading teachers...</span>
+                <span className="ml-3 text-gray-400 text-sm">Loading teachers...</span>
               </div>
             ) : filteredTeachers.length === 0 ? (
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                   <Users className="h-12 w-12 text-gray-600 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-400 mb-2 cabinet-grotesk">No teachers found</h3>
-                  <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                  <p className="text-gray-500 text-sm">Try adjusting your search or filter criteria</p>
                 </div>
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full min-w-full">
+                <table className="w-full min-w-[800px]">
                 <thead className="bg-gray-800/50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/4">Teacher</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/5">Contact</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/5">Academic</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6">Location</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6">Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6">Registered</th>
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/4">Teacher</th>
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/5 hidden sm:table-cell">Contact</th>
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/5 hidden md:table-cell">Academic</th>
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6 hidden lg:table-cell">Location</th>
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6">Status</th>
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6 hidden lg:table-cell">Registered</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
                   {filteredTeachers.map((teacher, index) => (
                     <tr key={teacher.id || index} className="hover:bg-gray-800/30 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-12 w-12">
-                            <div className="h-12 w-12 rounded-full bg-gray-700 flex items-center justify-center">
-                              <User className="h-6 w-6 text-gray-400" />
+                          <div className="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12">
+                            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gray-700 flex items-center justify-center">
+                              <User className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
                             </div>
                           </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-white cabinet-grotesk">{teacher.name}</div>
-                            <div className="text-sm text-gray-400">{teacher.email}</div>
+                          <div className="ml-3 sm:ml-4">
+                            <div className="text-xs sm:text-sm font-medium text-white cabinet-grotesk">{teacher.name}</div>
+                            <div className="text-xs sm:text-sm text-gray-400 hidden sm:block">{teacher.email}</div>
+                            <div className="text-xs text-gray-400 sm:hidden">{teacher.email?.split('@')[0]}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-300">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                        <div className="text-xs sm:text-sm text-gray-300">
                           {teacher.phone && (
                             <div className="flex items-center gap-2 mb-2">
                               <Phone className="h-4 w-4 text-gray-500" />
@@ -486,27 +487,27 @@ const AdminDashboard = () => {
                           )}
                           <div className="flex items-center gap-2">
                             <Mail className="h-4 w-4 text-gray-500" />
-                            <span className="truncate max-w-[200px]">{teacher.email}</span>
+                            <span className="truncate max-w-[150px] sm:max-w-[200px]">{teacher.email}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-300">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap hidden md:table-cell">
+                        <div className="text-xs sm:text-sm text-gray-300">
                           <div className="flex items-center gap-2 mb-2">
-                            <BookOpen className="h-4 w-4 text-gray-500" />
+                            <BookOpen className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
                             <span>{teacher.subject || 'N/A'}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-gray-500" />
+                            <Building className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
                             <span>{teacher.department || 'N/A'}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-300">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap hidden lg:table-cell">
+                        <div className="text-xs sm:text-sm text-gray-300">
                           {teacher.office ? (
                             <div className="flex items-center gap-2">
-                              <MapPin className="h-4 w-4 text-gray-500" />
+                              <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
                               <span>{teacher.office}</span>
                             </div>
                           ) : (
@@ -514,17 +515,23 @@ const AdminDashboard = () => {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div>
                           {getStatusBadge(teacher.status)}
                           {teacher.status_note && (
-                            <div className="text-xs text-gray-500 mt-2 truncate max-w-[120px]">
+                            <div className="text-xs text-gray-500 mt-2 truncate max-w-[100px] sm:max-w-[120px]">
                               {teacher.status_note}
                             </div>
                           )}
+                          {/* Mobile-only additional info */}
+                          <div className="mt-2 sm:hidden text-xs text-gray-400 space-y-1">
+                            {teacher.subject && <div>📚 {teacher.subject}</div>}
+                            {teacher.department && <div>🏢 {teacher.department}</div>}
+                            {teacher.office && <div>📍 {teacher.office}</div>}
+                          </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-300 hidden lg:table-cell">
                         {formatDate(teacher.created_at)}
                       </td>
                     </tr>
@@ -536,7 +543,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-gray-500 text-sm">
+        <div className="mt-6 text-center text-gray-500 text-xs sm:text-sm">
           Showing {filteredTeachers.length} of {teachers.length} teachers
         </div>
       </div>

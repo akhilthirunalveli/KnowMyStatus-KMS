@@ -5,6 +5,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 /* Custom Red Scrollbar */
 ::-webkit-scrollbar {
   width: 12px;

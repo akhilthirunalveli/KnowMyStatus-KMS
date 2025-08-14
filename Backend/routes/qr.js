@@ -38,8 +38,15 @@ router.post('/generate', authenticateToken, async (req, res) => {
       office: teacher.office,
       email: teacher.email,
       status: teacher.status,
-      available_until: teacher.available_until,
-      status_note: teacher.status_note
+      status_note: teacher.status_note,
+      status_until: teacher.status_until || teacher.available_until,
+      // Add separated date and time for better display
+      expected_return_date: (teacher.status_until || teacher.available_until)
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleDateString()
+        : null,
+      expected_return_time: (teacher.status_until || teacher.available_until)
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        : null
     };
 
     // Generate unique filename
@@ -109,8 +116,15 @@ router.get('/teacher/:teacherId', async (req, res) => {
       office: teacher.office,
       email: teacher.email,
       status: teacher.status,
-      available_until: teacher.available_until,
-      status_note: teacher.status_note
+      status_note: teacher.status_note,
+      status_until: teacher.status_until || teacher.available_until,
+      // Add separated date and time for better display
+      expected_return_date: (teacher.status_until || teacher.available_until)
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleDateString()
+        : null,
+      expected_return_time: (teacher.status_until || teacher.available_until)
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        : null
     };
 
     res.json({
@@ -213,8 +227,15 @@ router.get('/my-qr', authenticateToken, async (req, res) => {
       office: teacher.office,
       email: teacher.email,
       status: teacher.status,
-      available_until: teacher.available_until,
-      status_note: teacher.status_note
+      status_note: teacher.status_note,
+      status_until: teacher.status_until || teacher.available_until,
+      // Add separated date and time for better display
+      expected_return_date: (teacher.status_until || teacher.available_until)
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleDateString()
+        : null,
+      expected_return_time: (teacher.status_until || teacher.available_until)
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        : null
     };
 
     res.json({
