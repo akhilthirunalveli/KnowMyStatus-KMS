@@ -20,6 +20,11 @@ const TeacherQR = () => {
   const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Set page title
+  useEffect(() => {
+    document.title = "Teacher QR Code - KnowMyStatus";
+  }, []);
+
   useEffect(() => {
     fetchTeacherAndQR();
   }, [id]);

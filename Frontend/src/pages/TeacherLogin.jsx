@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Mail, Copy, User, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import '../index.css';
 
 const TeacherAuth = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, register, isAuthenticated } = useAuth();
   const [tab, setTab] = useState('login');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -28,6 +28,18 @@ const TeacherAuth = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Set page title
+  useEffect(() => {
+    document.title = "Teacher Login - KnowMyStatus";
+  }, []);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/teacher/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleCopy = (val) => {
     navigator.clipboard.writeText(val);
@@ -65,7 +77,7 @@ const TeacherAuth = () => {
       setError('Please fill all required fields'); setLoading(false); return;
     }
     try {
-      const res = await axios.post('/api/auth/register', {
+      const result = await register({
         name: registerData.name,
         email: registerData.email,
         password: registerData.password,
@@ -74,11 +86,14 @@ const TeacherAuth = () => {
         phone: registerData.phone,
         office: registerData.office
       });
-      setSuccess('Registration successful!');
-      localStorage.setItem('token', res.data.token);
-      navigate('/teacher/dashboard');
+      if (result.success) {
+        setSuccess('Registration successful!');
+        navigate('/teacher/dashboard');
+      } else {
+        setError('Registration failed');
+      }
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed');
+      setError('Registration failed');
     } finally {
       setLoading(false);
     }
@@ -92,9 +107,9 @@ const TeacherAuth = () => {
           <div className="glass-card w-full max-w-md rounded-2xl shadow-2xl border border-gray-800 p-8 flex flex-col items-center relative bg-black/95 animate-slide-up">
         {/* Logo */}
         <div className="flex flex-col items-center mb-6">
-          <span className="text-4xl font-bold cabinet-grotesk text-white tracking-tight">
+          <Link to="/" className="text-4xl font-bold cabinet-grotesk text-white tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
             KnowMyStatus<span className="navbar-red-dot">.</span>
-          </span>
+          </Link>
         </div>
         {/* Segmented Tabs */}
         <div className="w-full mb-6">
@@ -290,9 +305,9 @@ const TeacherAuth = () => {
         {/* Right Side - KnowMyStatus Text */}
         <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center border-l border-gray-800">
           <div className="text-center">
-            <span className="text-6xl font-bold navbar-brand text-white tracking-tight">
+            <Link to="/" className="text-6xl font-bold navbar-brand text-white tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
               KnowMyStatus<span className="navbar-red-dot">.</span>
-            </span>
+            </Link>
           </div>
         </div>
       </div>

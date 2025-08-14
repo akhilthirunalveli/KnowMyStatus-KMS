@@ -11,6 +11,7 @@ import TeacherProfile from './pages/TeacherProfile';
 import QRScanner from './pages/QRScanner';
 import TeacherDetails from './pages/TeacherDetails';
 import TeacherQR from './pages/TeacherQR';
+import AdminDashboard from './pages/AdminDashboard';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Protected Route Component
@@ -24,8 +25,19 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/teacher/login" />;
 };
 
+// Redirect authenticated users away from auth pages
+const AuthRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+  
+  return isAuthenticated ? <Navigate to="/teacher/dashboard" /> : children;
+};
+
 function App() {
-  const { loading } = useAuth();
+  const { loading, isAuthenticated } = useAuth();
 
   if (loading) {
     return <LoadingSpinner />;
@@ -35,10 +47,34 @@ function App() {
     <div className="min-h-screen" style={{backgroundColor: '#000000'}}>
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/teacher/login" element={<TeacherAuth />} />
+          <Route 
+            path="/" 
+            element={<Home />}
+          />
+          <Route 
+            path="/login" 
+            element={
+              <AuthRoute>
+                <Login />
+              </AuthRoute>
+            } 
+          />
+          <Route 
+            path="/signup" 
+            element={
+              <AuthRoute>
+                <Signup />
+              </AuthRoute>
+            } 
+          />
+          <Route 
+            path="/teacher/login" 
+            element={
+              <AuthRoute>
+                <TeacherAuth />
+              </AuthRoute>
+            } 
+          />
           <Route 
             path="/teacher/dashboard" 
             element={
@@ -59,6 +95,7 @@ function App() {
           <Route path="/student/scan" element={<QRScanner />} />
           <Route path="/student/teacher/:id" element={<TeacherDetails />} />
           <Route path="/student/teacher/:id/qr" element={<TeacherQR />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>

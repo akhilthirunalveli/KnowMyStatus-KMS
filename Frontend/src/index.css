@@ -2,75 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:wght@100..900&display=swap');
 @import url('./fonts/WEB/css/cabinet-grotesk.css');
-
-
-
-/* Slanted half red/half black background for login page */
-.login-bg {
-  min-height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  background: linear-gradient(90deg, #650000 50%, #000000 50% 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Glassy card and background for login page */
-.login-bg-stars {
-  min-height: 100vh;
-  width: 100vw;
-  background: #000;
-  position: relative;
-  overflow: hidden;
-}
-.login-bg-stars::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png');
-  opacity: 0.12;
-  pointer-events: none;
-  z-index: 0;
-}
-.glass-card {
-  background: linear-gradient(120deg, rgba(0,0,0,0.98) 60%, rgba(20,0,0,0.95) 100%);
-  box-shadow: 0 8px 40px 0 #000a, 0 1.5px 8px 0 #0004;
-  border-radius: 1.25rem;
-  border: 1.5px solid #2a0000;
-  backdrop-filter: blur(12px) saturate(1.2);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2);
-}
-
-/* Blob animations for login/signup pages */
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 /* Custom Red Scrollbar */
 ::-webkit-scrollbar {
   width: 12px;
@@ -89,65 +23,10 @@
   border-radius: 8px;
 }
 
-/* Bitcount Grid Single by Petr van Blokland for KnowMyStatus navbar */
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
   :root {
-    /* App Color Variables */
     --app-background: #000000;
-    --app-surface: #111111;
-    --app-overlay: rgba(0, 0, 0, 0.8);
-    
-    /* Text Colors */
-    --app-text-primary: #ffffff;
-    --app-text-secondary: #cccccc;
-    --app-text-muted: #999999;
     --app-text-light: #ffffff;
-    
-    /* Button Colors */
-    --app-button-primary: #EBAC00;
-    --app-button-primary-hover: #d49a00;
-    --app-button-primary-text: #000000;
-    --app-button-secondary: #333333;
-    --app-button-secondary-hover: #555555;
-    --app-button-secondary-text: #ffffff;
-    
-    /* Input Colors */
-    --app-input: #000000;
-    --app-input-text: #ffffff;
-    --app-placeholder: #888888;
-    --app-border: #333333;
-    
-    /* Card Colors */
-    --app-card: #000000;
-    --app-card-text: #ffffff;
-    --app-card-border: #333333;
-    
-    /* Navigation Colors */
-    --app-nav-text: #666666;
-    --app-nav-hover: #333333;
-    --app-nav-active-bg: #333333;
-    --app-nav-active-text: #ffffff;
-    
-    /* Accent Colors */
-    --app-accent: #3b82f6;
-    --app-accent-light: #eff6ff;
-    --app-accent-dark: #1e40af;
-    
-    /* Status Colors */
-    --app-status-available: #22c55e;
-    --app-status-busy: #ef4444;
-    --app-status-away: #f59e0b;
-    
-    /* State Colors */
-    --app-success: #22c55e;
-    --app-error: #ef4444;
-    --app-warning: #f59e0b;
-    --app-info: #3b82f6;
   }
 
   html {
@@ -182,57 +61,14 @@
 }
 
 @layer components {
-  /* Segmented Control (Tabs) */
-  .segmented-control {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: #0b0b0b;
-    border: 1px solid #2a0000;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .segmented-control > button {
-    position: relative;
-    z-index: 1;
-    padding: 10px 14px;
-    color: #bbb;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    transition: color .25s ease;
-  }
-  .segmented-control > button[data-active="true"] {
-    color: #fff;
-  }
-  .segmented-indicator {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: calc(50% - 8px);
-    height: calc(100% - 8px);
-    background: radial-gradient(120% 120% at 100% 0%, rgba(255,0,0,0.35) 0%, rgba(0,0,0,0.7) 60%), linear-gradient(180deg, #1a0000, #000000);
-    border: 1px solid #3a0000;
-    border-radius: 10px;
-    box-shadow: inset 0 0 0 1px #000, 0 6px 24px rgba(239, 68, 68, 0.25);
-    transition: transform .25s ease;
-  }
-
-  /* Button Components */
-  .btn-primary {
-    @apply bg-app-button-primary hover:bg-app-button-primary-hover text-app-button-primary-text font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-app-accent focus:ring-offset-2;
-  }
-  
-  .btn-secondary {
-    @apply bg-app-button-secondary hover:bg-app-button-secondary-hover text-app-button-secondary-text font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-app-accent focus:ring-offset-2;
-  }
-  
-  .btn-outline {
-    @apply border border-app-accent text-app-accent hover:bg-app-accent-light font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-app-accent focus:ring-offset-2;
-  }
-  
-  /* Form Components */
-  .input-field {
-    @apply w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:ring-2 focus:ring-app-accent focus:border-transparent transition-colors duration-200 bg-app-input text-app-input-text placeholder-app-placeholder;
+  /* Glass card for login page */
+  .glass-card {
+    background: linear-gradient(120deg, rgba(0,0,0,0.98) 60%, rgba(20,0,0,0.95) 100%);
+    box-shadow: 0 8px 40px 0 #000a, 0 1.5px 8px 0 #0004;
+    border-radius: 1.25rem;
+    border: 1.5px solid #2a0000;
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
   }
 
   /* Floating label input */
@@ -318,72 +154,7 @@
     border: 1px solid #166534;
   }
   
-  /* Card Components */
-  .card {
-    @apply bg-app-card text-app-card-text rounded-xl shadow-sm border border-app-card-border p-6; 
-  }
-  
-  .card-hover {
-    @apply bg-app-card text-app-card-text rounded-xl shadow-sm border border-app-card-border p-6 hover:shadow-md transition-shadow duration-200 cursor-pointer;
-  }
-
-  /* Navigation Components */
-  .nav-link {
-    @apply text-app-nav-text hover:text-app-nav-hover;
-  }
-
-  .nav-link-active {
-    @apply bg-app-nav-active-bg text-app-nav-active-text;
-  }
-
-  /* Status Components */
-  .status-available {
-    @apply text-app-status-available;
-  }
-
-  .status-busy {
-    @apply text-app-status-busy;
-  }
-
-  .status-away {
-    @apply text-app-status-away;
-  }
-
-  /* Text Components */
-  .text-primary {
-    @apply text-app-text-primary;
-  }
-
-  .text-secondary {
-    @apply text-app-text-secondary;
-  }
-
-  .text-muted {
-    @apply text-app-text-muted;
-  }
-
-  .text-error {
-    @apply text-app-error;
-  }
-
-  .text-success {
-    @apply text-app-success;
-  }
-
-  /* Background Components */
-  .bg-primary {
-    @apply bg-app-background;
-  }
-
-  .bg-surface {
-    @apply bg-app-surface;
-  }
-
-  .bg-overlay {
-    @apply bg-app-overlay;
-  }
-  
-  /* Navbar Brand - Bitcount Grid Single by Petr van Blokland */
+  /* Navbar Brand - Bitcount Grid Single */
   .navbar-brand {
     font-family: 'Bitcount Grid Single', 'JetBrains Mono', monospace;
     font-weight: 400;
@@ -446,30 +217,6 @@
     overflow: hidden;
   }
 
-  .dashboard-pill-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 50px;
-    padding: 2px;
-    background: linear-gradient(45deg, 
-      rgba(255, 255, 255, 0.3) 0%, 
-      rgba(255, 255, 255, 0.1) 25%, 
-      transparent 50%, 
-      rgba(255, 255, 255, 0.1) 75%, 
-      rgba(255, 255, 255, 0.3) 100%
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: exclude;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
   .dashboard-pill-btn:hover {
     border-color: rgb(235, 0, 0);
     color: #ff0000;
@@ -478,17 +225,6 @@
       0 10px 30px rgba(235, 0, 0, 0.3),
       0 0 0 1px rgba(235, 0, 0, 0.2);
     background: rgba(235, 172, 0, 0.05);
-  }
-
-  .dashboard-pill-btn:hover::before {
-    opacity: 1;
-    background: linear-gradient(45deg, 
-      rgba(235, 0, 0, 0.4) 0%, 
-      rgba(235, 0, 0, 0.2) 25%, 
-      transparent 50%, 
-      rgba(235, 0, 0, 0.2) 75%, 
-      rgba(235, 0, 0, 0.4) 100%
-    );
   }
 
   /* Dotted Arrow Effect */
@@ -502,55 +238,9 @@
     stroke: #eb0000;
     transform: translateX(3px);
   }
-
-  /* Subtle Grid Background */
-  .subtle-grid {
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-position: 0 0, 0 0;
-  }
-
-  .subtle-grid::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 80px 80px;
-    background-position: 20px 20px, 20px 20px;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  /* Input Glow Effect */
-  .shadow-input-glow {
-    box-shadow: 0 0 0 2px #ef4444, 0 2px 8px 0 #ef444455;
-  }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent;
-  }
-  
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-  }
-  
-  .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
-  }
-  
-  .animate-bounce-in {
-    animation: bounceIn 0.6s ease-out;
-  }
-
   .animate-scroll {
     animation: scroll 20s linear infinite;
   }
@@ -565,35 +255,12 @@
   }
 }
 
-/* Override login background and card for pure black and red theme */
-.login-bg-stars {
-  min-height: 100vh;
-  width: 100vw;
-  background: #000;
-  position: relative;
-  overflow: hidden;
-}
-.glass-card {
-  background: linear-gradient(120deg, rgba(0,0,0,0.98) 60%, rgba(20,0,0,0.95) 100%);
-  box-shadow: 0 8px 40px 0 #000a, 0 1.5px 8px 0 #0004;
-  border-radius: 1.25rem;
-  border: 1.5px solid #2a0000;
-  backdrop-filter: blur(12px) saturate(1.2);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2);
-}
-.shadow-input-glow {
-  box-shadow: 0 0 0 2px #ef4444, 0 2px 8px 0 #ef444455;
-}
-/* Red accent for navbar dot */
-.navbar-red-dot {
-  color: #ef4444;
-}
-/* Red focus for inputs */
+/* Override for inputs and buttons to maintain red theme */
 input:focus {
   border-color: #ef4444 !important;
   box-shadow: 0 0 0 2px #ef4444 !important;
 }
-/* Red/black for tab buttons */
+
 button.bg-black,
 button.bg-black:focus,
 button.bg-black:active {
@@ -601,6 +268,7 @@ button.bg-black:active {
   color: #ef4444 !important;
   border-bottom: 2px solid #ef4444 !important;
 }
+
 button.bg-gray-900 {
   background: #1a1a1a !important;
   color: #fff !important;

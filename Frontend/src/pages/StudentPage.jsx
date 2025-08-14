@@ -23,6 +23,11 @@ const StudentPage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
+  // Set page title
+  useEffect(() => {
+    document.title = "Find Teachers - KnowMyStatus";
+  }, []);
+
   useEffect(() => {
     fetchDepartments();
   }, []);
@@ -114,9 +119,9 @@ const StudentPage = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
             {/* Brand */}
-            <div className="text-white text-2xl navbar-brand font-bold tracking-tight">
+            <Link to="/" className="text-white text-2xl navbar-brand font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
               KnowMyStatus<span className="navbar-red-dot">.</span>
-            </div>
+            </Link>
             {/* Welcome Message */}
             <div>
               <h1 className="text-2xl font-bold text-white">

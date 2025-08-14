@@ -18,6 +18,11 @@ const Home = () => {
   const liveStatusRef = useRef(null);
   const aboutRef = useRef(null);
 
+  // Set page title
+  useEffect(() => {
+    document.title = "KnowMyStatus - Real-time Teacher Communication";
+  }, []);
+
   // Timeline data
   const timelineData = [
     {
@@ -36,7 +41,7 @@ const Home = () => {
       content: (
         <div>
           <p className="text-gray-300 text-sm md:text-2xl font-normal mb-8 cabinet-grotesk">
-            Built the core platform with QR code integration, teacher profiles in PHP & SQL.
+            Built the core platform with QR code integration, teacher profiles in PHP & SQL first.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-black rounded-lg p-4 flex flex-col items-center justify-center">
@@ -77,7 +82,7 @@ const Home = () => {
       content: (
         <div>
           <p className="text-gray-300 text-sm md:text-2xl font-normal mb-8 cabinet-grotesk">
-            KnowMyStatus is now live and helping educational institutions worldwide 
+            KnowMyStatus is now live using MERN Stack and helping educational institutions worldwide 
             improve communication between teachers and students.
           </p>
         </div>
@@ -118,9 +123,9 @@ const Home = () => {
       <nav className="bg-app-background px-10 py-6 relative z-10">
         <div className="flex items-center justify-between">
           {/* Logo/Brand */}
-          <div className="text-app-text-primary text-4xl navbar-brand">
+          <Link to="/" className="text-app-text-primary text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
             KnowMyStatus<span className="navbar-red-dot">.</span>
-          </div>
+          </Link>
           
           {/* Center Navigation Links */}
           <div className="flex items-center gap-4 navbar-brand text-xl text-white">
@@ -135,23 +140,37 @@ const Home = () => {
             <Link to="/student/scan" className="nav-center-link">
               Scan
             </Link>
+            <span className="nav-dot">•</span>
+            <Link to="/admin" className="nav-center-link">
+              Admin
+            </Link>
           </div>
           
           {/* Dashboard Button */}
-          <Link 
-            to="/teacher/dashboard" 
-            className="dashboard-pill-btn flex items-center gap-3"
-          >
-            <span className="navbar-brand text-lg">Dashboard</span>
-            <ArrowRight size={24} className="dotted-arrow" />
-          </Link>
+          {isAuthenticated ? (
+            <Link 
+              to="/teacher/dashboard" 
+              className="dashboard-pill-btn flex items-center gap-3"
+            >
+              <span className="navbar-brand text-lg">Dashboard</span>
+              <ArrowRight size={24} className="dotted-arrow" />
+            </Link>
+          ) : (
+            <Link 
+              to="/login" 
+              className="dashboard-pill-btn flex items-center gap-3"
+            >
+              <span className="navbar-brand text-lg">Login</span>
+              <ArrowRight size={24} className="dotted-arrow" />
+            </Link>
+          )}
         </div>
       </nav>
 
       {/* Main Content */}
       <div className="w-full relative" style={{ height: 'calc(100vh - 110px)' }}>
         {/* Evervault Card Background */}
-        <EvervaultCard text="Connect. Update. Share." className="" />
+        <EvervaultCard text="Connect. Update. Share." className=""/>
         
         {/* Comet Card - Fixed Position */}
         <div className="absolute right-[12.5%] bottom-[9rem] z-20">
@@ -183,11 +202,11 @@ const Home = () => {
       {/* Timeline Section */}
       <Timeline data={timelineData} />
 
-      {/* Gray Scroll Section */}
-      <div className="w-full h-32 bg-app-background relative overflow-hidden">
-        <div className="absolute top-1/2 -translate-y-1/2 w-full">
+      {/* Red Scroll Section */}
+      <div className="w-full py-4 bg-red-900 relative overflow-hidden">
+        <div className="w-full">
           <div className="flex animate-scroll whitespace-nowrap">
-            <div className="flex items-center space-x-8 text-gray-400 text-xl md:text-2xl cabinet-grotesk">
+            <div className="flex items-center space-x-8 text-white text-xl md:text-2xl cabinet-grotesk uppercase">
               <span>•</span>
               <span>Innovation</span>
               <span>•</span>

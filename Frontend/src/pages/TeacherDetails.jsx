@@ -20,7 +20,11 @@ const TeacherDetails = () => {
   const navigate = useNavigate();
   const [teacher, setTeacher] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [qrCode, setQrCode] = useState(null);
+
+  // Set page title
+  useEffect(() => {
+    document.title = "Teacher Details - KnowMyStatus";
+  }, []);
 
   useEffect(() => {
     fetchTeacherDetails();

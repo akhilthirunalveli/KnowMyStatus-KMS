@@ -29,6 +29,11 @@ const TeacherDashboard = () => {
   const { user, updateProfile, logout } = useAuth();
   const navigate = useNavigate();
   
+  // Set page title
+  useEffect(() => {
+    document.title = "Teacher Dashboard - KnowMyStatus";
+  }, []);
+  
   // All state variables
   const [qrCode, setQrCode] = useState(null);
   const [analytics, setAnalytics] = useState(null);
@@ -173,13 +178,13 @@ const TeacherDashboard = () => {
   return (
     <div className="min-h-screen bg-black cabinet-grotesk">
       {/* Header */}
-      <header className="bg-black/80 backdrop-blur-lg border-b border-gray-800 px-6 py-4">
+      <header className="bg-black/80 backdrop-blur-lg  px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
             {/* Brand */}
-            <div className="text-white text-2xl navbar-brand font-bold tracking-tight">
+            <Link to="/" className="text-white text-2xl navbar-brand font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
               KnowMyStatus<span className="navbar-red-dot">.</span>
-            </div>
+            </Link>
             {/* Welcome Message */}
             <div>
               <h1 className="text-2xl font-bold text-white">
@@ -193,7 +198,7 @@ const TeacherDashboard = () => {
           <div className="flex items-center gap-8">
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-6 py-3 text-gray-300 hover:text-white hover:bg-red-600/20 rounded-full border-2 border-dashed border-gray-500 hover:border-red-400 transition-all duration-300 bg-transparent backdrop-blur-sm"
             >
               <LogOut className="h-4 w-4" />
               Logout

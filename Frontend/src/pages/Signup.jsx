@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Building, BookOpen } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,6 +19,11 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  // Set page title
+  useEffect(() => {
+    document.title = "Sign Up - KnowMyStatus";
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -264,9 +269,9 @@ const Signup = () => {
         </div>        {/* Right Side - KnowMyStatus Text */}
         <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center">
           <div className="text-center">
-            <span className="text-6xl font-bold navbar-brand text-white tracking-tight">
+            <Link to="/" className="text-6xl font-bold navbar-brand text-white tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
               KnowMyStatus<span className="navbar-red-dot">.</span>
-            </span>
+            </Link>
           </div>
         </div>
       </div>

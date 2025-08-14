@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,6 +12,11 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Set page title
+  useEffect(() => {
+    document.title = "Login - KnowMyStatus";
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -122,6 +127,15 @@ const Login = () => {
                   Sign up for free
                 </Link>
               </p>
+                <p className="text-gray-400">
+                Go back to{' '}
+                <Link
+                  to="/"
+                  className="text-red-400 hover:text-red-300 font-medium"
+                >
+                  Home
+                </Link>
+              </p>
             </div>
           </div>
         </div>
@@ -129,9 +143,9 @@ const Login = () => {
         {/* Right Side - KnowMyStatus Text */}
         <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center">
           <div className="text-center">
-            <span className="text-6xl font-bold navbar-brand text-white tracking-tight">
+            <Link to="/" className="text-6xl font-bold navbar-brand text-white tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
               KnowMyStatus<span className="navbar-red-dot">.</span>
-            </span>
+            </Link>
           </div>
         </div>
       </div>
