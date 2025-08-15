@@ -395,9 +395,27 @@ const AdminDashboard = () => {
         )}
 
         {/* Main Content */}
-          {/* Filters and Search */}
-          <div className="flex flex-col sm:flex-row lg:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
-            <div className="flex-1">
+          {/* Enhanced Filters and Search Section */}
+          <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="p-2 bg-blue-900/50 rounded-lg border border-dashed border-blue-600/50">
+                <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-white cabinet-grotesk">Search & Filter</h3>
+                <p className="text-xs sm:text-sm text-gray-400">Find and organize teacher data</p>
+              </div>
+              <div className="ml-auto text-xs sm:text-sm text-gray-500">
+                {filteredTeachers.length} / {teachers.length} teachers
+              </div>
+            </div>
+
+            {/* Search Bar */}
+            <div className="mb-4 sm:mb-6">
+              <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                <Search className="h-4 w-4 text-white" />
+                Search Teachers
+              </label>
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                 <input
@@ -405,62 +423,202 @@ const AdminDashboard = () => {
                   placeholder="Search by name, email, subject, or department..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-white placeholder-gray-400 text-xs sm:text-sm"
+                  className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-white placeholder-gray-400 text-sm sm:text-base transition-all duration-300 hover:border-gray-500/70"
                 />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 text-white text-xs sm:text-sm min-w-[120px] sm:min-w-[140px]"
-              >
-                <option value="all">All Status</option>
-                <option value="available">Available</option>
-                <option value="not_available">Not Available</option>
-                <option value="on_leave">On Leave</option>
-                <option value="lunch">Lunch</option>
-                <option value="in_meeting">In Meeting</option>
-              </select>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 text-white text-xs sm:text-sm min-w-[120px] sm:min-w-[140px]"
-              >
-                <option value="created_at">Registration Date</option>
-                <option value="name">Name</option>
-                <option value="email">Email</option>
-                <option value="department">Department</option>
-                <option value="subject">Subject</option>
-              </select>
-              <button
-                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-900/50 border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors text-white text-xs sm:text-sm min-w-[40px] sm:min-w-[50px]"
-              >
-                {sortOrder === 'asc' ? '↑' : '↓'}
-              </button>
+
+            {/* Filter Options */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {/* Status Filter */}
+              <div>
+                <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  Filter by Status
+                </label>
+                <div className="relative">
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-400 text-white text-xs sm:text-sm transition-all duration-300 hover:border-gray-500/70 appearance-none cursor-pointer"
+                  >
+                    <option value="all">🌟 All Status</option>
+                    <option value="available">✅ Available</option>
+                    <option value="not_available">❌ Not Available</option>
+                    <option value="on_leave">🏖️ On Leave</option>
+                    <option value="lunch">🍽️ Lunch</option>
+                    <option value="in_meeting">🤝 In Meeting</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sort By Filter */}
+              <div>
+                <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                  Sort by Field
+                </label>
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-400 text-white text-xs sm:text-sm transition-all duration-300 hover:border-gray-500/70 appearance-none cursor-pointer"
+                  >
+                    <option value="created_at">📅 Registration Date</option>
+                    <option value="name">👤 Name</option>
+                    <option value="email">📧 Email</option>
+                    <option value="department">🏢 Department</option>
+                    <option value="subject">📚 Subject</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sort Order */}
+              <div>
+                <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  Sort Order
+                </label>
+                <button
+                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg hover:bg-gray-800/50 transition-all duration-300 text-white text-xs sm:text-sm flex items-center justify-center gap-2 hover:border-yellow-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-400"
+                >
+                  {sortOrder === 'asc' ? (
+                    <>
+                      <span>🔼 Ascending</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>🔽 Descending</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Quick Actions */}
+              <div>
+                <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  Quick Actions
+                </label>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setFilterStatus('all');
+                      setSortBy('created_at');
+                      setSortOrder('desc');
+                    }}
+                    className="flex-1 px-2 sm:px-3 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg hover:bg-gray-800/50 transition-all duration-300 text-white text-xs flex items-center justify-center hover:border-red-400 focus:ring-2 focus:ring-red-500 focus:border-red-400"
+                    title="Clear all filters"
+                  >
+                    🔄
+                  </button>
+                  <button
+                    onClick={exportToCSV}
+                    className="flex-1 px-2 sm:px-3 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg hover:bg-gray-800/50 transition-all duration-300 text-white text-xs flex items-center justify-center hover:border-green-400 focus:ring-2 focus:ring-green-500 focus:border-green-400"
+                    title="Export to CSV"
+                  >
+                    📥
+                  </button>
+                </div>
+              </div>
             </div>
+
+            {/* Active Filters Display */}
+            {(searchTerm || filterStatus !== 'all' || sortBy !== 'created_at' || sortOrder !== 'desc') && (
+              <div className="mt-4 pt-4 border-t border-dashed border-gray-600/50">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs text-gray-400">Active filters:</span>
+                  {searchTerm && (
+                    <span className="px-2 py-1 bg-blue-900/50 text-blue-300 rounded-full text-xs border border-dashed border-blue-600/50">
+                      Search: {searchTerm}
+                    </span>
+                  )}
+                  {filterStatus !== 'all' && (
+                    <span className="px-2 py-1 bg-green-900/50 text-green-300 rounded-full text-xs border border-dashed border-green-600/50">
+                      Status: {filterStatus.replace('_', ' ')}
+                    </span>
+                  )}
+                  {(sortBy !== 'created_at' || sortOrder !== 'desc') && (
+                    <span className="px-2 py-1 bg-purple-900/50 text-purple-300 rounded-full text-xs border border-dashed border-purple-600/50">
+                      Sort: {sortBy} ({sortOrder})
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Table */}
-          <div className="bg-gray-900/50 border border-gray-700 rounded-lg overflow-hidden">
+          {/* Enhanced Data Table */}
+          <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 overflow-hidden">
+            <div className="p-4 sm:p-6 border-b border-dashed border-gray-600/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-purple-900/50 rounded-lg border border-dashed border-purple-600/50">
+                    <Users className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-semibold text-white cabinet-grotesk">Teacher Directory</h3>
+                    <p className="text-xs sm:text-sm text-gray-400">Manage all registered teachers</p>
+                  </div>
+                </div>
+                <div className="text-xs sm:text-sm text-gray-400">
+                  {filteredTeachers.length} teachers found
+                </div>
+              </div>
+            </div>
+
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 border-dashed"></div>
                 <span className="ml-3 text-gray-400 text-sm">Loading teachers...</span>
               </div>
             ) : filteredTeachers.length === 0 ? (
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
-                  <Users className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                  <div className="w-16 h-16 bg-gray-800/50 rounded-2xl border-2 border-dashed border-gray-600/50 flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-8 w-8 text-gray-600" />
+                  </div>
                   <h3 className="text-lg font-medium text-gray-400 mb-2 cabinet-grotesk">No teachers found</h3>
                   <p className="text-gray-500 text-sm">Try adjusting your search or filter criteria</p>
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setFilterStatus('all');
+                      setSortBy('created_at');
+                      setSortOrder('desc');
+                    }}
+                    className="mt-4 px-4 py-2 bg-red-600/20 border border-dashed border-red-600/50 text-red-400 rounded-lg hover:bg-red-600/30 transition-colors text-sm"
+                  >
+                    Clear Filters
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[800px]">
-                <thead className="bg-gray-800/50">
+                <thead className="bg-black/30 border-b border-dashed border-gray-600/50">
                   <tr>
                     <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/4">Teacher</th>
                     <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/5 hidden sm:table-cell">Contact</th>
@@ -470,14 +628,14 @@ const AdminDashboard = () => {
                     <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6 hidden lg:table-cell">Registered</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-dashed divide-gray-700/50">
                   {filteredTeachers.map((teacher, index) => (
-                    <tr key={teacher.id || index} className="hover:bg-gray-800/30 transition-colors">
+                    <tr key={teacher.id || index} className="hover:bg-gray-800/30 transition-colors group">
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12">
-                            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gray-700 flex items-center justify-center">
-                              <User className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
+                            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 border-2 border-dashed border-gray-600/50 flex items-center justify-center group-hover:border-blue-500/50 transition-colors">
+                              <User className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400 group-hover:text-blue-400 transition-colors" />
                             </div>
                           </div>
                           <div className="ml-3 sm:ml-4">
@@ -552,9 +710,20 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* Footer */}
-        <div className="mt-6 text-center text-gray-500 text-xs sm:text-sm">
-          Showing {filteredTeachers.length} of {teachers.length} teachers
+        {/* Enhanced Footer */}
+        <div className="mt-6 p-4 bg-gradient-to-r from-gray-900/40 to-gray-800/20 backdrop-blur-lg rounded-xl border-2 border-dashed border-gray-600/30 text-center">
+          <div className="flex items-center justify-center gap-4 text-gray-400 text-xs sm:text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+              <span>Showing {filteredTeachers.length} of {teachers.length} teachers</span>
+            </div>
+            {(searchTerm || filterStatus !== 'all') && (
+              <>
+                <span className="text-gray-600">•</span>
+                <span className="text-yellow-400">Filtered results</span>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
