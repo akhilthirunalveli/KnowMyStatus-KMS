@@ -1,8 +1,6 @@
-# KnowMyStatus
-
 <div align="left">
   <img src="Frontend/src/assets/KMS_Logo.png" alt="KnowMyStatus Logo" width="120"/>
-  <h3>Real-time Teacher Status Tracking System</h3>
+  <h3> KnowMyStatus - Real-time Teacher Status Tracking System</h3>
 </div>
 
 KnowMyStatus is a comprehensive teacher monitoring and status tracking system designed for educational institutions. Built with React frontend and Node.js backend, it enables students to instantly check teacher availability through QR code scanning while providing teachers with an intuitive dashboard to manage their status in real-time.
@@ -249,13 +247,4 @@ VITE_API_BASE_URL=https://your-backend-url.render.com
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-For support, email support@knowmystatus.com or join our [Discord community](https://discord.gg/knowmystatus).
-
 ---
