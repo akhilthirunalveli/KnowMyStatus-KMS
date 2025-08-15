@@ -1,9 +1,8 @@
 # KnowMyStatus
 
-<div align="center">
+<div align="left">
   <img src="Frontend/src/assets/KMS_Logo.png" alt="KnowMyStatus Logo" width="120"/>
-  <h3>🎯 Real-time Teacher Status Tracking System</h3>
-  <p><em>✨ Know your teacher's availability instantly with QR code technology</em></p>
+  <h3>Real-time Teacher Status Tracking System</h3>
 </div>
 
 KnowMyStatus is a comprehensive teacher monitoring and status tracking system designed for educational institutions. Built with React frontend and Node.js backend, it enables students to instantly check teacher availability through QR code scanning while providing teachers with an intuitive dashboard to manage their status in real-time.
