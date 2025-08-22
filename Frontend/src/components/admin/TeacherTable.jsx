@@ -17,8 +17,10 @@ const TeacherTable = ({
     return (
       <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 overflow-hidden">
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 border-dashed"></div>
-          <span className="ml-3 text-gray-400 text-sm">Loading teachers...</span>
+          <div className="w-full flex justify-center items-center">
+            <div className="w-48"><div className="kms-loading-bar h-2"></div></div>
+            <span className="ml-3 text-red-500 text-sm font-medium tracking-wide">Loading teachers...</span>
+          </div>
         </div>
       </div>
     );

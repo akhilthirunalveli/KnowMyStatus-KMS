@@ -15,7 +15,7 @@ import {
   User,
   Activity
 } from 'lucide-react';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingBar from '../components/LoadingBar';
 
 // Import custom components
 import StatusUpdateCard from '../components/teacher/StatusUpdateCard';
@@ -256,7 +256,7 @@ const TeacherDashboard = () => {
               
               {analyticsLoading ? (
                 <div className="flex justify-center py-8">
-                  <LoadingSpinner size="small" text="Loading..." />
+                  <LoadingBar text="Loading..." />
                 </div>
               ) : analytics?.recentScans?.length > 0 ? (
                 <div className="space-y-4">

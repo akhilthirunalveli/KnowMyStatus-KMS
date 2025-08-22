@@ -11,14 +11,14 @@ import QRScanner from './pages/QRScanner';
 import TeacherDetails from './pages/TeacherDetails';
 import TeacherQR from './pages/TeacherQR';
 import AdminDashboard from './pages/AdminDashboard';
-import LoadingSpinner from './components/LoadingSpinner';
+import LoadingBar from './components/LoadingBar';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   
   if (loading) {
-    return <LoadingSpinner />;
+  return <LoadingBar />;
   }
   
   return isAuthenticated ? children : <Navigate to="/teacher/login" />;
@@ -29,7 +29,7 @@ const AuthRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   
   if (loading) {
-    return <LoadingSpinner />;
+  return <LoadingBar />;
   }
   
   return isAuthenticated ? <Navigate to="/teacher/dashboard" /> : children;
@@ -39,7 +39,7 @@ function App() {
   const { loading, isAuthenticated } = useAuth();
 
   if (loading) {
-    return <LoadingSpinner />;
+  return <LoadingBar />;
   }
 
   return (

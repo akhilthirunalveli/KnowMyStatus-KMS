@@ -38,10 +38,6 @@
     @apply text-app-text-light;
     background-color: #000000;
     position: relative;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
   }
   
   body::before {
@@ -52,10 +48,6 @@
     width: 100%;
     height: 100%;
     background-color: #000000;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 100px 100px;
     pointer-events: none;
     z-index: -1;
   }
@@ -238,6 +230,33 @@
   .dashboard-pill-btn:hover .dotted-arrow {
     stroke: #eb0000;
     transform: translateX(3px);
+  }
+
+  /* Horizontal red loading bar */
+  .red-loading-bar {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .red-loading-bar::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -40%;
+    top: 0;
+    width: 40%;
+    height: 100%;
+    background: rgba(255,255,255,0.25);
+    animation: loading-bar-move 1.2s linear infinite;
+    border-radius: 2px;
+  }
+
+  @keyframes loading-bar-move {
+    0% { left: -40%; }
+    100% { left: 100%; }
   }
 }
 

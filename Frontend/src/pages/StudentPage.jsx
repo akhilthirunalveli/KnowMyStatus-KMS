@@ -12,7 +12,7 @@ import {
   Eye,
   Home
 } from 'lucide-react';
-import LoadingSpinner from '../components/LoadingSpinner.jsx';  
+import LoadingBar from '../components/LoadingBar.jsx';
 
 const StudentPage = () => {
   const [teachers, setTeachers] = useState([]);
@@ -235,7 +235,7 @@ const StudentPage = () => {
 
             {loading ? (
               <div className="flex justify-center py-12">
-                <LoadingSpinner text="Searching teachers..." />
+                <LoadingBar text="Searching teachers..." />
               </div>
             ) : !hasSearched ? (
               <div className="text-center py-12 sm:py-16">
