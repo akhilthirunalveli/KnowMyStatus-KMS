@@ -42,14 +42,14 @@ export const EvervaultCard = ({
         <div className="relative z-10 flex items-start justify-start pl-8" style={{ paddingTop: '0px' }}>
           <div className="relative flex flex-col items-start justify-start text-white cabinet-grotesk text-left">
             <div className="relative font-bold text-6xl mb-4 w-auto">
-              <div className="absolute w-full h-full bg-white/[0.8] dark:bg-black/[0.8] blur-sm" />
-              <span className="dark:text-white text-black z-20 py-4 relative block text-left">
+              <div className="absolute w-full h-full bg-black/[0.8] blur-sm" />
+              <span className="text-white z-20 py-4 relative block text-left">
                 Connect<span className="text-red-500">.</span> Update<span className="text-red-500">.</span> Share<span className="text-red-500">.</span>
               </span>
             </div>
             <div className="relative font-extralight text-4xl text-white/80 w-auto" style={{ fontFamily: 'CabinetGrotesk-Extralight, sans-serif' }}>
-              <div className="absolute w-full h-full bg-white/[0.8] dark:bg-black/[0.8] blur-sm" />
-              <span className="dark:text-white text-black z-20 py-2 relative block text-left">
+              <div className="absolute w-full h-full bg-black/[0.8] blur-sm" />
+              <span className="text-white z-20 py-2 relative block text-left">
                 The smartest way to manage<br />status in real-time
               </span>
             </div>
