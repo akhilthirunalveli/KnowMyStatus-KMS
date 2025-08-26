@@ -16,7 +16,7 @@ import {
   StickyNote,
   Download
 } from 'lucide-react';
-import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import LoadingBar from '../components/LoadingBar.jsx';
 
 const TeacherDetails = () => {
   const { id } = useParams();
@@ -66,7 +66,7 @@ const TeacherDetails = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Loading teacher details..." />;
+  return <LoadingBar text="Loading teacher details..." />;
   }
 
   if (!teacher) {

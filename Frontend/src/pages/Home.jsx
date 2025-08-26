@@ -11,6 +11,7 @@ import phpLogo from "../assets/2.png";
 import sqlLogo from "../assets/3.svg";
 import asaImage from "../assets/ASA.png.jpg";
 import adobeHackathonImage from "../assets/Adobe India Hackathon 2025.png";
+import GithubLogo from "../assets/github.png"; // add GitHub logo import
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
@@ -346,21 +347,61 @@ const Home = () => {
           </div>
         </div>
       </div>
-
-      {/* Live Status Section */}
       <div 
         ref={liveStatusRef}
-        className="w-full h-screen bg-app-background relative overflow-hidden flex items-center justify-center px-4"
-      >
-        {/* Spotlight Effect - Only active when scrolled to center */}
+        className="w-full h-screen bg-app-background relative overflow-hidden flex items-center justify-center px-4">
         {isSpotlightActive && <Spotlight />}
-        
         {/* Live Status Text */}
         <div className="relative z-50 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white cabinet-grotesk leading-tight">
             KnowMyStatus<span className="text-red-500">.</span> is live now
           </h2>
         </div>
+      </div>
+
+      {/* Credit Bar */}
+      <div
+        className="credit-bar"
+        style={{
+          position: "fixed",
+          right: "1.5vw",
+          bottom: "1.2vw",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5em",
+          background: "rgba(0,0,0,0.12)",
+          color: "#b6b6b6",
+          fontSize: "1.05em",
+          fontWeight: 400,
+          borderRadius: "999px",
+          padding: "0.35em 1.1em 0.35em 0.7em",
+          zIndex: 99,
+          opacity: 0.45,
+          boxShadow: "0 2px 12px 0 rgba(0,0,0,0.08)",
+          transition: "opacity 0.2s, background 0.2s, color 0.2s",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          MozUserSelect: "none",
+          msUserSelect: "none"
+        }}
+      >
+        Developed By
+        <img
+          src={GithubLogo}
+          alt="GitHub"
+          style={{
+            height: "1.25em",
+            width: "1.25em",
+            marginRight: "0.3em",
+            verticalAlign: "middle",
+            opacity: 0.45,
+            filter: "grayscale(0.7)",
+            transition: "filter 0.2s, opacity 0.2s",
+            userSelect: "none",
+            pointerEvents: "none"
+          }}
+        />
+        akhilthirunalveli
       </div>
     </div>
   );

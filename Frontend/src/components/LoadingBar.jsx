@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import '../index.css';
 
 const LoadingBar = ({ text = 'Loading...', barClass = '' }) => (
   <div className="flex flex-col items-center justify-center w-full py-4">

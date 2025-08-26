@@ -11,7 +11,7 @@ import {
   BookOpen,
   Building
 } from 'lucide-react';
-import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import LoadingBar from '../components/LoadingBar.jsx';
 
 const TeacherQR = () => {
   const { id } = useParams();
@@ -85,7 +85,7 @@ const TeacherQR = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Loading QR code..." />;
+  return <LoadingBar text="Loading QR code..." />;
   }
 
   if (!teacher || !qrCode) {
