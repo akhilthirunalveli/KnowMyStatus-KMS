@@ -288,7 +288,7 @@ const QRScanner = () => {
             </div>
 
             {/* HIGHLIGHTED CURRENT STATUS SECTION */}
-            <div className="mb-6 p-4 sm:p-6 bg-black rounded-xl border-2 border-red-500 shadow-lg shadow-red-500/20">
+            <div className="mb-6 p-4 sm:p-6 bg-gradient-to-r from-red-900/50 to-red-800/30 rounded-xl border-2 border-red-500 shadow-lg shadow-red-500/20">
               <div className="flex items-center justify-center mb-3">
                 <div className="flex items-center space-x-2">
                   <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-red-400" />
@@ -314,7 +314,7 @@ const QRScanner = () => {
 
             {/* Expected Return Section */}
             {(scannedData.expected_return_date || scannedData.expected_return_time) && (
-              <div className="mb-6 p-4 sm:p-5 bg-black rounded-lg border border-blue-500 shadow-md">
+              <div className="mb-6 p-4 sm:p-5 bg-gradient-to-r from-blue-900/40 to-blue-800/20 rounded-lg border border-blue-500 shadow-md">
                 <h3 className="text-base sm:text-lg font-semibold text-blue-300 cabinet-grotesk mb-3 text-center flex items-center justify-center space-x-2">
                   <Calendar className="h-5 w-5" />
                   <span>Expected Return</span>
@@ -343,7 +343,7 @@ const QRScanner = () => {
             )}
 
             <div className="space-y-3 sm:space-y-4 text-left">
-              <div className="flex items-center space-x-3 p-3 bg-black rounded-lg border border-red-500 border-dotted">
+              <div className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg border border-red-500 border-dotted">
                 <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" />
                 <div>
                   <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Subject</p>
@@ -351,7 +351,7 @@ const QRScanner = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 p-3 bg-black rounded-lg border border-red-500 border-dotted">
+              <div className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg border border-red-500 border-dotted">
                 <Building className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" />
                 <div>
                   <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Department</p>
@@ -360,7 +360,7 @@ const QRScanner = () => {
               </div>
 
               {scannedData.office && (
-                <div className="flex items-center space-x-3 p-3 bg-black rounded-lg border border-red-500 border-dotted">
+                <div className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg border border-red-500 border-dotted">
                   <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" />
                   <div>
                     <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Office</p>
@@ -370,7 +370,7 @@ const QRScanner = () => {
               )}
 
               {scannedData.phone && (
-                <div className="flex items-center space-x-3 p-3 bg-black rounded-lg border border-red-500 border-dotted">
+                <div className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg border border-red-500 border-dotted">
                   <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" />
                   <div>
                     <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Phone</p>
@@ -385,7 +385,7 @@ const QRScanner = () => {
               )}
 
               {scannedData.email && (
-                <div className="flex items-center space-x-3 p-3 bg-black rounded-lg border border-red-500 border-dotted">
+                <div className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg border border-red-500 border-dotted">
                   <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" />
                   <div>
                     <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Email</p>
@@ -467,7 +467,7 @@ const QRScanner = () => {
       <main className="p-4 sm:p-6">
         <div className="w-full space-y-4 sm:space-y-6">
           <div className="max-w-sm sm:max-w-md mx-auto">
-            <div className="border-dashed border border-gray-800 rounded-2xl p-4 sm:p-6" style={{backgroundColor: '#000000ff'}}>
+            <div className="border-dashed border border-gray-800 rounded-2xl p-4 sm:p-6" style={{backgroundColor: '#0E0E0E'}}>
               <div className="text-center">
                 <div className="mb-4 sm:mb-6">
                   <div className="w-16 h-16 sm:w-20 sm:h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-red-500 border-dotted">
@@ -483,7 +483,7 @@ const QRScanner = () => {
 
           {!showScanner ? (
             <div className="space-y-3 sm:space-y-4">
-              <div className="p-4 bg-black sm:p-6 rounded-lg border-2 border-red-500 border-dotted">
+              <div className="p-4 sm:p-6 bg-gray-800 rounded-lg border-2 border-red-500 border-dotted">
                 <Camera className="h-10 w-10 sm:h-12 sm:w-12 text-red-400 mx-auto mb-3 sm:mb-4" />
                 <p className="text-xs sm:text-sm text-gray-300 cabinet-grotesk px-2">
                   Click the button below to start scanning
@@ -491,7 +491,7 @@ const QRScanner = () => {
               </div>
               
               {error && (
-                <div className="p-4 bg-black rounded-lg border border-red-500">
+                <div className="p-4 bg-red-900/50 rounded-lg border border-red-500">
                   <p className="text-xs sm:text-sm text-red-300 text-center cabinet-grotesk">
                     {error}
                   </p>
@@ -517,7 +517,7 @@ const QRScanner = () => {
           ) : (
             <div className="space-y-3 sm:space-y-4">
               {loading ? (
-                <div className="p-4 sm:p-6 bg-black rounded-lg border-2 border-red-500 border-dotted">
+                <div className="p-4 sm:p-6 bg-gray-800 rounded-lg border-2 border-red-500 border-dotted">
                   <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-red-500 mx-auto mb-2"></div>
                   <p className="text-xs sm:text-sm text-gray-300 cabinet-grotesk">Processing QR code...</p>
                 </div>
