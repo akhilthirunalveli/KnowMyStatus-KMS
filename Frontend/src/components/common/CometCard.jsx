@@ -6,7 +6,7 @@ import {
   useTransform,
   useMotionTemplate,
 } from "framer-motion";
-import { cn } from "../utils/cn";
+import { cn } from "../../utils/cn";
 
 export const CometCard = ({
   rotateDepth = 17.5,

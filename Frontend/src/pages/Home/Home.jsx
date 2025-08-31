@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, QrCode, Camera, ArrowLeft } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
-import { EvervaultCard } from "../components/EvervaultCard";
-import { CometCard } from "../components/CometCard";
-import { Spotlight } from "../components/Spotlight";
-import { Timeline } from "../components/Timeline";
-import oneImage from "../assets/1.png";
-import phpLogo from "../assets/2.png";
-import sqlLogo from "../assets/3.svg";
-import asaImage from "../assets/ASA.png.jpg";
-import adobeHackathonImage from "../assets/Adobe India Hackathon 2025.png";
-import GithubLogo from "../assets/github.png"; // add GitHub logo import
+import { useAuth } from "../../contexts/AuthContext";
+import { EvervaultCard } from "../../components/common/EvervaultCard";
+import { CometCard } from "../../components/common/CometCard";
+import { Spotlight } from "../../components/common/Spotlight";
+import { Timeline } from "../../components/common/Timeline";
+import eventImage from "../../assets/EventImage.jpg";
+import phpLogo from "../../assets/Php.png";
+import sqlLogo from "../../assets/MySQL.svg";
+import qrHeroImage from "../../assets/QRHeroSection.png";
+import techStackImage from "../../assets/Techstackused.png";
+import GithubLogo from "../../assets/github.png";
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
@@ -94,8 +94,8 @@ const Home = () => {
         <div className="w-full">
           <div className="bg-gray-800 rounded-xl p-2 overflow-hidden h-60 sm:h-72 md:h-80 lg:h-96 w-full">
             <img 
-              src={asaImage} 
-              alt="ASA" 
+              src={eventImage} 
+              alt="Event Image" 
               className="w-full h-full object-cover rounded-lg"
             />
           </div>
@@ -274,8 +274,8 @@ const Home = () => {
             <div className="w-full h-full bg-gradient-to-br from-red-900 via-red-700 to-red-900 rounded-2xl p-4 sm:p-6 lg:p-8 flex items-center justify-center text-white">
               <div className="w-full h-full rounded-lg flex items-center justify-center">
                 <img 
-                  src={oneImage} 
-                  alt="1" 
+                  src={qrHeroImage} 
+                  alt="QR Hero Section" 
                   className="w-full h-full object-contain rounded-lg"
                 />
               </div>
@@ -339,8 +339,8 @@ const Home = () => {
           <div className="flex justify-center">
             <div className="bg-black rounded-xl p-3 sm:p-4 overflow-hidden max-w-xs sm:max-w-md lg:max-w-2xl">
               <img 
-                src={adobeHackathonImage} 
-                alt="Adobe India Hackathon 2025" 
+                src={techStackImage} 
+                alt="Technology Stack Used" 
                 className="w-full h-auto object-contain rounded-lg"
               />
             </div>

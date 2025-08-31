@@ -12,7 +12,7 @@ import {
   Eye,
   Home
 } from 'lucide-react';
-import LoadingBar from '../components/LoadingBar.jsx';
+import LoadingBar from '../../components/common/LoadingBar.jsx';
 
 const StudentPage = () => {
   const [teachers, setTeachers] = useState([]);

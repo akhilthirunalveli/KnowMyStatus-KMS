@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { 
+  Home, 
+  Lock, 
+  Unlock, 
+  Download,
+  Shield,
+  Users,
+  LogOut
+} from 'lucide-react';
 
 // Import custom components
-import AdminNavbar from '../components/admin/AdminNavbar';
-import SearchFilters from '../components/admin/SearchFilters';
-import TeacherTable from '../components/admin/TeacherTable';
-import { PasswordModal, LockOverlay } from '../components/admin/SecurityModals';
-import StatusBadge from '../components/common/StatusBadge';
+import SearchFilters from '../../components/admin/SearchFilters';
+import TeacherTable from '../../components/admin/TeacherTable';
+import { PasswordModal, LockOverlay } from '../../components/admin/SecurityModals';
+import StatusBadge from '../../components/common/StatusBadge';
 
 // Import utilities
-import { formatDate } from '../utils/uiUtils';
+import { formatDate } from '../../utils/uiUtils';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -69,6 +79,14 @@ const AdminDashboard = () => {
     setShowPasswordModal(true);
     setPassword(['', '', '']);
     setCurrentPasswordIndex(0);
+  };
+
+  const handleLogout = () => {
+    // Clear any session data if needed
+    localStorage.removeItem('authToken'); // Remove if using localStorage
+    sessionStorage.clear(); // Clear session storage
+    toast.success('Logged out successfully');
+    navigate('/'); // Navigate to home page
   };
 
   const handlePasswordInput = (index, value) => {
@@ -210,34 +228,82 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Navbar */}
-      <AdminNavbar 
-        isLocked={isLocked}
-        handleLock={handleLock}
-        handleUnlock={handleUnlock}
-        fetchTeachers={fetchTeachers}
-        exportToCSV={exportToCSV}
-      />
+    <div className="min-h-screen bg-black cabinet-grotesk">
+      {/* Header */}
+      <header className="bg-black px-4 sm:px-6 py-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full sm:w-auto">
+            {/* Brand */}
+            <Link to="/" className="text-white text-xl sm:text-2xl navbar-brand font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
+              KnowMyStatus<span className="navbar-red-dot">.</span>
+            </Link>
+            {/* Welcome Message */}
+            <div className="flex-1 sm:flex-initial">
+              <h1 className="text-xl sm:text-2xl font-bold text-white">
+                Admin Dashboard
+              </h1>
+              <p className="text-gray-400 text-xs sm:text-sm">Manage teachers, monitor status updates, and export data.</p>
+            </div>
+          </div>
+          
+          {/* Quick Actions */}
+          <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-end">
+            <Link 
+              to="/" 
+              className="bg-black hover:bg-gray-700 text-white font-medium py-2 px-3 sm:px-4 rounded-full border-dashed border border-gray-400 transition-colors flex items-center gap-2"
+            >
+              <Home className="h-4 w-4" />
+              <span className="hidden sm:inline text-sm">Home</span>
+            </Link>
+            <button
+              onClick={exportToCSV}
+              className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-3 sm:px-4 rounded-full border-dashed border border-green-400 transition-colors flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              <span className="text-xs sm:text-sm">Export CSV</span>
+            </button>
+            <button
+              onClick={isLocked ? handleUnlock : handleLock}
+              className={`font-medium py-2 px-3 sm:px-4 rounded-full border-dashed border transition-colors flex items-center gap-2 text-xs sm:text-sm ${
+                isLocked 
+                  ? 'bg-red-600 hover:bg-red-700 text-white border-red-400' 
+                  : 'bg-blue-600 hover:bg-blue-700 text-white border-blue-400'
+              }`}
+            >
+              {isLocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+              <span>{isLocked ? 'Unlock' : 'Lock'}</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-black hover:bg-gray-800 text-white font-medium py-2 px-3 sm:px-4 rounded-full border-dashed border border-red-500 transition-colors flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="text-xs sm:text-sm">Logout</span>
+            </button>
+          </div>
+        </div>
+      </header>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Lock Overlay */}
-        <LockOverlay isLocked={isLocked && !showPasswordModal} handleUnlock={handleUnlock} />
+      {/* Main Content */}
+      <main className="p-4 sm:p-6">
+        <div className="w-full space-y-4 sm:space-y-6">
+          {/* Lock Overlay */}
+          <LockOverlay isLocked={isLocked && !showPasswordModal} handleUnlock={handleUnlock} />
 
-        {/* Password Modal */}
-        <PasswordModal 
-          showPasswordModal={showPasswordModal}
-          password={password}
-          currentPasswordIndex={currentPasswordIndex}
-          handlePasswordInput={handlePasswordInput}
-          closePasswordModal={closePasswordModal}
-          checkPassword={checkPassword}
-        />
+          {/* Password Modal */}
+          <PasswordModal 
+            showPasswordModal={showPasswordModal}
+            password={password}
+            currentPasswordIndex={currentPasswordIndex}
+            handlePasswordInput={handlePasswordInput}
+            closePasswordModal={closePasswordModal}
+            checkPassword={checkPassword}
+          />
 
-        {/* Search & Filter Section */}
-        <SearchFilters 
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
+          {/* Search & Filter Section */}
+          <SearchFilters 
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
           filterStatus={filterStatus}
           setFilterStatus={setFilterStatus}
           sortBy={sortBy}
@@ -272,7 +338,8 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };

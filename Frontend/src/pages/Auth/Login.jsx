@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { Eye, EyeOff, Mail, Lock, Compass } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 const Login = () => {
@@ -35,6 +35,25 @@ const Login = () => {
     }
   };
 
+  // Handle explore mode - auto navigate to dashboard with test credentials
+  const handleExploreMode = async () => {
+    setLoading(true);
+    try {
+      // Use test credentials for exploration
+      const result = await login('test@kms.com', 'test2@123');
+      if (result.success) {
+        toast.success('Welcome to KnowMyStatus! Exploring in test mode.');
+        navigate('/teacher/dashboard');
+      } else {
+        toast.error('Failed to start explore mode. Please try manual login.');
+      }
+    } catch (error) {
+      toast.error('Failed to start explore mode. Please try manual login.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -55,7 +74,18 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white relative">
+      {/* Explore Button - Top Left */}
+      <button
+        onClick={handleExploreMode}
+        disabled={loading}
+        className="fixed top-8 right-8 z-50 bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:opacity-50 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2 text-sm shadow-lg"
+      >
+        <Compass className="h-4 w-4" />
+        <span className="hidden sm:inline">Explore KnowMyStatus</span>
+        <span className="sm:hidden">Explore</span>
+      </button>
+
       <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Left Side - Login Form */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 md:p-8 min-h-screen lg:min-h-0">

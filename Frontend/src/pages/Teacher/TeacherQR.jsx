@@ -11,7 +11,7 @@ import {
   BookOpen,
   Building
 } from 'lucide-react';
-import LoadingBar from '../components/LoadingBar.jsx';
+import LoadingBar from '../../components/common/LoadingBar.jsx';
 
 const TeacherQR = () => {
   const { id } = useParams();
@@ -90,8 +90,8 @@ const TeacherQR = () => {
 
   if (!teacher || !qrCode) {
     return (
-      <div className="min-h-screen bg-app-background subtle-grid">
-        <nav className="bg-app-background px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
+      <div className="min-h-screen bg-black subtle-grid">
+        <nav className="bg-black px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
           <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
             KnowMyStatus<span className="navbar-red-dot">.</span>
           </Link>
@@ -109,9 +109,9 @@ const TeacherQR = () => {
   }
 
   return (
-    <div className="min-h-screen bg-app-background subtle-grid">
+    <div className="min-h-screen bg-black subtle-grid">
       {/* Navbar */}
-      <nav className="bg-app-background px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
+      <nav className="bg-black px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
             KnowMyStatus<span className="navbar-red-dot">.</span>

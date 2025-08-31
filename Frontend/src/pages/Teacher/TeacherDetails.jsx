@@ -16,7 +16,7 @@ import {
   StickyNote,
   Download
 } from 'lucide-react';
-import LoadingBar from '../components/LoadingBar.jsx';
+import LoadingBar from '../../components/common/LoadingBar.jsx';
 
 const TeacherDetails = () => {
   const { id } = useParams();

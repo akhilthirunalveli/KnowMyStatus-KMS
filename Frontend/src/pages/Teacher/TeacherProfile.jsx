@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { User, Mail, BookOpen, Building, Phone, MapPin, Save, X, Clock, StickyNote, ArrowLeft } from 'lucide-react';
 
 const TeacherProfile = () => {

@@ -1,17 +1,17 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import TeacherDashboard from './pages/TeacherDashboard';
-import StudentPage from './pages/StudentPage';
-import TeacherProfile from './pages/TeacherProfile';
-import QRScanner from './pages/QRScanner';
-import TeacherDetails from './pages/TeacherDetails';
-import TeacherQR from './pages/TeacherQR';
-import AdminDashboard from './pages/AdminDashboard';
-import LoadingBar from './components/LoadingBar';
+import Home from './pages/Home/Home';
+import Login from './pages/Auth/Login';
+import Signup from './pages/Auth/Signup';
+import TeacherDashboard from './pages/Teacher/TeacherDashboard';
+import StudentPage from './pages/Student/StudentPage';
+import TeacherProfile from './pages/Teacher/TeacherProfile';
+import QRScanner from './pages/Student/QRScanner';
+import TeacherDetails from './pages/Teacher/TeacherDetails';
+import TeacherQR from './pages/Teacher/TeacherQR';
+import AdminDashboard from './pages/Dashboard/AdminDashboard';
+import LoadingBar from './components/common/LoadingBar';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {

@@ -49,7 +49,7 @@ const TeacherTable = ({
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 overflow-hidden">
+    <div className="bg-black backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 overflow-hidden">
       <div className="p-4 sm:p-6 border-b border-dashed border-gray-600/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

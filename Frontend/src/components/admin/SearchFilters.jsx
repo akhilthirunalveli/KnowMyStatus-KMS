@@ -22,9 +22,9 @@ const SearchFilters = ({
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 p-4 sm:p-6 mb-6 sm:mb-8">
+    <div className="bg-black backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 p-4 sm:p-6 mb-6 sm:mb-8">
       <div className="flex items-center gap-3 mb-4 sm:mb-6">
-        <div className="p-2 bg-blue-900/50 rounded-lg border border-dashed border-blue-600/50">
+        <div className="p-2 bg-blue-900/10 rounded-lg border border-dashed border-blue-600/50">
           <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
         </div>
         <div>
@@ -64,107 +64,6 @@ const SearchFilters = ({
         </div>
       </div>
 
-      {/* Filter Options */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {/* Status Filter */}
-        <div>
-          <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-            Filter by Status
-          </label>
-          <div className="relative">
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-400 text-white text-xs sm:text-sm transition-all duration-300 hover:border-gray-500/70 appearance-none cursor-pointer"
-            >
-              <option value="all">🌟 All Status</option>
-              <option value="available">✅ Available</option>
-              <option value="not_available">❌ Not Available</option>
-              <option value="on_leave">🏖️ On Leave</option>
-              <option value="lunch">🍽️ Lunch</option>
-              <option value="in_meeting">🤝 In Meeting</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Sort By Filter */}
-        <div>
-          <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
-            <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-            Sort by Field
-          </label>
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-400 text-white text-xs sm:text-sm transition-all duration-300 hover:border-gray-500/70 appearance-none cursor-pointer"
-            >
-              <option value="created_at">📅 Registration Date</option>
-              <option value="name">👤 Name</option>
-              <option value="email">📧 Email</option>
-              <option value="department">🏢 Department</option>
-              <option value="subject">📚 Subject</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Sort Order */}
-        <div>
-          <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
-            <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-            Sort Order
-          </label>
-          <button
-            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg hover:bg-gray-800/50 transition-all duration-300 text-white text-xs sm:text-sm flex items-center justify-center gap-2 hover:border-yellow-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-400"
-          >
-            {sortOrder === 'asc' ? (
-              <>
-                <span>🔼 Ascending</span>
-              </>
-            ) : (
-              <>
-                <span>🔽 Descending</span>
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* Quick Actions */}
-        <div>
-          <label className="block text-xs font-medium text-gray-300 mb-2 flex items-center gap-2">
-            <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-            Quick Actions
-          </label>
-          <div className="flex gap-2">
-            <button
-              onClick={clearAllFilters}
-              className="flex-1 px-2 sm:px-3 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg hover:bg-gray-800/50 transition-all duration-300 text-white text-xs flex items-center justify-center hover:border-red-400 focus:ring-2 focus:ring-red-500 focus:border-red-400"
-              title="Clear all filters"
-            >
-              🔄
-            </button>
-            <button
-              onClick={exportToCSV}
-              className="flex-1 px-2 sm:px-3 py-2 sm:py-3 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg hover:bg-gray-800/50 transition-all duration-300 text-white text-xs flex items-center justify-center hover:border-green-400 focus:ring-2 focus:ring-green-500 focus:border-green-400"
-              title="Export to CSV"
-            >
-              📥
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* Active Filters Display */}
       {(searchTerm || filterStatus !== 'all' || sortBy !== 'created_at' || sortOrder !== 'desc') && (

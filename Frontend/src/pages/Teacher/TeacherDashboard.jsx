@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import {
@@ -15,15 +15,15 @@ import {
   User,
   Activity
 } from 'lucide-react';
-import LoadingBar from '../components/LoadingBar';
+import LoadingBar from '../../components/common/LoadingBar';
 
 // Import custom components
-import StatusUpdateCard from '../components/teacher/StatusUpdateCard';
-import QRCodeCard from '../components/teacher/QRCodeCard';
-import AnalyticsCards from '../components/teacher/AnalyticsCards';
+import StatusUpdateCard from '../../components/teacher/StatusUpdateCard';
+import QRCodeCard from '../../components/teacher/QRCodeCard';
+import AnalyticsCards from '../../components/teacher/AnalyticsCards';
 
 // Import utilities
-import { getStatusColor } from '../utils/uiUtils';
+import { getStatusColor } from '../../utils/uiUtils';
 
 const TeacherDashboard = () => {
   const { user, updateProfile, logout } = useAuth();
@@ -213,10 +213,10 @@ const TeacherDashboard = () => {
           <div className="flex items-center gap-4 sm:gap-8">
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-gray-300 hover:text-white hover:bg-red-600/20 rounded-full border-2 border-dashed border-gray-500 hover:border-red-400 transition-all duration-300 bg-transparent backdrop-blur-sm text-sm sm:text-base"
+              className="bg-black hover:bg-gray-800 text-white font-medium py-2 px-3 sm:px-4 rounded-full border-dashed border-2 border-red-500 transition-colors flex items-center gap-2"
             >
               <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Logout</span>
+              <span className="text-xs sm:text-sm">Logout</span>
             </button>
           </div>
         </div>
@@ -260,7 +260,7 @@ const TeacherDashboard = () => {
                 </div>
               ) : analytics?.recentScans?.length > 0 ? (
                 <div className="space-y-4">
-                  {analytics.recentScans.slice(0, 5).map((scan, index) => (
+                  {analytics.recentScans.slice(0, 3).map((scan, index) => (
                     <div key={index} className="flex items-center gap-4 p-4 bg-black/30 rounded-lg border border-gray-700">
                       <div className="p-2 bg-blue-800/50 rounded-lg">
                         <Eye className="h-4 w-4 text-blue-400" />

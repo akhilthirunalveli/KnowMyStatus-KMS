@@ -1,5 +1,5 @@
 <div align="left">
-  <img src="Frontend/src/assets/KMS_Logo.png" alt="KnowMyStatus Logo" width="120"/>
+  <img src="Frontend/src/assets/Logo.png" alt="KnowMyStatus Logo" width="120"/>
   <h3> KnowMyStatus - Real-time Teacher Status Tracking System</h3>
 </div>
 
