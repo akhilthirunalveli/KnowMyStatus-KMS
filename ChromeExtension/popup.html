@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowMyStatus - Quick Update</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="extension-container">
+        <!-- Header -->
+        <header class="extension-header">
+            <div class="logo-container">
+                <img src="icons/icon-32.png" alt="KnowMyStatus" class="logo">
+                <h1 class="brand-title">KnowMyStatus<span class="red-dot">.</span></h1>
+            </div>
+            <p class="subtitle">Quick Teacher Update</p>
+        </header>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading...</p>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="form-container" style="display: none;">
+            <h2 class="form-title">Teacher Login</h2>
+            <p class="form-subtitle">Sign in to update your status quickly</p>
+            
+            <form id="teacher-login">
+                <div class="input-group">
+                    <input type="email" id="email" class="input-field" placeholder="Email Address" required>
+                    <span class="input-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </span>
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="password" class="input-field" placeholder="Password" required>
+                    <span class="input-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <circle cx="12" cy="16" r="1"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </span>
+                    <button type="button" id="toggle-password" class="password-toggle">
+                        <svg id="eye-closed" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                        <svg id="eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <button type="submit" class="primary-btn" id="login-btn">
+                    <span class="btn-text">Sign In</span>
+                    <div class="btn-loader" style="display: none;"></div>
+                </button>
+            </form>
+            
+            <div id="login-error" class="error-message" style="display: none;"></div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard-container" style="display: none;">
+            <!-- Teacher Info -->
+            <div class="teacher-info">
+                <div class="teacher-avatar">
+                    <span id="teacher-initial" class="avatar-text">T</span>
+                </div>
+                <div class="teacher-details">
+                    <h3 id="teacher-name" class="teacher-name">Teacher Name</h3>
+                    <p id="teacher-subject" class="teacher-subject">Subject</p>
+                    <p id="teacher-dept" class="teacher-dept">Department</p>
+                </div>
+                <button id="logout-btn" class="logout-btn" title="Logout">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16,17 21,12 16,7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Quick Status Update -->
+            <div class="status-section">
+                <h3 class="section-title">Quick Status Update</h3>
+                
+                <div class="status-grid">
+                    <button class="status-btn available" data-status="available">
+                        <span class="status-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                        </span>
+                        <span class="status-label">Available</span>
+                    </button>
+                    
+                    <button class="status-btn busy" data-status="busy">
+                        <span class="status-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                        </span>
+                        <span class="status-label">Busy</span>
+                    </button>
+                    
+                    <button class="status-btn meeting" data-status="in_meeting">
+                        <span class="status-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </span>
+                        <span class="status-label">In Meeting</span>
+                    </button>
+                    
+                    <button class="status-btn teaching" data-status="teaching">
+                        <span class="status-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                        </span>
+                        <span class="status-label">Teaching</span>
+                    </button>
+                    
+                </div>
+                
+                <!-- Current Status Display -->
+                <div class="current-status">
+                    <span class="current-label">Current Status:</span>
+                    <span id="current-status" class="current-value">Available</span>
+                </div>
+            </div>
+
+            <!-- Status Note -->
+            <div class="note-section">
+                <h3 class="section-title">Status Note</h3>
+                <div class="input-group">
+                    <textarea id="status-note" class="textarea-field" placeholder="Add a note about your current status (optional)" rows="2" maxlength="100"></textarea>
+                </div>
+            </div>
+
+            <!-- Quick Contact Update -->
+            <div class="contact-section">
+                <h3 class="section-title">Quick Contact Update</h3>
+                
+                <div class="input-group">
+                    <input type="tel" id="phone-update" class="input-field" placeholder="Phone Number">
+                    <span class="input-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </span>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="office-update" class="input-field" placeholder="Office Location">
+                    <span class="input-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="update-btn" class="primary-btn">
+                    <span class="btn-text">Update Status</span>
+                    <div class="btn-loader" style="display: none;"></div>
+                </button>
+            </div>
+
+            <!-- Success/Error Messages -->
+            <div id="update-message" class="message" style="display: none;"></div>
+        </div>
+
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
