@@ -39,20 +39,16 @@ export const EvervaultCard = ({
         onMouseMove={onMouseMove}
         className="group/card w-full relative overflow-hidden bg-transparent flex items-center justify-start h-full">
         <CardPattern mouseX={mouseX} mouseY={mouseY} randomString={randomString} />
-        <div className="relative z-10 flex items-start justify-start pl-8" style={{ paddingTop: '0px' }}>
+        <div className="relative z-10 flex items-start justify-start pl-8 lg:pl-16 -mt-24">
           <div className="relative flex flex-col items-start justify-start text-white cabinet-grotesk text-left">
-            <div className="relative font-bold text-6xl mb-4 w-auto">
-              <div className="absolute w-full h-full bg-black/[0.8] blur-sm" />
-              <span className="text-white z-20 py-4 relative block text-left">
-                Connect<span className="text-red-500">.</span> Update<span className="text-red-500">.</span> Share<span className="text-red-500">.</span>
+            <h2 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-4">
+              <span className="text-white relative z-20">
+                Connect<span className="text-[#ff3333]">.</span> Update<span className="text-[#ff3333]">.</span> Share<span className="text-[#ff3333]">.</span>
               </span>
-            </div>
-            <div className="relative font-extralight text-4xl text-white/80 w-auto" style={{ fontFamily: 'CabinetGrotesk-Extralight, sans-serif' }}>
-              <div className="absolute w-full h-full bg-black/[0.8] blur-sm" />
-              <span className="text-white z-20 py-2 relative block text-left">
-                The smartest way to manage<br />status in real-time
-              </span>
-            </div>
+            </h2>
+            <p className="text-xl sm:text-2xl md:text-3xl font-light text-gray-300 max-w-2xl">
+              The smartest way to manage status in real-time
+            </p>
           </div>
         </div>
       </div>
@@ -95,9 +91,9 @@ export const generateRandomString = (length) => {
   const charsPerLine = 500; // Restored to original full width coverage
   const linesNeeded = Math.ceil(window.innerHeight / 10);
   const totalChars = charsPerLine * linesNeeded * 4;
-  
+
   let charCount = 0;
-  
+
   for (let i = 0; i < Math.max(length, totalChars); i++) {
     if (charCount > 0 && charCount % charsPerLine === 0) {
       result += "\n";
@@ -117,7 +113,7 @@ export const generateRandomString = (length) => {
       charCount++;
     }
   }
-  
+
   return result;
 };
 
