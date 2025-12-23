@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  QrCode, 
-  Download, 
-  Copy, 
-  CheckCircle, 
-  RefreshCw 
+import {
+  QrCode,
+  Download,
+  Copy,
+  CheckCircle,
+  RefreshCw
 } from 'lucide-react';
 
 const QRCodeCard = ({
@@ -16,64 +16,73 @@ const QRCodeCard = ({
   copied
 }) => {
   return (
-    <div className="bg-gradient-to-br from-purple-900/20 to-purple-800/30 backdrop-blur-lg rounded-2xl border border-purple-700/30 p-4 sm:p-6">
-      <h2 className="text-lg sm:text-lg font-semibold text-white mb-4 sm:mb-6">Your QR Code</h2>
+    <div className="premium-card p-6 sm:p-8 flex flex-col items-center">
+      <div className="w-full flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold font-cabinet-grotesk text-white">Digital Pass</h2>
+        <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_#22c55e]"></div>
+      </div>
+
       {qrCode ? (
-        <div className="text-center">
-          <div className="bg-black/30 p-2 rounded-xl inline-block mb-4 border-2 border-dashed border-purple-500/50 font-cabinet-grotesk">
-            <img 
-              src={qrCode.qrCodeUrl} 
+        <div className="w-full">
+          <div className="relative group mx-auto w-full max-w-[240px] aspect-square flex items-center justify-center bg-white rounded-2xl mb-8 overflow-hidden shadow-[0_0_40px_-10px_rgba(255,255,255,0.2)]">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5"></div>
+            <img
+              src={qrCode.qrCodeUrl}
               alt="Teacher QR Code"
-              className="w-24 h-24 sm:w-32 sm:h-32 object-contain"
+              className="w-48 h-48 object-contain relative z-10"
             />
+            {/* Corner acccents */}
+            <div className="absolute top-4 left-4 w-4 h-4 border-l-2 border-t-2 border-black"></div>
+            <div className="absolute top-4 right-4 w-4 h-4 border-r-2 border-t-2 border-black"></div>
+            <div className="absolute bottom-4 left-4 w-4 h-4 border-l-2 border-b-2 border-black"></div>
+            <div className="absolute bottom-4 right-4 w-4 h-4 border-r-2 border-b-2 border-black"></div>
           </div>
-          <div className="space-y-2 sm:space-y-3">
+
+          <div className="space-y-3">
             <button
               onClick={downloadQRCode}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
+              className="w-full bg-[#ff3333] text-white font-bold py-3 px-4 rounded-xl transition-all shadow-[0_4px_15px_rgba(255,51,51,0.3)] flex items-center justify-center gap-2"
             >
               <Download className="h-4 w-4" />
-              Download QR Code
+              Save to Device
             </button>
             <button
               onClick={copyQRData}
-              className="w-full border border-purple-500/50 hover:bg-purple-900/30 text-gray-300 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
+              className="w-full bg-transparent border border-white/10 text-gray-300 font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               {copied ? (
                 <>
-                  <CheckCircle className="h-4 w-4 text-emerald-600" />
-                  Copied!
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <span className="text-green-500">Copied</span>
                 </>
               ) : (
                 <>
                   <Copy className="h-4 w-4" />
-                  Copy QR Data
+                  Copy Data
                 </>
               )}
             </button>
           </div>
         </div>
       ) : (
-        <div className="text-center py-6 sm:py-8">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-black/30 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <QrCode className="h-6 w-6 sm:h-8 sm:w-8 text-purple-400" />
-          </div>
-          <h3 className="font-medium text-white mb-2 text-sm sm:text-base">No QR Code Generated</h3>
-          <p className="text-xs sm:text-sm text-gray-400 mb-4">Generate your personal QR code to share with students.</p>
+        <div className="text-center py-12 w-full border-2 border-dashed border-white/10 rounded-2xl bg-white/5">
+          <QrCode className="h-10 w-10 text-gray-600 mx-auto mb-4" />
+          <h3 className="font-bold text-white mb-2">No Pass Generated</h3>
+          <p className="text-sm text-gray-500 mb-6 px-4">Create your digital ID to allow students to scan your status.</p>
           <button
             onClick={generateQRCode}
             disabled={loading}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 mx-auto text-sm sm:text-base"
+            className="bg-white text-black font-bold py-2 px-6 rounded-full transition-colors flex items-center justify-center gap-2 mx-auto"
           >
             {loading ? (
               <>
                 <RefreshCw className="h-4 w-4 animate-spin" />
-                Generating...
+                Wait...
               </>
             ) : (
               <>
                 <QrCode className="h-4 w-4" />
-                Generate QR Code
+                Generate
               </>
             )}
           </button>
