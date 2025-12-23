@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { 
-  ArrowLeft, 
-  QrCode, 
+import {
+  ArrowLeft,
+  QrCode,
   Download,
   Share2,
   User,
@@ -34,7 +34,7 @@ const TeacherQR = () => {
       // Fetch teacher details
       const teacherResponse = await axios.get(`/api/students/teacher/${id}`);
       setTeacher(teacherResponse.data.teacher);
-      
+
       // Fetch QR code
       const qrResponse = await axios.get(`/api/students/teacher/${id}/qr`, {
         responseType: 'blob'
@@ -85,22 +85,33 @@ const TeacherQR = () => {
   };
 
   if (loading) {
-  return <LoadingBar text="Loading QR code..." />;
+    return <LoadingBar text="Loading QR code..." />;
   }
 
   if (!teacher || !qrCode) {
     return (
-      <div className="min-h-screen bg-black subtle-grid">
-        <nav className="bg-black px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
-          <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
-            KnowMyStatus<span className="navbar-red-dot">.</span>
-          </Link>
+      <div className="min-h-screen bg-app-background subtle-grid cabinet-grotesk">
+        <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+          <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between">
+            <Link to="/" className="text-2xl font-bold text-white tracking-tight flex items-center gap-1 cabinet-grotesk">
+              KnowMyStatus<span className="text-[#ff3333] text-4xl leading-none">.</span>
+            </Link>
+
+            <div className="flex items-center gap-8 text-base font-medium text-white cabinet-grotesk">
+              <Link to="/student" className="text-white/70">
+                Find Teacher
+              </Link>
+              <Link to="/student/scan" className="text-white">
+                Scan
+              </Link>
+            </div>
+          </div>
         </nav>
-        <div className="text-center py-12 px-4">
-          <QrCode className="h-16 w-16 text-red-400 mx-auto mb-4" />
+        <div className="pt-32 text-center px-4">
+          <QrCode className="h-16 w-16 text-[#ff3333] mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-4 cabinet-grotesk">QR Code Not Found</h2>
           <p className="text-gray-400 mb-6 cabinet-grotesk">The QR code for this teacher is not available.</p>
-          <Link to="/student" className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors cabinet-grotesk">
+          <Link to="/student" className="bg-[#ff3333] text-white font-bold py-3 px-6 rounded-lg cabinet-grotesk">
             Back to Teachers
           </Link>
         </div>
@@ -109,37 +120,36 @@ const TeacherQR = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black subtle-grid">
+    <div className="min-h-screen bg-app-background subtle-grid cabinet-grotesk">
       {/* Navbar */}
-      <nav className="bg-black px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
-            KnowMyStatus<span className="navbar-red-dot">.</span>
+      <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between">
+          <Link to="/" className="text-2xl font-bold text-white tracking-tight flex items-center gap-1 cabinet-grotesk">
+            KnowMyStatus<span className="text-[#ff3333] text-4xl leading-none">.</span>
           </Link>
-          
-          <div className="flex items-center gap-3 lg:gap-4 navbar-brand text-lg lg:text-xl text-white">
-            <Link to="/student" className="nav-center-link">
+
+          <div className="flex items-center gap-8 text-base font-medium text-white cabinet-grotesk">
+            <Link to="/student" className="text-white/70">
               Find Teacher
             </Link>
-            <span className="nav-dot">•</span>
-            <Link to="/student/scan" className="nav-center-link">
+            <Link to="/student/scan" className="text-white">
               Scan
             </Link>
           </div>
         </div>
       </nav>
 
-      <div className="animate-fade-in px-4 sm:px-6 lg:px-10 py-4 sm:py-6">
+      <div className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Header with Back Button */}
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate(`/student/teacher/${id}`)}
-            className="bg-transparent hover:bg-red-900 text-red-400 font-bold py-2 px-3 sm:px-4 rounded-lg border-2 border-red-500 border-dotted transition-colors cabinet-grotesk flex items-center space-x-2 text-sm sm:text-base mb-4"
+            className="group flex items-center text-gray-400 font-medium mb-4"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 mr-2" />
             <span>Back to Details</span>
           </button>
-          
+
           <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 cabinet-grotesk">
             QR Code for {teacher.name}
           </h1>
@@ -150,22 +160,22 @@ const TeacherQR = () => {
 
         <div className="max-w-4xl mx-auto">
           {/* Teacher Info Card */}
-          <div className="card mb-6 sm:mb-8">
+          <div className="premium-card p-6 mb-6 sm:mb-8 bg-[#0a0a0a] border border-white/10 rounded-[1.4rem]">
             <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-900 rounded-full flex items-center justify-center border-2 border-red-500 border-dotted">
-                <User className="h-8 w-8 sm:h-10 sm:w-10 text-red-400" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-[#ff3333]/20 to-transparent rounded-full flex items-center justify-center border border-[#ff3333]/30">
+                <User className="h-8 w-8 sm:h-10 sm:w-10 text-[#ff3333]" />
               </div>
               <div className="flex-1 text-center sm:text-left">
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 cabinet-grotesk">
                   {teacher.name}
                 </h2>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                  <div className="flex items-center justify-center sm:justify-start text-gray-300">
-                    <BookOpen className="h-4 w-4 mr-2 text-red-400" />
+                  <div className="flex items-center justify-center sm:justify-start text-gray-400">
+                    <BookOpen className="h-4 w-4 mr-2 text-[#ff3333]" />
                     <span className="cabinet-grotesk">{teacher.subject}</span>
                   </div>
-                  <div className="flex items-center justify-center sm:justify-start text-gray-300">
-                    <Building className="h-4 w-4 mr-2 text-red-400" />
+                  <div className="flex items-center justify-center sm:justify-start text-gray-400">
+                    <Building className="h-4 w-4 mr-2 text-[#ff3333]" />
                     <span className="cabinet-grotesk">{teacher.department}</span>
                   </div>
                 </div>
@@ -175,38 +185,38 @@ const TeacherQR = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* QR Code Display */}
-            <div className="card text-center">
+            <div className="premium-card p-6 text-center bg-[#0a0a0a] border border-white/10 rounded-[1.4rem]">
               <div className="mb-4 sm:mb-6">
                 <h3 className="text-lg sm:text-xl font-bold text-white mb-4 cabinet-grotesk flex items-center justify-center">
-                  <QrCode className="h-5 w-5 sm:h-6 sm:w-6 text-red-400 mr-3" />
+                  <QrCode className="h-5 w-5 sm:h-6 sm:w-6 text-[#ff3333] mr-3" />
                   QR Code
                 </h3>
-                
-                <div className="p-4 sm:p-6 bg-white rounded-xl mx-auto inline-block border-2 border-red-500 border-dotted mb-4">
-                  <img 
-                    src={qrCode} 
+
+                <div className="p-4 sm:p-6 bg-white rounded-xl mx-auto inline-block shadow-lg shadow-black/50 mb-4">
+                  <img
+                    src={qrCode}
                     alt={`QR Code for ${teacher.name}`}
                     className="w-48 h-48 sm:w-64 sm:h-64 lg:w-72 lg:h-72"
                   />
                 </div>
               </div>
-              
+
               <p className="text-sm sm:text-base text-gray-400 mb-6 cabinet-grotesk">
                 Point your phone's camera at this QR code to quickly access {teacher.name}'s contact information.
               </p>
-              
+
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleDownload}
-                  className="w-full bg-transparent hover:bg-red-900 text-red-400 font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg border-2 border-red-500 border-dotted transition-colors cabinet-grotesk flex items-center justify-center space-x-2"
+                  className="w-full bg-white/5 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg border border-white/10 cabinet-grotesk flex items-center justify-center space-x-2"
                 >
                   <Download className="h-4 w-4" />
                   <span>Download QR Code</span>
                 </button>
-                
+
                 <button
                   onClick={handleShare}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors cabinet-grotesk flex items-center justify-center space-x-2"
+                  className="w-full bg-[#ff3333] text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg cabinet-grotesk flex items-center justify-center space-x-2"
                 >
                   <Share2 className="h-4 w-4" />
                   <span>Share QR Code</span>
@@ -215,36 +225,36 @@ const TeacherQR = () => {
             </div>
 
             {/* Instructions */}
-            <div className="card">
+            <div className="premium-card p-6 bg-[#0a0a0a] border border-white/10 rounded-[1.4rem]">
               <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 cabinet-grotesk flex items-center">
-                <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                <span className="w-2 h-2 bg-[#ff3333] rounded-full mr-3"></span>
                 How to Use
               </h3>
-              
+
               <div className="space-y-4 sm:space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-red-500 border-dotted">
-                    <span className="text-red-400 font-bold text-sm cabinet-grotesk">1</span>
+                  <div className="w-8 h-8 bg-[#ff3333]/10 rounded-full flex items-center justify-center flex-shrink-0 border border-[#ff3333]/20">
+                    <span className="text-[#ff3333] font-bold text-sm cabinet-grotesk">1</span>
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-1 cabinet-grotesk">Open Camera</h4>
                     <p className="text-sm sm:text-base text-gray-400 cabinet-grotesk">Open your phone's camera app or any QR code scanner application</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-red-500 border-dotted">
-                    <span className="text-red-400 font-bold text-sm cabinet-grotesk">2</span>
+                  <div className="w-8 h-8 bg-[#ff3333]/10 rounded-full flex items-center justify-center flex-shrink-0 border border-[#ff3333]/20">
+                    <span className="text-[#ff3333] font-bold text-sm cabinet-grotesk">2</span>
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-1 cabinet-grotesk">Point & Scan</h4>
                     <p className="text-sm sm:text-base text-gray-400 cabinet-grotesk">Point your camera directly at this QR code until it's recognized</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-red-500 border-dotted">
-                    <span className="text-red-400 font-bold text-sm cabinet-grotesk">3</span>
+                  <div className="w-8 h-8 bg-[#ff3333]/10 rounded-full flex items-center justify-center flex-shrink-0 border border-[#ff3333]/20">
+                    <span className="text-[#ff3333] font-bold text-sm cabinet-grotesk">3</span>
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-1 cabinet-grotesk">Access Info</h4>
@@ -252,9 +262,9 @@ const TeacherQR = () => {
                   </div>
                 </div>
               </div>
-              
-              <div className="mt-6 p-4 bg-blue-900/30 rounded-lg border border-blue-500">
-                <p className="text-sm text-blue-300 cabinet-grotesk">
+
+              <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/5">
+                <p className="text-sm text-gray-300 cabinet-grotesk">
                   💡 <strong>Tip:</strong> Save this QR code to your photos for quick access anytime!
                 </p>
               </div>

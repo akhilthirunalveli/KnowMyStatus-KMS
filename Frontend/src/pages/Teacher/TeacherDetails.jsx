@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { 
-  ArrowLeft, 
-  QrCode, 
-  MapPin, 
-  Mail, 
-  Phone, 
-  BookOpen, 
+import {
+  ArrowLeft,
+  QrCode,
+  MapPin,
+  Mail,
+  Phone,
+  BookOpen,
   Building,
   User,
-  Calendar,
   Clock,
   StickyNote,
-  Download
+  Download,
+  ArrowRight
 } from 'lucide-react';
 import LoadingBar from '../../components/common/LoadingBar.jsx';
 
@@ -25,7 +25,6 @@ const TeacherDetails = () => {
   const [loading, setLoading] = useState(true);
   const [qrCode, setQrCode] = useState(null);
 
-  // Set page title
   useEffect(() => {
     document.title = "Teacher Details - KnowMyStatus";
   }, []);
@@ -38,8 +37,7 @@ const TeacherDetails = () => {
     try {
       const response = await axios.get(`/api/students/teacher/${id}`);
       setTeacher(response.data.teacher);
-      
-      // If QR code exists, fetch it
+
       if (response.data.teacher.qr_code) {
         fetchQRCode();
       }
@@ -66,247 +64,172 @@ const TeacherDetails = () => {
   };
 
   if (loading) {
-  return <LoadingBar text="Loading teacher details..." />;
+    return <LoadingBar text="Loading teacher details..." />;
   }
 
   if (!teacher) {
     return (
-      <div className="min-h-screen bg-app-background subtle-grid">
-        <nav className="bg-app-background px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
-          <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
-            KnowMyStatus<span className="navbar-red-dot">.</span>
-          </Link>
-        </nav>
-        <div className="text-center py-12 px-4">
-          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 cabinet-grotesk">Teacher Not Found</h2>
-          <p className="text-sm sm:text-base text-gray-400 mb-6 cabinet-grotesk">The teacher you're looking for doesn't exist or has been removed.</p>
-          <Link to="/student" className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors cabinet-grotesk">
-            Back to Teachers
-          </Link>
+      <div className="min-h-screen bg-app-background subtle-grid cabinet-grotesk">
+        <div className="pt-32 text-center px-4">
+          <h2 className="text-2xl font-bold text-white mb-4">Teacher Not Found</h2>
+          <Link to="/student" className="text-[#ff3333]">Back to Teachers</Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-app-background subtle-grid">
+    <div className="min-h-screen bg-app-background subtle-grid cabinet-grotesk">
       {/* Navbar */}
-      <nav className="bg-app-background px-4 sm:px-6 lg:px-10 py-4 sm:py-6 relative z-10">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="text-app-text-primary text-2xl sm:text-3xl lg:text-4xl navbar-brand cursor-pointer hover:opacity-80 transition-opacity">
-            KnowMyStatus<span className="navbar-red-dot">.</span>
+      <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between">
+          <Link to="/" className="text-2xl font-bold text-white tracking-tight transition-opacity flex items-center gap-1 cabinet-grotesk">
+            KnowMyStatus<span className="text-[#ff3333] text-4xl leading-none">.</span>
           </Link>
-          
-          <div className="flex items-center gap-3 lg:gap-4 navbar-brand text-lg lg:text-xl text-white">
-            <Link to="/student" className="nav-center-link">
+
+          <div className="flex items-center gap-8 text-base font-medium text-white cabinet-grotesk">
+            <Link to="/student" className="text-[#ff3333] transition-colors">
               Find Teacher
             </Link>
-            <span className="nav-dot">•</span>
-            <Link to="/student/scan" className="nav-center-link">
+            <Link to="/student/scan" className="text-white transition-colors">
               Scan
             </Link>
           </div>
         </div>
       </nav>
 
-      <div className="animate-fade-in px-4 sm:px-6 lg:px-10 py-4 sm:py-6">
-        {/* Header with Back Button */}
-        <div className="mb-4 sm:mb-6">
+      <div className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="mb-6">
           <button
             onClick={() => navigate('/student')}
-            className="bg-transparent hover:bg-red-900 text-red-400 font-bold py-2 px-3 sm:px-4 rounded-lg border-2 border-red-500 border-dotted transition-colors cabinet-grotesk flex items-center space-x-2 text-sm sm:text-base mb-4"
+            className="flex items-center text-gray-400 font-medium"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 mr-2" />
             <span>Back to Teachers</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
-          {/* Main Teacher Information */}
-          <div className="lg:col-span-2">
-            <div className="card">
-              {/* Teacher Profile Header */}
-              <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6 mb-6 sm:mb-8">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-red-900 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-red-500 border-dotted">
-                  <User className="h-10 w-10 sm:h-12 sm:w-12 text-red-400" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Info */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="premium-card p-6 sm:p-8 bg-[#0a0a0a] border border-white/10 rounded-[1.4rem]">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8 text-center sm:text-left">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#ff3333]/20 to-transparent rounded-full flex items-center justify-center border border-[#ff3333]/30">
+                  <User className="h-10 w-10 text-[#ff3333]" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3 cabinet-grotesk">
+                <div>
+                  <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
                     {teacher.name}
                   </h1>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
-                    <div className="flex items-center text-gray-300 text-sm sm:text-base">
-                      <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-red-400" />
-                      <span className="cabinet-grotesk">{teacher.subject}</span>
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-gray-400">
+                    <div className="flex items-center">
+                      <BookOpen className="h-4 w-4 mr-2 text-[#ff3333]" />
+                      <span>{teacher.subject}</span>
                     </div>
-                    <div className="flex items-center text-gray-300 text-sm sm:text-base">
-                      <Building className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-red-400" />
-                      <span className="cabinet-grotesk">{teacher.department}</span>
+                    <div className="flex items-center">
+                      <Building className="h-4 w-4 mr-2 text-[#ff3333]" />
+                      <span>{teacher.department}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Current Status Section */}
+              {/* Status Section */}
               {(teacher.status || teacher.status_note) && (
-                <div className="mb-6 p-4 sm:p-6 bg-gradient-to-r from-red-900/50 to-red-800/30 rounded-xl border-2 border-red-500 shadow-lg shadow-red-500/20">
-                  <div className="flex items-center justify-center mb-3">
-                    <div className="flex items-center space-x-2">
-                      <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-red-400" />
-                      <h3 className="text-lg sm:text-xl font-bold text-red-300 cabinet-grotesk">Current Status</h3>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center px-4 py-2 bg-black/40 rounded-full border border-red-400 mb-3">
-                      <span className="text-xl sm:text-2xl font-bold text-white cabinet-grotesk capitalize">
+                <div className="mb-8 p-6 bg-gradient-to-r from-red-900/10 to-transparent rounded-2xl border border-red-500/20">
+                  <div className="flex flex-col items-center sm:items-start">
+                    <span className="text-xs font-bold text-red-400 uppercase tracking-widest mb-2">Current Status</span>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`w-3 h-3 rounded-full ${teacher.status === 'available' ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></div>
+                      <span className="text-2xl font-bold text-white capitalize">
                         {teacher.status ? teacher.status.replace('_', ' ') : 'Available'}
                       </span>
                     </div>
-                    
                     {teacher.status_note && (
-                      <div className="flex items-center justify-center gap-2 text-sm sm:text-base text-red-200">
-                        <StickyNote className="h-4 w-4 sm:h-5 sm:w-5" />
-                        <span className="cabinet-grotesk italic">{teacher.status_note}</span>
-                      </div>
+                      <p className="text-gray-400 italic">"{teacher.status_note}"</p>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* Contact Information */}
               <div className="space-y-4">
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 cabinet-grotesk flex items-center">
-                  <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
                   Contact Information
                 </h3>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-800 rounded-lg border border-red-500 border-dotted">
-                    <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 flex-shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Email</p>
-                      <a 
-                        href={`mailto:${teacher.email}`}
-                        className="font-medium text-red-400 hover:text-red-300 text-sm sm:text-base truncate block cabinet-grotesk"
-                      >
-                        {teacher.email}
-                      </a>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-3 mb-1">
+                      <Mail className="h-4 w-4 text-gray-500" />
+                      <span className="text-xs font-bold text-gray-500 uppercase">Email</span>
                     </div>
+                    <p className="text-white font-medium break-all">{teacher.email}</p>
                   </div>
-
                   {teacher.phone && (
-                    <div className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-800 rounded-lg border border-red-500 border-dotted">
-                      <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 flex-shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Phone</p>
-                        <a 
-                          href={`tel:${teacher.phone}`}
-                          className="font-medium text-red-400 hover:text-red-300 text-sm sm:text-base cabinet-grotesk"
-                        >
-                          {teacher.phone}
-                        </a>
+                    <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-3 mb-1">
+                        <Phone className="h-4 w-4 text-gray-500" />
+                        <span className="text-xs font-bold text-gray-500 uppercase">Phone</span>
                       </div>
+                      <p className="text-white font-medium">{teacher.phone}</p>
                     </div>
                   )}
-
                   {teacher.office && (
-                    <div className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-800 rounded-lg border border-red-500 border-dotted">
-                      <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 flex-shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Office Location</p>
-                        <p className="font-medium text-white text-sm sm:text-base cabinet-grotesk">{teacher.office}</p>
+                    <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-3 mb-1">
+                        <MapPin className="h-4 w-4 text-gray-500" />
+                        <span className="text-xs font-bold text-gray-500 uppercase">Office</span>
                       </div>
+                      <p className="text-white font-medium">{teacher.office}</p>
                     </div>
                   )}
-
-                  <div className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-800 rounded-lg border border-red-500 border-dotted">
-                    <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 flex-shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs sm:text-sm text-gray-400 cabinet-grotesk">Member Since</p>
-                      <p className="font-medium text-white text-sm sm:text-base cabinet-grotesk">
-                        {new Date(teacher.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* QR Code Section */}
+          {/* Sidebar - QR */}
           <div className="lg:col-span-1">
-            <div className="card">
-              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 cabinet-grotesk flex items-center">
-                <QrCode className="h-5 w-5 sm:h-6 sm:w-6 text-red-400 mr-3" />
-                QR Code
-              </h3>
-              
-              {teacher.qr_code ? (
+            <div className="premium-card p-6 bg-[#0a0a0a] border border-white/10 rounded-[1.4rem] sticky top-32">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-white">Digital Pass</h3>
+                <QrCode className="h-5 w-5 text-[#ff3333]" />
+              </div>
+
+              {teacher.qr_code && qrCode ? (
                 <div className="text-center">
-                  {qrCode ? (
-                    <div className="mb-4 sm:mb-6">
-                      <div className="p-4 bg-white rounded-xl mx-auto inline-block border-2 border-red-500 border-dotted">
-                        <img 
-                          src={qrCode} 
-                          alt={`QR Code for ${teacher.name}`}
-                          className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 mx-auto bg-gray-800 rounded-xl flex items-center justify-center mb-4 sm:mb-6 border-2 border-red-500 border-dotted">
-                      <QrCode className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-red-400" />
-                    </div>
-                  )}
-                  
-                  <p className="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-6 px-2 cabinet-grotesk">
-                    Scan this QR code to quickly access {teacher.name}'s contact information
-                  </p>
-                  
+                  <div className="p-4 bg-white rounded-2xl inline-block mb-6 shadow-lg shadow-black/50">
+                    <img src={qrCode} alt="Teacher QR" className="w-40 h-40 object-contain" />
+                  </div>
+                  <p className="text-sm text-gray-400 mb-6">Scan to save {teacher.name}'s contact info.</p>
+
                   <div className="space-y-3">
                     <button
                       onClick={() => {
-                        if (qrCode) {
-                          const link = document.createElement('a');
-                          link.href = qrCode;
-                          link.download = `${teacher.name}-qr-code.png`;
-                          link.click();
-                          toast.success('QR Code downloaded successfully!');
-                        }
+                        const link = document.createElement('a');
+                        link.href = qrCode;
+                        link.download = `${teacher.name}-qr.png`;
+                        link.click();
                       }}
-                      className="w-full bg-transparent hover:bg-red-900 text-red-400 font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg border-2 border-red-500 border-dotted transition-colors cabinet-grotesk flex items-center justify-center space-x-2 text-xs sm:text-sm"
-                      disabled={!qrCode}
+                      className="w-full py-3 bg-[#ff3333] text-white font-bold rounded-xl flex items-center justify-center gap-2"
                     >
-                      <Download className="h-3 w-3 sm:h-4 sm:w-4" />
-                      <span>Download QR Code</span>
+                      <Download className="h-4 w-4" />
+                      Download
                     </button>
-                    
                     <Link
-                      to={`/student/teacher/${teacher.id}/qr`}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors cabinet-grotesk flex items-center justify-center space-x-2 text-xs sm:text-sm"
+                      to={`/student/teacher/${id}/qr`}
+                      className="w-full py-3 bg-white/5 text-white font-medium rounded-xl border border-white/10 flex items-center justify-center gap-2"
                     >
-                      <QrCode className="h-3 w-3 sm:h-4 sm:w-4" />
-                      <span>View Full QR</span>
+                      <QrCode className="h-4 w-4" />
+                      View Full Screen
                     </Link>
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-6 sm:py-8">
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-4 border-2 border-red-500 border-dotted">
-                    <QrCode className="h-8 w-8 sm:h-10 sm:w-10 text-red-400" />
+                <div className="text-center py-10">
+                  <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <QrCode className="h-8 w-8 text-gray-600" />
                   </div>
-                  <h4 className="text-base sm:text-lg font-bold text-white mb-2 cabinet-grotesk">
-                    No QR Code Available
-                  </h4>
-                  <p className="text-sm sm:text-base text-gray-400 mb-4 px-2 cabinet-grotesk">
-                    QR code will be generated when teacher completes profile setup
-                  </p>
-                  <div className="p-3 bg-yellow-900/30 rounded-lg border border-yellow-500">
-                    <p className="text-xs sm:text-sm text-yellow-300 cabinet-grotesk">
-                      Contact the teacher directly using the information provided
-                    </p>
-                  </div>
+                  <p className="text-gray-500 text-sm">QR Code not available</p>
                 </div>
               )}
             </div>
@@ -317,4 +240,4 @@ const TeacherDetails = () => {
   );
 };
 
-export default TeacherDetails; 
+export default TeacherDetails;
