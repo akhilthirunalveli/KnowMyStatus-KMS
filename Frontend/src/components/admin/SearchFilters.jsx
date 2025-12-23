@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, X } from 'lucide-react';
 
 const SearchFilters = ({
   searchTerm,
@@ -22,72 +22,91 @@ const SearchFilters = ({
   };
 
   return (
-    <div className="bg-black backdrop-blur-lg rounded-2xl border-2 border-dashed border-gray-600/50 p-4 sm:p-6 mb-6 sm:mb-8">
-      <div className="flex items-center gap-3 mb-4 sm:mb-6">
-        <div className="p-2 bg-blue-900/10 rounded-lg border border-dashed border-blue-600/50">
-          <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
-        </div>
-        <div>
-          <h3 className="text-base sm:text-lg font-semibold text-white cabinet-grotesk">Search & Filter</h3>
-          <p className="text-xs sm:text-sm text-gray-400">Find and organize teacher data</p>
-        </div>
-        <div className="ml-auto text-xs sm:text-sm text-gray-500">
-          {filteredTeachers.length} / {teachers.length} teachers
-        </div>
-      </div>
+    <div className="premium-card p-1 bg-gradient-to-br from-white/10 to-transparent border-0 mb-6">
+      <div className="bg-black/90 p-5 sm:p-6 rounded-[1.4rem]">
+        <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center mb-6">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+              <Filter className="h-5 w-5 text-[#ff3333]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-white cabinet-grotesk">Search & Filter</h3>
+              <p className="text-sm text-gray-400">Find and organize staff data</p>
+            </div>
+          </div>
 
-      {/* Search Bar */}
-      <div className="mb-4 sm:mb-6">
-        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
-          <Search className="h-4 w-4 text-white" />
-          Search Teachers
-        </label>
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by name, email, subject, or department..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 bg-black/50 border-2 border-dashed border-gray-600/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-400 text-white placeholder-gray-400 text-sm sm:text-base transition-all duration-300 hover:border-gray-500/70"
-          />
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+              {filteredTeachers.length} / {teachers.length} Active
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          {/* Search Bar */}
+          <div className="md:col-span-8 lg:col-span-9">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search by name, email, subject, or department..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-10 py-3.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#ff3333] text-white placeholder-gray-500 text-sm transition-colors"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Sort Dropdown (Simplified for UI) */}
+          <div className="md:col-span-4 lg:col-span-3">
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="w-full py-3.5 px-4 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#ff3333] transition-colors appearance-none cursor-pointer"
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          )}
+              <option value="all" className="bg-black text-white">All Statuses</option>
+              <option value="available" className="bg-black text-white">Available</option>
+              <option value="not_available" className="bg-black text-white">Not Available</option>
+              <option value="on_leave" className="bg-black text-white">On Leave</option>
+              <option value="lunch" className="bg-black text-white">Lunch</option>
+              <option value="in_meeting" className="bg-black text-white">In Meeting</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-
-      {/* Active Filters Display */}
-      {(searchTerm || filterStatus !== 'all' || sortBy !== 'created_at' || sortOrder !== 'desc') && (
-        <div className="mt-4 pt-4 border-t border-dashed border-gray-600/50">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-gray-400">Active filters:</span>
+        {/* Active Filters Display */}
+        {(searchTerm || filterStatus !== 'all' || sortBy !== 'created_at' || sortOrder !== 'desc') && (
+          <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2">Active filters:</span>
             {searchTerm && (
-              <span className="px-2 py-1 bg-blue-900/50 text-blue-300 rounded-full text-xs border border-dashed border-blue-600/50">
-                Search: {searchTerm}
+              <span className="px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-medium border border-blue-500/20 flex items-center gap-2">
+                "{searchTerm}"
+                <button onClick={() => setSearchTerm('')}><X className="h-3 w-3" /></button>
               </span>
             )}
             {filterStatus !== 'all' && (
-              <span className="px-2 py-1 bg-green-900/50 text-green-300 rounded-full text-xs border border-dashed border-green-600/50">
+              <span className="px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg text-xs font-medium border border-green-500/20 flex items-center gap-2">
                 Status: {filterStatus.replace('_', ' ')}
+                <button onClick={() => setFilterStatus('all')}><X className="h-3 w-3" /></button>
               </span>
             )}
-            {(sortBy !== 'created_at' || sortOrder !== 'desc') && (
-              <span className="px-2 py-1 bg-purple-900/50 text-purple-300 rounded-full text-xs border border-dashed border-purple-600/50">
-                Sort: {sortBy} ({sortOrder})
-              </span>
-            )}
+            <button
+              onClick={clearAllFilters}
+              className="text-xs text-gray-400 hover:text-white underline ml-auto transition-colors"
+            >
+              Clear All
+            </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
