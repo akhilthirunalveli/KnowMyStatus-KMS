@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
   try {
     const { data: teachers, error } = await supabase
       .from('teachers')
-      .select('id, name, subject, department, office, qr_code')
+      .select('id, name, subject, department, office, qr_code, status, status_until, status_note')
       .order('name');
 
     if (error) {
@@ -17,7 +17,21 @@ router.get('/', async (req, res) => {
       return res.status(500).json({ error: 'Failed to fetch teachers' });
     }
 
-    res.json({ teachers });
+    // Process teachers to check for expired status
+    const now = new Date();
+    const processedTeachers = teachers.map(teacher => {
+      if (teacher.status_until && new Date(teacher.status_until) < now) {
+        return {
+          ...teacher,
+          status: 'available',
+          status_note: null,
+          status_until: null
+        };
+      }
+      return teacher;
+    });
+
+    res.json({ teachers: processedTeachers });
 
   } catch (error) {
     console.error('Teachers fetch error:', error);
@@ -32,12 +46,19 @@ router.get('/:id', async (req, res) => {
 
     const { data: teacher, error } = await supabase
       .from('teachers')
-      .select('id, name, subject, department, phone, office, email, qr_code')
+      .select('id, name, subject, department, phone, office, email, qr_code, status, status_until, status_note')
       .eq('id', id)
       .single();
 
     if (error || !teacher) {
       return res.status(404).json({ error: 'Teacher not found' });
+    }
+
+    // Check for expired status
+    if (teacher.status_until && new Date(teacher.status_until) < new Date()) {
+      teacher.status = 'available';
+      teacher.status_note = null;
+      teacher.status_until = null;
     }
 
     res.json({ teacher });

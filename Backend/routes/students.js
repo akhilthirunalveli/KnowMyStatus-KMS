@@ -11,7 +11,7 @@ router.get('/teachers', async (req, res) => {
   try {
     const { data: teachers, error } = await supabase
       .from('teachers')
-      .select('id, name, subject, department, office, qr_code')
+      .select('*')
       .order('name');
 
     if (error) {
@@ -19,7 +19,25 @@ router.get('/teachers', async (req, res) => {
       return res.status(500).json({ error: 'Failed to fetch teachers' });
     }
 
-    res.json({ teachers });
+    // Process teachers to check for expired status and remove sensitive data
+    const now = new Date();
+    const processedTeachers = teachers.map(teacher => {
+      // Remove sensitive data
+      const { password, ...safeTeacher } = teacher;
+
+      // If status_until is in the past, reset to available
+      if (safeTeacher.status_until && new Date(safeTeacher.status_until) < now) {
+        return {
+          ...safeTeacher,
+          status: 'available',
+          status_note: null,
+          status_until: null
+        };
+      }
+      return safeTeacher;
+    });
+
+    res.json({ teachers: processedTeachers });
 
   } catch (error) {
     console.error('Student teachers fetch error:', error);
@@ -34,12 +52,24 @@ router.get('/teacher/:id', async (req, res) => {
 
     const { data: teacher, error } = await supabase
       .from('teachers')
-      .select('id, name, subject, department, phone, office, email, qr_code, created_at')
+      .select('*')
       .eq('id', id)
       .single();
 
     if (error || !teacher) {
+      // Don't log full error object to console to avoid credential leaks, but log code
+      if (error) console.error('Teacher detail fetch error code:', error.code);
       return res.status(404).json({ error: 'Teacher not found' });
+    }
+
+    // Remove password from response
+    delete teacher.password;
+
+    // Check for expired status
+    if (teacher.status_until && new Date(teacher.status_until) < new Date()) {
+      teacher.status = 'available';
+      teacher.status_note = null;
+      teacher.status_until = null;
     }
 
     res.json({ teacher });
@@ -58,7 +88,7 @@ router.get('/search/:query', async (req, res) => {
 
     const { data: teachers, error } = await supabase
       .from('teachers')
-      .select('id, name, subject, department, office')
+      .select('id, name, subject, department, office, status, status_until')
       .or(`name.ilike.${searchTerm},subject.ilike.${searchTerm},department.ilike.${searchTerm}`)
       .order('name');
 
@@ -67,7 +97,20 @@ router.get('/search/:query', async (req, res) => {
       return res.status(500).json({ error: 'Failed to search teachers' });
     }
 
-    res.json({ teachers });
+    // Process teachers to check for expired status
+    const now = new Date();
+    const processedTeachers = teachers.map(teacher => {
+      if (teacher.status_until && new Date(teacher.status_until) < now) {
+        return {
+          ...teacher,
+          status: 'available',
+          status_until: null
+        };
+      }
+      return teacher;
+    });
+
+    res.json({ teachers: processedTeachers });
 
   } catch (error) {
     console.error('Student search error:', error);
@@ -148,26 +191,26 @@ router.get('/teacher/:id/qr', async (req, res) => {
       try {
         const url = new URL(teacher.qr_code);
         const protocol = url.protocol === 'https:' ? https : http;
-        
+
         const request = protocol.get(teacher.qr_code, (response) => {
           if (response.statusCode !== 200) {
             return res.status(404).json({ error: 'QR code not accessible' });
           }
-          
+
           // Set appropriate headers for image
           res.setHeader('Content-Type', 'image/png');
           res.setHeader('Content-Disposition', `inline; filename="teacher_${id}_qr.png"`);
           res.setHeader('Cache-Control', 'public, max-age=3600');
-          
+
           // Pipe the response directly
           response.pipe(res);
         });
-        
+
         request.on('error', (error) => {
           console.error('Error fetching QR from Supabase:', error);
           return res.status(500).json({ error: 'Failed to fetch QR code' });
         });
-        
+
       } catch (fetchError) {
         console.error('Error processing QR URL:', fetchError);
         return res.status(500).json({ error: 'Failed to process QR code URL' });
@@ -175,7 +218,7 @@ router.get('/teacher/:id/qr', async (req, res) => {
     } else {
       // Legacy: serve from local uploads folder
       const qrCodePath = path.join(__dirname, '../uploads', teacher.qr_code);
-      
+
       // Check if file exists
       if (!require('fs').existsSync(qrCodePath)) {
         return res.status(404).json({ error: 'QR code file not found' });
@@ -184,7 +227,7 @@ router.get('/teacher/:id/qr', async (req, res) => {
       // Set appropriate headers for image
       res.setHeader('Content-Type', 'image/png');
       res.setHeader('Content-Disposition', `inline; filename="${teacher.qr_code}"`);
-      
+
       // Send the file
       res.sendFile(qrCodePath);
     }

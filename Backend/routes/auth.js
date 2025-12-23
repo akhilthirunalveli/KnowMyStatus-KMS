@@ -157,9 +157,9 @@ router.put('/profile', authenticateToken, async (req, res) => {
     if (phone !== undefined) updateData.phone = phone;
     if (office !== undefined) updateData.office = office;
     if (status) updateData.status = status;
-    // Store in available_until field (database schema field) but accept both names for compatibility
-    if (status_until !== undefined) updateData.available_until = status_until;
-    if (available_until !== undefined) updateData.available_until = available_until;
+    if (status_until !== undefined) {
+      updateData.status_until = status_until === '' ? null : status_until;
+    }
     if (status_note !== undefined) updateData.status_note = status_note;
 
     const { data: teacher, error } = await supabase
