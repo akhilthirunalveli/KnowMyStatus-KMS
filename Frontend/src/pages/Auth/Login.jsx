@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, Compass } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Compass, Terminal, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -8,8 +8,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [testMode, setTestMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -20,35 +18,25 @@ const Login = () => {
   }, []);
 
   // Handle test mode toggle
-  const handleTestModeToggle = () => {
-    setTestMode(!testMode);
-    if (!testMode) {
-      // Enable test mode - fill credentials
-      setEmail('test@kms.com');
-      setPassword('test2@123');
-      toast.success('Test credentials loaded!');
-    } else {
-      // Disable test mode - clear credentials
-      setEmail('');
-      setPassword('');
-      toast.info('Test credentials cleared');
-    }
+  const handleTestMode = () => {
+    setEmail('test@kms.com');
+    setPassword('test2@123');
+    toast.success('Test credentials loaded!');
   };
 
-  // Handle explore mode - auto navigate to dashboard with test credentials
+  // Handle explore mode
   const handleExploreMode = async () => {
     setLoading(true);
     try {
-      // Use test credentials for exploration
       const result = await login('test@kms.com', 'test2@123');
       if (result.success) {
-        toast.success('Welcome to KnowMyStatus! Exploring in test mode.');
+        toast.success('Welcome to KnowMyStatus!');
         navigate('/teacher/dashboard');
       } else {
-        toast.error('Failed to start explore mode. Please try manual login.');
+        toast.error('Failed to start explore mode.');
       }
     } catch (error) {
-      toast.error('Failed to start explore mode. Please try manual login.');
+      toast.error('Failed to start explore mode.');
     } finally {
       setLoading(false);
     }
@@ -74,153 +62,125 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
-      {/* Explore Button - Top Left */}
-      <button
-        onClick={handleExploreMode}
-        disabled={loading}
-        className="fixed top-8 right-8 z-50 bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:opacity-50 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2 text-sm shadow-lg"
-      >
-        <Compass className="h-4 w-4" />
-        <span className="hidden sm:inline">Explore KnowMyStatus</span>
-        <span className="sm:hidden">Explore</span>
-      </button>
+    <div className="h-screen w-full bg-black cabinet-grotesk overflow-hidden flex flex-col relative">
 
-      <div className="flex flex-col lg:flex-row min-h-screen">
-        {/* Left Side - Login Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 md:p-8 min-h-screen lg:min-h-0">
-          <div className="w-full max-w-md">
-            {/* Welcome Message */}
-            <div className="mb-6 sm:mb-8">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-2 cabinet-grotesk">Welcome!</h1>
-              <p className="text-gray-400 text-sm sm:text-base">Sign in to your account</p>
+      {/* Absolute Navbar */}
+      <nav className="absolute top-0 left-0 right-0 z-50 p-6 flex justify-between items-center pointer-events-none">
+        <div className="pointer-events-auto">
+          <Link to="/" className="text-2xl font-bold text-white tracking-tight flex items-center gap-1 cabinet-grotesk">
+            KnowMyStatus<span className="text-[#ff3333]">.</span>
+          </Link>
+        </div>
+        <div className="pointer-events-auto">
+          <Link to="/" className="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
+        </div>
+      </nav>
+
+      {/* Main Split Layout */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 h-full">
+
+        {/* Left Side: Form */}
+        <div className="flex flex-col justify-center px-8 sm:px-12 lg:px-20 xl:px-32 bg-[#050505] border-r border-white/10 relative z-10 h-full overflow-y-auto">
+          <div className="w-full max-w-md mx-auto">
+            <div className="mb-10">
+              <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">Welcome Back</h1>
+              <p className="text-gray-400">Sign in to manage student status updates.</p>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-              {/* Email Field */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                  Email
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
-                  </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Email Address</label>
+                <div className="relative group">
+                  <Mail className="absolute left-0 top-3.5 text-gray-600 group-focus-within:text-white transition-colors" size={18} />
                   <input
-                    id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-600 bg-gray-900/50 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent placeholder-gray-500 text-white text-sm sm:text-base"
-                    placeholder="Enter your email"
+                    className="w-full bg-transparent border-b border-white/10 py-3.5 pl-8 text-white focus:border-[#ff3333] transition-colors outline-none placeholder-gray-700 rounded-none text-sm"
+                    placeholder="name@example.com"
                     required
                   />
                 </div>
               </div>
 
-              {/* Password Field */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
-                  </div>
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center">
+                  <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Password</label>
+                  <button type="button" onClick={handleTestMode} className="text-[10px] text-[#ff3333] hover:text-[#ff6666] flex items-center gap-1 font-medium transition-colors">
+                    <Terminal size={10} />
+                    FILL TEST DATA
+                  </button>
+                </div>
+                <div className="relative group">
+                  <Lock className="absolute left-0 top-3.5 text-gray-600 group-focus-within:text-white transition-colors" size={18} />
                   <input
-                    id="password"
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-9 sm:pl-10 pr-10 py-2.5 sm:py-3 border border-gray-600 bg-gray-900/50 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent placeholder-gray-500 text-white text-sm sm:text-base"
+                    className="w-full bg-transparent border-b border-white/10 py-3.5 pl-8 pr-8 text-white focus:border-[#ff3333] transition-colors outline-none placeholder-gray-700 rounded-none text-sm"
                     placeholder="Enter your password"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute right-0 top-3.5 text-gray-600 hover:text-white transition-colors"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-300" />
-                    ) : (
-                      <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-300" />
-                    )}
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
 
-              
+              <div className="pt-6 flex flex-col gap-3">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-white text-black font-bold py-4 hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 group"
+                >
+                  {loading ? 'Processing...' : 'Sign In'}
+                  {!loading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
+                </button>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-red-600 text-white font-semibold py-2.5 sm:py-3 px-4 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-black transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
-              >
-                {loading ? 'Signing In...' : 'Sign In'}
-              </button>
-
-              {/* Test User Toggle */}
-              <div className="flex items-center justify-between p-3 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-amber-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-xs sm:text-sm font-bold">T</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-white">Test User Mode</p>
-                    <p className="text-xs text-gray-400">Auto-fill demo credentials</p>
-                  </div>
-                </div>
                 <button
                   type="button"
-                  onClick={handleTestModeToggle}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${
-                    testMode ? 'bg-red-600' : 'bg-gray-600'
-                  }`}
+                  onClick={handleExploreMode}
+                  disabled={loading}
+                  className="w-full bg-transparent border border-white/10 text-white font-medium py-4 hover:bg-white/5 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
                 >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      testMode ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                  />
+                  <Compass size={16} />
+                  Explore as Guest
                 </button>
               </div>
             </form>
 
-            {/* Sign Up Link */}
-            <div className="mt-6 sm:mt-8 text-center">
-              <p className="text-gray-400 text-sm sm:text-base">
-                Don't have an account?{' '}
-                <Link
-                  to="/signup"
-                  className="text-red-400 hover:text-red-300 font-medium"
-                >
-                  Sign up for free
-                </Link>
-              </p>
-              <p className="text-gray-400 text-sm sm:text-base mt-2">
-                Go back to{' '}
-                <Link
-                  to="/"
-                  className="text-red-400 hover:text-red-300 font-medium"
-                >
-                  Home
-                </Link>
-              </p>
+            <div className="mt-10 text-center">
+              <Link to="/signup" className="text-sm text-gray-500 hover:text-white transition-colors">
+                New here? <span className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white transition-all">Create an account</span>
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Right Side - KnowMyStatus Text */}
-        <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center">
-          <div className="text-center">
-            <Link to="/" className="text-4xl xl:text-6xl font-bold navbar-brand text-white tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
-              KnowMyStatus<span className="navbar-red-dot">.</span>
-            </Link>
+        {/* Right Side: Visual/Branding */}
+        <div className="hidden lg:flex bg-[#0a0a0a] flex-col justify-center items-center p-12 relative overflow-hidden">
+          {/* Subtle Grid Pattern */}
+          <div className="absolute inset-0 opacity-20"
+            style={{ backgroundImage: 'radial-gradient(#333 1px, transparent 1px)', backgroundSize: '32px 32px' }}
+          />
+
+          <div className="text-center relative z-10 p-12 max-w-lg">
+            <h2 className="text-[120px] font-bold text-[#111] leading-none select-none tracking-tighter opacity-80">LOGIN</h2>
+            <div className="h-px w-24 bg-[#ff3333] mx-auto my-10" />
+            <h3 className="text-2xl font-bold text-white mb-4">Faculty Portal</h3>
+            <p className="text-gray-500 text-lg leading-relaxed">
+              Streamline your workflow. Manage student statuses, attendance, and notifications from one central dashboard.
+            </p>
           </div>
         </div>
+
       </div>
     </div>
   );
