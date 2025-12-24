@@ -26,6 +26,7 @@
     "tailwindcss": "^3.3.6",
     "three": "^0.179.1",
     "three-globe": "^2.44.0",
+    "vconsole": "^3.15.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

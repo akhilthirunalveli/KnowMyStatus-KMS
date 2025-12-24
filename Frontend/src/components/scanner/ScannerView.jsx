@@ -3,14 +3,23 @@ import { Camera, RotateCcw, X, Zap, ScanLine } from 'lucide-react';
 import jsQR from 'jsqr';
 import { toast } from 'react-hot-toast';
 
+import VConsole from 'vconsole';
+
+// Initialize vConsole for mobile debugging
+if (typeof window !== 'undefined') {
+    const vConsole = new VConsole();
+}
+
 const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
     const videoRef = useRef(null);
+
     const canvasRef = useRef(null);
     const streamRef = useRef(null);
     const scanIntervalRef = useRef(null);
 
     const [currentCameraId, setCurrentCameraId] = useState(null);
     const [cameras, setCameras] = useState([]);
+    const [scanning, setScanning] = useState(false);
 
     // QR Detection Logic
     const detectQRCode = useCallback(() => {
@@ -46,59 +55,97 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
     // Start Camera
     const startCamera = useCallback(async (deviceId = null) => {
         try {
+            console.log("Initializing camera...", deviceId ? `Device: ${deviceId}` : "Default Environment");
+
+            // 1. Stop any existing stream first
+            if (streamRef.current) {
+                console.log("Stopping existing stream...");
+                streamRef.current.getTracks().forEach(track => track.stop());
+                streamRef.current = null;
+            }
+
+            // 2. Enumerate devices
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
+            console.log("Available video devices:", videoDevices);
             setCameras(videoDevices);
 
+            // 3. Define constraints
             const constraints = {
                 video: {
-                    // If a specific deviceId is requested (user switched), use it.
-                    // Otherwise, if no deviceId is current, default to 'environment' (OS picks best back cam).
                     deviceId: deviceId ? { exact: deviceId } : undefined,
+                    // If no specific device ID, try 'environment'. 
+                    // Fallback to 'user' if 'environment' fails is handled by browser usually, but we can be explicit if needed.
                     facingMode: deviceId ? undefined : { ideal: 'environment' },
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 },
-                    // Advanced constraints for better focus if supported
+                    width: { ideal: 1280 }, // Lowered slightly for better compatibility
+                    height: { ideal: 720 },
                     focusMode: 'continuous',
                 },
                 audio: false
             };
+            console.log("Requesting constraints:", JSON.stringify(constraints));
 
+            // 4. Get User Media
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            console.log("Stream acquired:", stream.id);
 
+            // 5. Attach to Video
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
                 streamRef.current = stream;
 
-                // Update current camera ID from the active stream track to validation
+                // Update current camera state
                 const track = stream.getVideoTracks()[0];
                 const settings = track.getSettings();
+                console.log("Active track settings:", settings);
+
                 if (settings.deviceId) {
                     setCurrentCameraId(settings.deviceId);
                 }
 
-                videoRef.current.onloadedmetadata = () => {
-                    videoRef.current.play().catch(e => console.error("Play error", e));
-                    setScanning(true);
+                // 6. Play and Start Scanning Loop
+                videoRef.current.onloadedmetadata = async () => {
+                    console.log("Video metadata loaded. Dimensions:", videoRef.current.videoWidth, "x", videoRef.current.videoHeight);
+                    try {
+                        await videoRef.current.play();
+                        console.log("Video playing safely.");
+                        setScanning(true);
 
-                    scanIntervalRef.current = setInterval(() => {
-                        if (videoRef.current && videoRef.current.videoWidth > 0 && !loading) {
-                            detectQRCode();
-                        }
-                    }, 100);
+                        // Clear any old interval just in case
+                        if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+
+                        scanIntervalRef.current = setInterval(() => {
+                            if (
+                                videoRef.current &&
+                                videoRef.current.readyState >= 2 && // HAVE_CURRENT_DATA
+                                videoRef.current.videoWidth > 0 &&
+                                !loading
+                            ) {
+                                detectQRCode();
+                            }
+                        }, 100);
+                    } catch (e) {
+                        console.error("Play error:", e);
+                        onError("CameraBlocked");
+                    }
                 };
             }
 
         } catch (err) {
-            console.error("Camera start error:", err);
-            onError(err.name);
+            console.error("Camera start error detailed:", err);
+            onError(err.name || "CameraError");
+            toast.error(`Camera Error: ${err.name}`);
         }
     }, [detectQRCode, onError, loading]);
 
     // Stop Camera
     const stopCamera = useCallback(() => {
+        console.log("Stopping camera and scanning...");
         if (streamRef.current) {
-            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current.getTracks().forEach(track => {
+                track.stop();
+                console.log("Track stopped:", track.label);
+            });
             streamRef.current = null;
         }
         if (scanIntervalRef.current) {
@@ -108,25 +155,35 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
         setScanning(false);
     }, []);
 
-    const switchCamera = () => {
-        if (cameras.length < 2) return;
+    const switchCamera = async () => {
+        if (cameras.length < 2) {
+            toast('Only one camera available');
+            return;
+        }
 
-        stopCamera();
+        console.log("Switching camera...");
 
-        // Find current index
+        // Find loop index
         const currentIndex = cameras.findIndex(c => c.deviceId === currentCameraId);
-        // Next index (wrap around)
         const nextIndex = (currentIndex + 1) % cameras.length;
         const nextDevice = cameras[nextIndex];
 
-        startCamera(nextDevice.deviceId);
+        console.log(`Switching from index ${currentIndex} to ${nextIndex} (ID: ${nextDevice.deviceId})`);
+
+        // Fully stop before starting new one to prevent resource conflicts on some Androids
+        stopCamera();
+
+        // Small delay to allow hardware release
+        setTimeout(() => {
+            startCamera(nextDevice.deviceId);
+        }, 200);
     };
 
     // Lifecycle
     useEffect(() => {
         startCamera();
         return () => stopCamera();
-    }, [startCamera, stopCamera]);
+    }, []); // Run once on mount (startCamera dependency removed to prevent re-runs)
 
 
     return (
