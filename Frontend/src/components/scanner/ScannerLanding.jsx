@@ -7,8 +7,6 @@ const ScannerLanding = ({ onStartScan }) => {
         <div className="relative flex flex-col items-center justify-center min-h-screen w-full px-4 overflow-hidden">
 
             {/* Ambient Background Effects */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-600/20 rounded-full blur-[120px] pointer-events-none opacity-40"></div>
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
 
             <div className="relative z-10 w-full max-w-sm flex flex-col items-center animate-fade-in-up">
 
@@ -35,12 +33,9 @@ const ScannerLanding = ({ onStartScan }) => {
                         {/* Icon */}
                         <div className="mb-8 relative">
                             <div className="absolute inset-0 bg-red-500/20 blur-2xl rounded-full"></div>
-                            <div className="relative w-24 h-24 bg-gradient-to-br from-[#1a1a1a] to-black rounded-3xl border border-white/10 flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                            <div className="relative w-24 h-24 bg-gradient-to-br from-[#1a1a1a] to-black rounded-3xl  flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform duration-300">
                                 <QrCode className="h-10 w-10 text-white opacity-90" />
                             </div>
-                            {/* Corner accents */}
-                            <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-[#ff3333] rounded-tl-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-[#ff3333] rounded-br-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </div>
 
                         <h2 className="text-xl font-bold text-white mb-2 cabinet-grotesk">Ready to Scan?</h2>

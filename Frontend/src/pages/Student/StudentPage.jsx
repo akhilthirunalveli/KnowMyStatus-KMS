@@ -10,7 +10,9 @@ import {
   Users,
   BookOpen,
   Eye,
-  Home
+  Home,
+  Menu,
+  X
 } from 'lucide-react';
 import LoadingBar from '../../components/common/LoadingBar.jsx';
 import { useAuth } from "../../contexts/AuthContext";
@@ -25,6 +27,7 @@ const StudentPage = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Set page title
   useEffect(() => {
@@ -120,9 +123,8 @@ const StudentPage = () => {
   return (
     <div className="min-h-screen bg-app-background subtle-grid cabinet-grotesk">
       {/* Navbar */}
-      {/* Navbar */}
       <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
-        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between">
+        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between relative">
           <Link to="/" className="text-2xl font-bold text-white tracking-tight transition-opacity flex items-center cabinet-grotesk">
             KnowMyStatus<span className="text-[#ff3333] text-4xl leading-none">.</span>
           </Link>
@@ -143,7 +145,7 @@ const StudentPage = () => {
             {isAuthenticated ? (
               <Link
                 to="/teacher/dashboard"
-                className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold transition-colors flex items-center gap-2"
+                className="hidden sm:flex bg-white text-black px-5 py-2 rounded-full text-sm font-bold transition-colors items-center gap-2"
               >
                 Dashboard
                 <ArrowRight size={16} />
@@ -151,25 +153,79 @@ const StudentPage = () => {
             ) : (
               <Link
                 to="/login"
-                className="bg-[#ff3333] text-white px-5 py-2 rounded-full text-sm font-bold transition-colors flex items-center gap-2 cabinet-grotesk"
+                className="hidden sm:flex bg-[#ff3333] text-white px-5 py-2 rounded-full text-sm font-bold transition-colors items-center gap-2 cabinet-grotesk"
               >
                 Login
                 <ArrowRight size={16} />
               </Link>
             )}
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-white p-1"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
       </nav>
 
+      {/* Mobile Menu Dropdown - Moved outside premium-card */}
+      {isMenuOpen && (
+        <div className="fixed inset-x-0 top-[88px] mx-4 p-4 premium-card bg-[#0a0a0a]/95 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col gap-4 md:hidden animate-fade-in z-[60]">
+          <Link
+            to="/"
+            className="text-white text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            to="/student"
+            className="text-[#ff3333] text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Find Teacher
+          </Link>
+          <Link
+            to="/student/scan"
+            className="text-white text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Scan
+          </Link>
+          <div className="h-px bg-white/10 my-1"></div>
+          {isAuthenticated ? (
+            <Link
+              to="/teacher/dashboard"
+              className="bg-white text-black px-5 py-3 rounded-xl text-center font-bold transition-colors flex items-center justify-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Dashboard
+              <ArrowRight size={16} />
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-[#ff3333] text-white px-5 py-3 rounded-xl text-center font-bold transition-colors flex items-center justify-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Get Started
+              <ArrowRight size={16} />
+            </Link>
+          )}
+        </div>
+      )}
+
       {/* Main Content */}
       <main className="pt-24 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-
         {/* Page Header */}
         <div className="mb-8 sm:mb-12 text-center sm:text-left">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-3 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">
             Find <span className="text-[#ff3333]">Teachers</span>
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl">
+          <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto sm:mx-0">
             Search for faculty members, view their status, or scan QR codes for instant access to contact information.
           </p>
         </div>
@@ -202,12 +258,12 @@ const StudentPage = () => {
                 </div>
 
                 {/* Filters Row */}
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col md:flex-row gap-4">
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className={`px-4 py-3 rounded-xl border font-medium transition-all flex items-center justify-center gap-2 ${showFilters
+                    className={`w-full md:w-auto px-6 py-3.5 rounded-xl border font-medium transition-all flex items-center justify-center gap-2 ${showFilters
                       ? 'bg-[#ff3333]/10 border-[#ff3333] text-[#ff3333]'
-                      : 'bg-white/5 border-white/10 text-gray-300'
+                      : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
                       }`}
                   >
                     <Filter className="h-4 w-4" />
@@ -215,15 +271,15 @@ const StudentPage = () => {
                   </button>
 
                   {showFilters && (
-                    <div className="flex-1 flex flex-col sm:flex-row gap-3 animate-fade-in">
-                      <div className="relative flex-1">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div className="flex-1 flex flex-col md:flex-row gap-4 animate-fade-in-down origin-top">
+                      <div className="relative flex-1 w-full">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                           <BookOpen className="h-4 w-4 text-gray-400" />
                         </div>
                         <select
                           value={selectedDepartment}
                           onChange={(e) => handleDepartmentFilter(e.target.value)}
-                          className="w-full pl-9 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-[#ff3333] focus:border-transparent text-white appearance-none cursor-pointer"
+                          className="w-full pl-10 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-[#ff3333] focus:border-transparent text-white appearance-none cursor-pointer text-base"
                         >
                           <option value="">All Departments</option>
                           {departments.map((dept, index) => (
@@ -234,7 +290,7 @@ const StudentPage = () => {
 
                       <button
                         onClick={clearFilters}
-                        className="px-4 py-3 bg-white/5 text-white border border-white/10 rounded-xl transition-colors whitespace-nowrap"
+                        className="w-full md:w-auto px-6 py-3.5 bg-white/5 text-white border border-white/10 rounded-xl transition-colors whitespace-nowrap hover:bg-white/10 text-base font-medium"
                       >
                         Clear All
                       </button>
@@ -255,9 +311,9 @@ const StudentPage = () => {
                 <p className="text-gray-400 animate-pulse">Searching profiles...</p>
               </div>
             ) : filteredTeachers.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {filteredTeachers.map((teacher) => (
-                  <div key={teacher.id} className="relative bg-[#0a0a0a] rounded-2xl p-6 border border-white/10 transition-all duration-300">
+                  <div key={teacher.id} className="relative bg-[#0a0a0a] rounded-2xl p-5 sm:p-6 border border-white/10 transition-all duration-300 hover:border-white/20">
 
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1 min-w-0 pr-4">
@@ -281,8 +337,8 @@ const StudentPage = () => {
                       </div>
 
                       {teacher.qr_code && (
-                        <div className="w-12 h-12 bg-white rounded-lg p-1 shrink-0 opacity-80 transition-opacity">
-                          <div className="w-full h-full bg-gray-900 rounded flex items-center justify-center">
+                        <div className="w-12 h-12 bg-white/5 rounded-lg p-1 shrink-0 opacity-80 transition-opacity">
+                          <div className="w-full h-full bg-white/5 rounded flex items-center justify-center">
                             <QrCode className="h-5 w-5 text-white" />
                           </div>
                         </div>
@@ -330,8 +386,8 @@ const StudentPage = () => {
             )}
           </div>
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 };
 

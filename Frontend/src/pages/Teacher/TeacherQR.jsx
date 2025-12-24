@@ -9,7 +9,9 @@ import {
   Share2,
   User,
   BookOpen,
-  Building
+  Building,
+  Menu,
+  X
 } from 'lucide-react';
 import LoadingBar from '../../components/common/LoadingBar.jsx';
 
@@ -19,6 +21,7 @@ const TeacherQR = () => {
   const [teacher, setTeacher] = useState(null);
   const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Set page title
   useEffect(() => {
@@ -123,12 +126,12 @@ const TeacherQR = () => {
     <div className="min-h-screen bg-app-background subtle-grid cabinet-grotesk">
       {/* Navbar */}
       <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
-        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between">
+        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between relative">
           <Link to="/" className="text-2xl font-bold text-white tracking-tight flex items-center cabinet-grotesk">
             KnowMyStatus<span className="text-[#ff3333] text-4xl leading-none">.</span>
           </Link>
 
-          <div className="flex items-center gap-8 text-base font-medium text-white cabinet-grotesk">
+          <div className="hidden md:flex items-center gap-8 text-base font-medium text-white cabinet-grotesk">
             <Link to="/student" className="text-white/70">
               Find Teacher
             </Link>
@@ -136,6 +139,43 @@ const TeacherQR = () => {
               Scan
             </Link>
           </div>
+
+          <div className="flex items-center gap-4">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-white p-1"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          {isMenuOpen && (
+            <div className="absolute top-full left-0 right-0 mt-4 mx-4 p-4 premium-card bg-[#0a0a0a]/95 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col gap-4 md:hidden animate-fade-in z-50">
+              <Link
+                to="/"
+                className="text-white text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                to="/student"
+                className="text-white/70 text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Find Teacher
+              </Link>
+              <Link
+                to="/student/scan"
+                className="text-white text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Scan
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
 

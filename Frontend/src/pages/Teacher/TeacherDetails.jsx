@@ -14,7 +14,9 @@ import {
   Clock,
   StickyNote,
   Download,
-  ArrowRight
+  ArrowRight,
+  Menu,
+  X
 } from 'lucide-react';
 import LoadingBar from '../../components/common/LoadingBar.jsx';
 
@@ -24,6 +26,7 @@ const TeacherDetails = () => {
   const [teacher, setTeacher] = useState(null);
   const [loading, setLoading] = useState(true);
   const [qrCode, setQrCode] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     document.title = "Teacher Details - KnowMyStatus";
@@ -82,12 +85,12 @@ const TeacherDetails = () => {
     <div className="min-h-screen bg-app-background subtle-grid cabinet-grotesk">
       {/* Navbar */}
       <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
-        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between">
+        <div className="premium-card w-full max-w-5xl !rounded-full px-6 py-3 flex items-center justify-between relative">
           <Link to="/" className="text-2xl font-bold text-white tracking-tight transition-opacity flex items-center cabinet-grotesk">
             KnowMyStatus<span className="text-[#ff3333] text-4xl leading-none">.</span>
           </Link>
 
-          <div className="flex items-center gap-8 text-base font-medium text-white cabinet-grotesk">
+          <div className="hidden md:flex items-center gap-8 text-base font-medium text-white cabinet-grotesk">
             <Link to="/student" className="text-[#ff3333] transition-colors">
               Find Teacher
             </Link>
@@ -95,6 +98,63 @@ const TeacherDetails = () => {
               Scan
             </Link>
           </div>
+
+          {/* Add Dashboard/Login button container for desktop */}
+          <div className="flex items-center gap-4">
+            {/* This page didn't have the auth button before in the original file view, 
+                   but to keep consistency with other pages and the plan, I should add it or just the menu button.
+                   The original code only had the Logo and Links. 
+                   Checking previous file content... It had Logo and Links.
+                   I will add the mobile menu button.
+               */}
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-white p-1"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          {isMenuOpen && (
+            <div className="absolute top-full left-0 right-0 mt-4 mx-4 p-4 premium-card bg-[#0a0a0a]/95 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col gap-4 md:hidden animate-fade-in z-50">
+              <Link
+                to="/"
+                className="text-white text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                to="/student"
+                className="text-[#ff3333] text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Find Teacher
+              </Link>
+              <Link
+                to="/student/scan"
+                className="text-white text-lg font-medium p-2 hover:bg-white/5 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Scan
+              </Link>
+              {/* 
+                  Since I don't see useAuth imported in the original TeacherDetails.jsx, 
+                  I should check if I need to import it to show Login/Dashboard.
+                  The original file imports: properties:{id: useParams(), navigate: useNavigate(), etc..}
+                  It does NOT import useAuth.
+                  
+                  Wait, looking at my view_file output for TeacherDetails.jsx:
+                  It does NOT import useAuth.
+                  
+                  If I want to add "Login/Dashboard" link in mobile menu, I need to know if authenticated.
+                  I should probably import useAuth first.
+               */}
+            </div>
+          )}
         </div>
       </nav>
 

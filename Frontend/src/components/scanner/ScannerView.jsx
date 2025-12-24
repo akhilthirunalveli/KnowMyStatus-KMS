@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Camera, RotateCcw } from 'lucide-react';
+import { Camera, RotateCcw, X, Zap, ScanLine } from 'lucide-react';
 import jsQR from 'jsqr';
 import { toast } from 'react-hot-toast';
 
@@ -35,6 +35,8 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
             });
 
             if (qrResult) {
+                // Haptic feedback pattern
+                if (navigator.vibrate) navigator.vibrate(50);
                 onScanSuccess(qrResult.data);
             }
         } catch (e) {
@@ -50,7 +52,6 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
             setHasMultipleCameras(videoDevices.length > 1);
 
             let preferredDeviceId = null;
-            // Simplified camera selection logic
             if (currentCamera === 'environment') {
                 const backCam = videoDevices.find(d => d.label.toLowerCase().includes('back') || d.label.toLowerCase().includes('environment'));
                 if (backCam) preferredDeviceId = backCam.deviceId;
@@ -60,8 +61,8 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
                 video: {
                     facingMode: preferredDeviceId ? undefined : { ideal: currentCamera },
                     deviceId: preferredDeviceId ? { exact: preferredDeviceId } : undefined,
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
                 },
                 audio: false
             };
@@ -80,7 +81,7 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
                         if (videoRef.current && videoRef.current.videoWidth > 0 && !loading) {
                             detectQRCode();
                         }
-                    }, 150);
+                    }, 100);
                 };
             }
 
@@ -116,69 +117,99 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
 
 
     return (
-        <div className="w-full max-w-sm mx-auto relative rounded-[32px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] sm:aspect-[3/4]">
+        <div className="w-full h-full md:max-w-md md:h-[80vh] md:aspect-[9/16] md:rounded-[40px] relative overflow-hidden bg-black md:border-[8px] md:border-[#1a1a1a] md:shadow-2xl md:mx-auto ring-1 ring-white/10 group">
 
-            {/* Loading Overlay */}
-            {loading && (
-                <div className="absolute inset-0 z-50 bg-black/80 flex flex-col items-center justify-center backdrop-blur-sm">
-                    <div className="w-10 h-10 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mb-4"></div>
-                    <p className="text-white font-medium text-sm">Verifying...</p>
-                </div>
-            )}
+            {/* Future-chic Vignette & Grain */}
+            <div className="absolute inset-0 pointer-events-none z-10 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]"></div>
+            <div className="absolute inset-0 pointer-events-none z-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
 
+            {/* Video Feed */}
             <video
                 ref={videoRef}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover scale-105" // slight zoom to fill
                 playsInline
                 muted
                 autoPlay
             />
             <canvas ref={canvasRef} className="hidden" />
 
-            {/* Scanning Overlay */}
-            <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
-                <div className="w-64 h-64 border border-white/20 rounded-3xl relative overflow-hidden">
-                    {/* Corners */}
-                    <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[#ff3333] rounded-tl-xl"></div>
-                    <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#ff3333] rounded-tr-xl"></div>
-                    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#ff3333] rounded-bl-xl"></div>
-                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[#ff3333] rounded-br-xl"></div>
+            {/* Loading Overlay */}
+            {loading && (
+                <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-md flex flex-col items-center justify-center animate-fade-in">
+                    <div className="relative">
+                        <div className="w-16 h-16 border-4 border-[#ff3333]/20 rounded-full"></div>
+                        <div className="absolute top-0 left-0 w-16 h-16 border-4 border-[#ff3333] rounded-full border-t-transparent animate-spin"></div>
+                    </div>
+                    <p className="text-white font-bold text-lg mt-6 cabinet-grotesk tracking-wide">VERIFYING</p>
+                </div>
+            )}
 
-                    {/* Scan Line */}
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ff3333] to-transparent animate-scan shadow-[0_0_15px_rgba(255,51,51,0.5)]"></div>
+            {/* Tech Overlay UI */}
+            <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-6 sm:p-8">
 
-                    {/* Pulse */}
-                    <div className="absolute inset-0 bg-[#ff3333]/5 animate-pulse"></div>
+                {/* Top Status HUD */}
+                <div className="flex justify-center pt-8 md:pt-4">
+                    <div className="px-5 py-2.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 flex items-center gap-3 shadow-lg shadow-black/20">
+                        <div className="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse shadow-[0_0_10px_#ff3333]"></div>
+                        <span className="text-xs font-bold text-white tracking-widest cabinet-grotesk uppercase">System Active</span>
+                    </div>
+                </div>
+
+                {/* Central Scanning Reticle */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 sm:w-80 sm:h-80">
+                    {/* Corner Brackets */}
+                    <div className="absolute top-0 left-0 w-12 h-12 border-t-[3px] border-l-[3px] border-white/80 rounded-tl-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+                    <div className="absolute top-0 right-0 w-12 h-12 border-t-[3px] border-r-[3px] border-white/80 rounded-tr-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+                    <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[3px] border-l-[3px] border-white/80 rounded-bl-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+                    <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[3px] border-r-[3px] border-white/80 rounded-br-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+
+                    {/* Animated Scalar Ring */}
+                    <div className="absolute inset-4 border border-white/20 rounded-2xl animate-pulse"></div>
+
+                    {/* Laser Scan Line */}
+                    <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#ff3333] to-transparent animate-scan shadow-[0_0_25px_#ff3333] z-10"></div>
+
+                    {/* Grid Effect */}
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-30"></div>
+                </div>
+
+                {/* Bottom Controls HUD */}
+                <div className="mb-4 pointer-events-auto flex items-center justify-center gap-8">
+                    <button
+                        onClick={onCancel}
+                        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 hover:bg-[#ff3333] transition-all duration-300"
+                    >
+                        <X className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                    </button>
+
+                    {/* Center Scan Cluster */}
+                    <div className="relative flex items-center justify-center w-20 h-20">
+                        <div className="absolute inset-0 rounded-full border-4 border-white/20 p-1 flex items-center justify-center animate-[spin_10s_linear_infinite]">
+                            <div className="w-full h-full border-2 border-dashed border-white/40 rounded-full"></div>
+                        </div>
+
+                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.3)] animate-pulse z-10">
+                            <ScanLine className="text-black w-8 h-8" />
+                        </div>
+                    </div>
+
+                    {hasMultipleCameras && (
+                        <button
+                            onClick={switchCamera}
+                            className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 hover:bg-white/20 transition-all duration-300"
+                        >
+                            <RotateCcw className="w-6 h-6 text-white group-hover:-rotate-180 transition-transform duration-500" />
+                        </button>
+                    )}
                 </div>
             </div>
 
-            {/* Controls */}
-            <div className="absolute bottom-8 left-0 w-full flex justify-center gap-6 z-30 px-6">
-                <button
-                    onClick={onCancel}
-                    className="p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all active:scale-95"
-                    aria-label="Cancel"
-                >
-                    <span className="text-xs font-bold">CANCEL</span>
-                </button>
-
-                {hasMultipleCameras && (
-                    <button
-                        onClick={switchCamera}
-                        className="p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all active:scale-95"
-                    >
-                        <RotateCcw className="h-6 w-6" />
-                    </button>
-                )}
+            {/* Helper Text */}
+            <div className="absolute bottom-36 left-0 right-0 text-center z-20 pointer-events-none">
+                <p className="text-white/80 font-medium tracking-wide text-sm drop-shadow-md cabinet-grotesk">
+                    Align code within frame
+                </p>
             </div>
-
-            {/* Status Text */}
-            <div className="absolute top-8 left-0 w-full text-center z-30">
-                <span className="px-4 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-xs font-medium text-white/80">
-                    Align QR code within frame
-                </span>
-            </div>
-
         </div>
     );
 };

@@ -7,7 +7,7 @@ import Signup from './pages/Auth/Signup';
 import TeacherDashboard from './pages/Teacher/TeacherDashboard';
 import StudentPage from './pages/Student/StudentPage';
 import TeacherProfile from './pages/Teacher/TeacherProfile';
-import QRScanner from './pages/Student/QRScanner';
+import QRScanner from './pages/QRScanner';
 import TeacherDetails from './pages/Teacher/TeacherDetails';
 import TeacherQR from './pages/Teacher/TeacherQR';
 import AdminDashboard from './pages/Dashboard/AdminDashboard';

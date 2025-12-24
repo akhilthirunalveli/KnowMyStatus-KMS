@@ -63,14 +63,15 @@ const QRScanner = () => {
     <div className="min-h-screen bg-[#050505] cabinet-grotesk overflow-hidden relative selection:bg-red-500/30">
 
       {/* Show header only when scanning or viewing results, otherwise Landing has its own specific header/layout */}
-      {(isScanning || scannedData) && (
+      {/* Show header only when viewing results. During scanning, ScannerView handles the UI. */}
+      {scannedData && (
         <ScannerHeader
           title={scannedData ? "Teacher Found" : "QR Scanner"}
           subtitle={scannedData ? "View status details below" : "Point camera at a teacher's QR code"}
         />
       )}
 
-      <main className={`h-screen flex flex-col items-center justify-center ${isScanning || scannedData ? 'pt-24 pb-12 px-4' : 'p-4'}`}>
+      <main className={`h-screen flex flex-col items-center justify-center ${isScanning || scannedData ? 'md:pt-24 md:pb-12 md:px-4' : 'p-4'}`}>
 
         {error ? (
           <div className="pt-20 w-full flex justify-center">
@@ -79,7 +80,7 @@ const QRScanner = () => {
         ) : scannedData ? (
           <ResultCard scannedData={scannedData} onReset={handleReset} />
         ) : isScanning ? (
-          <div className="w-full flex-1 flex flex-col items-center justify-center">
+          <div className="w-full h-full md:h-auto md:w-full md:flex-1 flex flex-col items-center justify-center">
             <ScannerView
               onScanSuccess={handleScanSuccess}
               onError={(err) => setError(err)}
