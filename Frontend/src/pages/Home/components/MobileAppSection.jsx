@@ -1,5 +1,5 @@
-import React from "react";
-import { ArrowRight } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowRight, Check, Wifi, Battery, Signal } from "lucide-react";
 
 export const MobileAppSection = () => {
     return (
@@ -55,19 +55,19 @@ export const MobileAppSection = () => {
                                 <div className="absolute top-0 w-full h-12 z-20 flex justify-between px-8 items-end pb-2 text-white font-medium text-[13px]">
                                     <span className="tracking-wide">9:41</span>
                                     <div className="flex gap-1.5 items-center">
-                                        <div className="w-4 h-4 bg-white/20 rounded-sm flex items-center justify-center"><div className="w-0.5 h-2 bg-white rounded-full"></div></div>
-                                        <div className="w-6 h-3 bg-white/20 rounded-[4px] relative overflow-hidden"><div className="absolute inset-0 bg-white w-[80%]"></div></div>
+                                        <Signal size={14} className="text-white" />
+                                        <Wifi size={14} className="text-white" />
+                                        <Battery size={14} className="text-white" />
                                     </div>
                                 </div>
 
                                 {/* Dynamic Island */}
                                 <div className="absolute top-3 left-1/2 -translate-x-1/2 w-[110px] h-[32px] bg-black rounded-full z-30 flex items-center justify-center">
-                                    <div className="w-20 h-20 bg-black/50 blur-xl absolute -z-10"></div>
                                 </div>
 
                                 {/* Home Screen Icons Grid */}
                                 <div className="absolute top-20 left-6 right-6 grid grid-cols-4 gap-x-5 gap-y-7 opacity-90">
-                                    {[...Array(16)].map((_, i) => (
+                                    {[...Array(8)].map((_, i) => (
                                         <div key={i} className="flex flex-col items-center gap-1 group/icon">
                                             <div className={`w-[54px] h-[54px] rounded-[14px] ${i === 2 ? 'bg-[#ff3333]' : 'bg-white/10 backdrop-blur-md'} flex items-center justify-center transition-transform duration-300 group-hover/icon:scale-105 shadow-lg`}>
                                                 {i === 2 && <div className="w-7 h-7 bg-white rounded-lg opacity-90"></div>}
@@ -76,55 +76,38 @@ export const MobileAppSection = () => {
                                     ))}
                                 </div>
 
-                                {/* The Widget - Interactive visual */}
-                                <div className="absolute bottom-32 left-6 right-6 h-auto min-h-[170px] bg-[#1c1c1e]/80 backdrop-blur-2xl border border-white/10 rounded-[28px] p-4 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] z-20 flex flex-col ring-1 ring-white/5 animate-float will-change-transform group/widget">
-                                    {/* Widget Header */}
-                                    <div className="flex items-center justify-between mb-4 px-1">
-                                        <div className="flex items-center gap-2.5">
-                                            <div className="w-6 h-6 rounded-[8px] bg-gradient-to-br from-[#ff3333] to-[#cc0000] flex items-center justify-center shadow-lg shadow-red-900/20 border border-white/10">
-                                                <span className="text-[10px] font-black text-white cabinet-grotesk">K</span>
-                                            </div>
-                                            <span className="text-[13px] font-bold text-white/90 tracking-wide font-sans">Status</span>
-                                        </div>
-                                        <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div>
-                                    </div>
-
+                                {/* The Widget - Premium Interactive visual */}
+                                <div className="absolute bottom-32 left-6 right-6 h-auto min-h-[170px] bg-[#1c1c1e]/60 backdrop-blur-xl border border-white/10 rounded-[28px] p-5 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] z-20 flex flex-col ring-1 ring-white/5 animate-float will-change-transform group/widget overflow-hidden">
+                                    {/* Background Gradient Effect */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none"></div>
                                     {/* Active Status Config */}
-                                    <div className="flex-1 bg-gradient-to-b from-[#2c2c2e] to-[#1e1e20] rounded-[20px] p-3.5 flex items-center gap-4 mb-3 border border-white/5 relative overflow-hidden group/item transition-all duration-300 hover:border-white/10 shadow-inner">
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+                                    <div className="flex-1 bg-gradient-to-b from-[#2c2c2e]/80 to-[#1e1e20]/90 rounded-[22px] p-4 flex items-center gap-4 mb-4 border border-white/5 relative overflow-hidden group/item transition-all duration-300 hover:border-white/10 hover:shadow-lg shadow-black/20">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
 
-                                        <div className="relative z-10 w-11 h-11 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)] group-hover/item:scale-105 transition-transform duration-300 ring-4 ring-emerald-500/10">
-                                            <svg className="w-6 h-6 text-white drop-shadow-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                        <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-500 to-emerald-400 flex items-center justify-center shadow-[0_4px_12px_rgba(16,185,129,0.3)] group-hover/item:scale-105 transition-transform duration-300 ring-4 ring-emerald-500/10">
+                                            <Check size={20} className="text-white drop-shadow-sm" strokeWidth={3} />
                                         </div>
 
-                                        <div className="z-10 min-w-0">
+                                        <div className="z-10 min-w-0 flex-1">
                                             <p className="text-[10px] text-gray-400 font-medium mb-0.5 uppercase tracking-wider font-sans">Current Status</p>
-                                            <p className="text-[17px] font-bold text-white tracking-tight leading-none cabinet-grotesk">Available</p>
-                                        </div>
-
-                                        <div className="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white/80 hover:bg-white/10 transition-colors cursor-pointer">
-                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
+                                            <p className="text-[19px] font-bold text-white tracking-tight leading-none cabinet-grotesk">Available</p>
                                         </div>
                                     </div>
 
-                                    {/* Quick Toggles */}
-                                    <div className="grid grid-cols-3 gap-2.5">
-                                        <div className="h-9 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#323234] transition-colors cursor-pointer group/btn active:scale-95 duration-100">
-                                            <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)] group-hover/btn:scale-110 transition-transform"></div>
-                                        </div>
-                                        <div className="h-9 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#323234] transition-colors cursor-pointer group/btn active:scale-95 duration-100">
-                                            <div className="w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)] group-hover/btn:scale-110 transition-transform"></div>
-                                        </div>
-                                        <div className="h-9 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#323234] transition-colors cursor-pointer group/btn active:scale-95 duration-100">
-                                            <div className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] group-hover/btn:scale-110 transition-transform"></div>
-                                        </div>
+                                    {/* Quick Actions */}
+                                    <div className="grid grid-cols-3 gap-2 relative z-10">
+                                        {['bg-red-500', 'bg-yellow-500', 'bg-blue-500'].map((color, idx) => (
+                                            <div key={idx} className="h-10 rounded-xl bg-[#2c2c2e]/60 border border-white/5 flex items-center justify-center hover:bg-[#3a3a3c] transition-all cursor-pointer group/btn active:scale-95 duration-200">
+                                                <div className={`w-3.5 h-3.5 rounded-full ${color} shadow-lg opacity-90 group-hover/btn:scale-125 transition-transform duration-300`}></div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 
                                 {/* Dock */}
                                 <div className="absolute bottom-5 left-4 right-4 h-[88px] bg-white/5 backdrop-blur-2xl rounded-[30px] flex items-center justify-around px-2 z-10 border border-white/5">
                                     {[...Array(4)].map((_, i) => (
-                                        <div key={i} className="w-[54px] h-[54px] bg-gradient-to-tr from-white/10 to-white/5 rounded-[14px] shadow-sm"></div>
+                                        <div key={i} className="w-[54px] h-[54px] bg-gradient-to-tr from-white/10 to-white/5 rounded-[14px] shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer"></div>
                                     ))}
                                 </div>
 

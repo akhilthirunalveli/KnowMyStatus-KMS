@@ -29,7 +29,7 @@ export const TechStackSection = () => {
                             mode="after"
                             spotlightColor={tech.color}
                             key={index}
-                            className="group h-full flex flex-col items-center justify-center p-6 bg-black/5 hover:bg-black/10 border-2 border-black/10"
+                            className="group h-full flex flex-col items-center justify-center p-6 bg-black/5 hover:bg-black/10 border border-black/10"
                         >
                             <div className="relative z-10 flex flex-col items-center gap-4 text-center">
                                 <div className="p-3 rounded-full bg-black/5 group-hover:bg-black/50 transition-colors">
@@ -37,7 +37,7 @@ export const TechStackSection = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-white font-bold cabinet-grotesk text-lg tracking-wide">{tech.name}</h3>
-                                    <p className="text-xs text-gray-500 font-mono mt-1 uppercase tracking-wider">{tech.description}</p>
+                                    <p className="text-xs text-white/ mt-1 tracking-wide">{tech.description}</p>
                                 </div>
                             </div>
                         </SpotlightCard>

@@ -243,7 +243,7 @@ const StudentPage = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Search by name, subject, or department..."
+                    placeholder=""
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}

@@ -38,7 +38,7 @@ export const SpotlightCard = ({ children, className = "", spotlightColor = "rgba
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
 
-    const rgbaColor = spotlightColor.startsWith('#') ? hexToRgba(spotlightColor, 0.15) : spotlightColor;
+    const rgbaColor = spotlightColor.startsWith('#') ? hexToRgba(spotlightColor, 0.70) : spotlightColor;
 
     return (
         <div
