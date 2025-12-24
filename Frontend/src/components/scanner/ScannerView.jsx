@@ -3,13 +3,6 @@ import { Camera, RotateCcw, X, Zap, ScanLine } from 'lucide-react';
 import jsQR from 'jsqr';
 import { toast } from 'react-hot-toast';
 
-import VConsole from 'vconsole';
-
-// Initialize vConsole for mobile debugging
-if (typeof window !== 'undefined') {
-    const vConsole = new VConsole();
-}
-
 const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
     const videoRef = useRef(null);
 
