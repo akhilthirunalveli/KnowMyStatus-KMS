@@ -77,43 +77,46 @@ export const MobileAppSection = () => {
                                 </div>
 
                                 {/* The Widget - Interactive visual */}
-                                <div className="absolute bottom-32 left-6 right-6 h-[170px] bg-[#1c1c1e]/90 backdrop-blur-xl border border-white/10 rounded-[26px] p-4 shadow-2xl z-20 flex flex-col ring-1 ring-black/5 animate-float will-change-transform">
+                                <div className="absolute bottom-32 left-6 right-6 h-auto min-h-[170px] bg-[#1c1c1e]/80 backdrop-blur-2xl border border-white/10 rounded-[28px] p-4 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] z-20 flex flex-col ring-1 ring-white/5 animate-float will-change-transform group/widget">
                                     {/* Widget Header */}
-                                    <div className="flex items-center justify-between mb-3 px-1">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-5 h-5 rounded-[6px] bg-[#ff3333] flex items-center justify-center shadow-md">
-                                                <span className="text-[9px] font-bold text-white">K</span>
+                                    <div className="flex items-center justify-between mb-4 px-1">
+                                        <div className="flex items-center gap-2.5">
+                                            <div className="w-6 h-6 rounded-[8px] bg-gradient-to-br from-[#ff3333] to-[#cc0000] flex items-center justify-center shadow-lg shadow-red-900/20 border border-white/10">
+                                                <span className="text-[10px] font-black text-white cabinet-grotesk">K</span>
                                             </div>
-                                            <span className="text-[10px] font-semibold text-white/60 uppercase tracking-wide">Status</span>
+                                            <span className="text-[13px] font-bold text-white/90 tracking-wide font-sans">Status</span>
                                         </div>
                                         <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div>
                                     </div>
 
                                     {/* Active Status Config */}
-                                    <div className="flex-1 bg-[#2c2c2e] rounded-[18px] p-3 flex items-center gap-3 mb-2 border border-white/5 relative overflow-hidden group/widget transition-colors hover:bg-[#3a3a3c] cursor-pointer">
-                                        <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-50"></div>
-                                        <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center shadow-lg shadow-green-900/50 z-10 shrink-0">
-                                            <svg className="w-5 h-5 text-black fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                                    <div className="flex-1 bg-gradient-to-b from-[#2c2c2e] to-[#1e1e20] rounded-[20px] p-3.5 flex items-center gap-4 mb-3 border border-white/5 relative overflow-hidden group/item transition-all duration-300 hover:border-white/10 shadow-inner">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+
+                                        <div className="relative z-10 w-11 h-11 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)] group-hover/item:scale-105 transition-transform duration-300 ring-4 ring-emerald-500/10">
+                                            <svg className="w-6 h-6 text-white drop-shadow-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                         </div>
+
                                         <div className="z-10 min-w-0">
-                                            <p className="text-[10px] text-gray-400 font-medium truncate">Current Status</p>
-                                            <p className="text-base font-bold text-white tracking-tight truncate">Available</p>
+                                            <p className="text-[10px] text-gray-400 font-medium mb-0.5 uppercase tracking-wider font-sans">Current Status</p>
+                                            <p className="text-[17px] font-bold text-white tracking-tight leading-none cabinet-grotesk">Available</p>
                                         </div>
-                                        <div className="ml-auto px-2 py-1 rounded-full bg-white/10 border border-white/5 text-[9px] font-medium text-white/80 whitespace-nowrap">
-                                            Just now
+
+                                        <div className="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white/80 hover:bg-white/10 transition-colors cursor-pointer">
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
                                         </div>
                                     </div>
 
                                     {/* Quick Toggles */}
-                                    <div className="grid grid-cols-3 gap-2">
-                                        <div className="h-8 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#3a3a3c] transition-colors cursor-pointer group/btn">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.4)] group-hover/btn:scale-110 transition-transform"></div>
+                                    <div className="grid grid-cols-3 gap-2.5">
+                                        <div className="h-9 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#323234] transition-colors cursor-pointer group/btn active:scale-95 duration-100">
+                                            <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)] group-hover/btn:scale-110 transition-transform"></div>
                                         </div>
-                                        <div className="h-8 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#3a3a3c] transition-colors cursor-pointer group/btn">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500 shadow-[0_0_6px_rgba(234,179,8,0.4)] group-hover/btn:scale-110 transition-transform"></div>
+                                        <div className="h-9 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#323234] transition-colors cursor-pointer group/btn active:scale-95 duration-100">
+                                            <div className="w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)] group-hover/btn:scale-110 transition-transform"></div>
                                         </div>
-                                        <div className="h-8 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#3a3a3c] transition-colors cursor-pointer group/btn">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.4)] group-hover/btn:scale-110 transition-transform"></div>
+                                        <div className="h-9 rounded-xl bg-[#2c2c2e]/80 border border-white/5 flex items-center justify-center hover:bg-[#323234] transition-colors cursor-pointer group/btn active:scale-95 duration-100">
+                                            <div className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] group-hover/btn:scale-110 transition-transform"></div>
                                         </div>
                                     </div>
                                 </div>

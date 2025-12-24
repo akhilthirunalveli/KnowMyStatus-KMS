@@ -13,7 +13,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
   try {
     console.log('QR Generation request received for teacher:', req.user.id);
     const teacherId = req.user.id;
-    
+
     // Get teacher details
     const { data: teacher, error: teacherError } = await supabase
       .from('teachers')
@@ -45,7 +45,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
         ? new Date(teacher.status_until || teacher.available_until).toLocaleDateString()
         : null,
       expected_return_time: (teacher.status_until || teacher.available_until)
-        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         : null
     };
 
@@ -63,7 +63,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
     console.log('QR code generated, uploading to Supabase...');
     // Upload to Supabase Storage
     const uploadResult = await supabaseStorage.uploadQRCode(qrBuffer, teacherId);
-    
+
     if (!uploadResult.success) {
       console.error('Upload failed:', uploadResult.error);
       return res.status(500).json({ error: 'Failed to upload QR code' });
@@ -131,7 +131,7 @@ router.get('/teacher/:teacherId', async (req, res) => {
         ? new Date(teacher.status_until || teacher.available_until).toLocaleDateString()
         : null,
       expected_return_time: (teacher.status_until || teacher.available_until)
-        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         : null
     };
 
@@ -163,8 +163,8 @@ router.post('/scan', async (req, res) => {
     }
 
     // Validate teacher data
-    if (!teacherData.teacherId || !teacherData.name) {
-      return res.status(400).json({ error: 'Invalid teacher data in QR code' });
+    if (!teacherData.teacherId) {
+      return res.status(400).json({ error: 'Invalid teacher data in QR code - ID missing' });
     }
 
     // Get updated teacher details from database
@@ -246,7 +246,7 @@ router.get('/my-qr', authenticateToken, async (req, res) => {
         ? new Date(teacher.status_until || teacher.available_until).toLocaleDateString()
         : null,
       expected_return_time: (teacher.status_until || teacher.available_until)
-        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        ? new Date(teacher.status_until || teacher.available_until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         : null
     };
 

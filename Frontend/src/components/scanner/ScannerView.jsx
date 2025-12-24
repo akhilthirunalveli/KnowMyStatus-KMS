@@ -9,9 +9,8 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
     const streamRef = useRef(null);
     const scanIntervalRef = useRef(null);
 
-    const [scanning, setScanning] = useState(false);
-    const [currentCamera, setCurrentCamera] = useState('environment'); // 'environment' or 'user'
-    const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
+    const [currentCameraId, setCurrentCameraId] = useState(null);
+    const [cameras, setCameras] = useState([]);
 
     // QR Detection Logic
     const detectQRCode = useCallback(() => {
@@ -45,24 +44,22 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
     }, [onScanSuccess]);
 
     // Start Camera
-    const startCamera = useCallback(async () => {
+    const startCamera = useCallback(async (deviceId = null) => {
         try {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
-            setHasMultipleCameras(videoDevices.length > 1);
-
-            let preferredDeviceId = null;
-            if (currentCamera === 'environment') {
-                const backCam = videoDevices.find(d => d.label.toLowerCase().includes('back') || d.label.toLowerCase().includes('environment'));
-                if (backCam) preferredDeviceId = backCam.deviceId;
-            }
+            setCameras(videoDevices);
 
             const constraints = {
                 video: {
-                    facingMode: preferredDeviceId ? undefined : { ideal: currentCamera },
-                    deviceId: preferredDeviceId ? { exact: preferredDeviceId } : undefined,
+                    // If a specific deviceId is requested (user switched), use it.
+                    // Otherwise, if no deviceId is current, default to 'environment' (OS picks best back cam).
+                    deviceId: deviceId ? { exact: deviceId } : undefined,
+                    facingMode: deviceId ? undefined : { ideal: 'environment' },
                     width: { ideal: 1920 },
                     height: { ideal: 1080 },
+                    // Advanced constraints for better focus if supported
+                    focusMode: 'continuous',
                 },
                 audio: false
             };
@@ -72,6 +69,13 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
                 streamRef.current = stream;
+
+                // Update current camera ID from the active stream track to validation
+                const track = stream.getVideoTracks()[0];
+                const settings = track.getSettings();
+                if (settings.deviceId) {
+                    setCurrentCameraId(settings.deviceId);
+                }
 
                 videoRef.current.onloadedmetadata = () => {
                     videoRef.current.play().catch(e => console.error("Play error", e));
@@ -89,7 +93,7 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
             console.error("Camera start error:", err);
             onError(err.name);
         }
-    }, [currentCamera, detectQRCode, onError, loading]);
+    }, [detectQRCode, onError, loading]);
 
     // Stop Camera
     const stopCamera = useCallback(() => {
@@ -105,8 +109,17 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
     }, []);
 
     const switchCamera = () => {
+        if (cameras.length < 2) return;
+
         stopCamera();
-        setCurrentCamera(prev => prev === 'environment' ? 'user' : 'environment');
+
+        // Find current index
+        const currentIndex = cameras.findIndex(c => c.deviceId === currentCameraId);
+        // Next index (wrap around)
+        const nextIndex = (currentIndex + 1) % cameras.length;
+        const nextDevice = cameras[nextIndex];
+
+        startCamera(nextDevice.deviceId);
     };
 
     // Lifecycle
@@ -193,7 +206,7 @@ const ScannerView = ({ onScanSuccess, onError, loading, onCancel }) => {
                         </div>
                     </div>
 
-                    {hasMultipleCameras && (
+                    {cameras.length > 1 && (
                         <button
                             onClick={switchCamera}
                             className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 hover:bg-white/20 transition-all duration-300"

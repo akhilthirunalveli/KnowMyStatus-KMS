@@ -22,13 +22,38 @@ const QRScanner = () => {
     if (loading) return;
 
     try {
-      // Parse data if it's JSONString, else use as raw ID
+      console.log("Raw Scanned Data:", data); // Debugging
+
       let qrPayload = {};
+
+      // 1. Try JSON Parse
       try {
         qrPayload = JSON.parse(data);
       } catch (e) {
-        qrPayload = { teacherId: data };
+        // 2. Check if it's a URL
+        if (typeof data === 'string' && (data.startsWith('http') || data.includes('knowmystatus'))) {
+          try {
+            // Attempt to extract ID from URL path (assuming /teacher/:id)
+            // Remove trailing slash if present
+            const cleanData = data.endsWith('/') ? data.slice(0, -1) : data;
+            const parts = cleanData.split('/');
+            const potentialId = parts[parts.length - 1];
+
+            if (potentialId) {
+              qrPayload = { teacherId: potentialId };
+            } else {
+              qrPayload = { teacherId: data };
+            }
+          } catch (urlErr) {
+            qrPayload = { teacherId: data };
+          }
+        } else {
+          // 3. Fallback to raw data as ID
+          qrPayload = { teacherId: data };
+        }
       }
+
+      console.log("Processed Payload:", qrPayload);
 
       setLoading(true);
       const response = await axios.post('/api/qr/scan', { qrData: qrPayload });
@@ -37,12 +62,19 @@ const QRScanner = () => {
         setScannedData(response.data.teacher);
         setIsScanning(false);
         toast.success('Found teacher!');
+        // Audio feedback
+        const audio = new Audio('/success.mp3'); // Optional if you have it, or ignore
+        audio.play().catch(() => { });
       } else {
         toast.error('Teacher not found');
+        setError('Teacher not found in database');
       }
     } catch (err) {
       console.error("Scan processing error:", err);
-      toast.error('Invalid QR Code');
+      // More descriptive error
+      const msg = err.response?.data?.message || 'Invalid QR Code';
+      toast.error(msg);
+      setError(msg);
     } finally {
       setLoading(false);
     }
