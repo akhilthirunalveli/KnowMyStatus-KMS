@@ -8,8 +8,8 @@ const ResultCard = ({ scannedData, onReset }) => {
 
     return (
         <div className="w-full max-w-sm mx-auto animate-rise-up perspective-1000">
-            {/* Main Glass Card */}
-            <div className="relative bg-[#1c1c1e]/80 backdrop-blur-3xl rounded-[40px] overflow-hidden border border-white/10 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] ring-1 ring-white/5 group">
+            {/* Main Premium Card */}
+            <div className="relative bg-black rounded-[40px] overflow-hidden border border-white/10 shadow-2xl ring-1 ring-white/5 group">
 
                 {/* Dynamic Status Header */}
                 <div className="relative h-36 w-full p-6 flex justify-between items-start z-0">
@@ -101,13 +101,13 @@ const ResultCard = ({ scannedData, onReset }) => {
                     {/* Quick Access Grid */}
                     <div className="grid grid-cols-2 gap-3 mb-8">
                         {scannedData.office && (
-                            <div className="p-4 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-white/10 transition-colors group/item">
+                            <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors group/item">
                                 <MapPin className="w-5 h-5 text-gray-500 mb-3 group-hover/item:text-white transition-colors" />
                                 <p className="text-[10px] text-gray-600 uppercase tracking-wider font-medium">Office</p>
                                 <p className="text-sm text-gray-200 font-bold max-w-full truncate">{scannedData.office}</p>
                             </div>
                         )}
-                        <a href={`mailto:${scannedData.email}`} className="p-4 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-white/10 transition-colors group/item hover:bg-white/5 cursor-pointer">
+                        <a href={`mailto:${scannedData.email}`} className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors group/item hover:bg-white/10 cursor-pointer">
                             <Mail className="w-5 h-5 text-gray-500 mb-3 group-hover/item:text-white transition-colors" />
                             <p className="text-[10px] text-gray-600 uppercase tracking-wider font-medium">Email</p>
                             <p className="text-sm text-gray-200 font-bold max-w-full truncate">{scannedData.email ? scannedData.email.split('@')[0] : 'Contact'}</p>
