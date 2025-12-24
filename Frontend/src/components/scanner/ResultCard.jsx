@@ -12,38 +12,50 @@ const ResultCard = ({ scannedData, onReset }) => {
             <div className="relative bg-[#1c1c1e]/80 backdrop-blur-3xl rounded-[40px] overflow-hidden border border-white/10 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] ring-1 ring-white/5 group">
 
                 {/* Dynamic Status Header */}
-                <div className={`relative h-32 w-full overflow-hidden ${isAvailable ? 'bg-gradient-to-br from-emerald-600 to-emerald-900' : 'bg-gradient-to-br from-red-600 to-red-900'}`}>
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-                    <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                <div className="relative h-36 w-full p-6 flex justify-between items-start z-0">
+                    <div className={`absolute inset-0 ${isAvailable ? 'bg-gradient-to-br from-emerald-600/90 via-emerald-800/80 to-black/50' : 'bg-gradient-to-br from-red-600/90 via-red-800/80 to-black/50'} z-0`}></div>
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-30 mix-blend-overlay z-0"></div>
 
-                    {/* Status Badge Pulse */}
-                    <div className="absolute top-6 right-6">
-                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-md border border-white/10 ${isAvailable ? 'text-emerald-100' : 'text-red-100'}`}>
-                            <span className={`w-2 h-2 rounded-full animate-pulse ${isAvailable ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
-                            <span className="text-[10px] font-bold uppercase tracking-wider">{isAvailable ? 'Live' : 'Busy'}</span>
+                    {/* Brand Watermark */}
+                    <div className="relative z-10 flex items-center gap-2 opacity-60">
+                        <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_white]"></div>
+                        <span className="text-[10px] font-bold text-white tracking-[0.2em] cabinet-grotesk uppercase">KMS ID</span>
+                    </div>
+
+                    {/* Status Badge */}
+                    <div className="relative z-10">
+                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-md border border-white/10 shadow-lg ${isAvailable ? 'text-emerald-100 ring-1 ring-emerald-500/20' : 'text-red-100 ring-1 ring-red-500/20'}`}>
+                            <span className={`relative flex h-2 w-2`}>
+                                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isAvailable ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+                                <span className={`relative inline-flex rounded-full h-2 w-2 ${isAvailable ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
+                            </span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider mobile-font-fix">{isAvailable ? 'Live' : 'Busy'}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Profile Content */}
-                <div className="px-8 pb-8 relative">
+                <div className="px-6 pb-8 relative z-10 -mt-12">
 
                     {/* Avatar Stacking */}
-                    <div className="relative -mt-16 mb-6 flex justify-center">
-                        <div className="relative">
-                            <div className={`absolute inset-0 rounded-[32px] blur-2xl opacity-40 ${isAvailable ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
-                            <div className="w-32 h-32 rounded-[32px] bg-[#1c1c1e] border-[6px] border-[#1c1c1e] flex items-center justify-center relative z-10 overflow-hidden shadow-2xl">
-                                {scannedData.photo_url ? (
-                                    <img src={scannedData.photo_url} alt={scannedData.name} className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center">
-                                        <User className="w-12 h-12 text-white/20" />
-                                    </div>
-                                )}
+                    <div className="flex justify-center mb-5">
+                        <div className="relative group/avatar cursor-pointer">
+                            <div className={`absolute -inset-4 rounded-full blur-xl opacity-40 transition-all duration-500 group-hover/avatar:opacity-60 ${isAvailable ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+                            <div className="relative w-28 h-28 rounded-full p-1 bg-gradient-to-b from-white/20 to-transparent shadow-2xl">
+                                <div className="w-full h-full rounded-full bg-[#1c1c1e] p-1 overflow-hidden relative">
+                                    {scannedData.photo_url ? (
+                                        <img src={scannedData.photo_url} alt={scannedData.name} className="w-full h-full object-cover rounded-full" />
+                                    ) : (
+                                        <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center rounded-full">
+                                            <User className="w-10 h-10 text-white/20" />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+
                             {/* Status Indicator Icon */}
-                            <div className={`absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl border-4 border-[#1c1c1e] flex items-center justify-center z-20 ${isAvailable ? 'bg-emerald-500 text-black' : 'bg-red-500 text-white'}`}>
-                                {isAvailable ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
+                            <div className={`absolute bottom-0 right-0 w-8 h-8 rounded-full border-[3px] border-[#1c1c1e] flex items-center justify-center shadow-lg ${isAvailable ? 'bg-emerald-500 text-black' : 'bg-red-500 text-white'}`}>
+                                {isAvailable ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                             </div>
                         </div>
                     </div>

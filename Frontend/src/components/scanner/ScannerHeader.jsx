@@ -4,7 +4,7 @@ import { Home, User } from 'lucide-react';
 
 const ScannerHeader = ({ title = "QR Scanner", subtitle = "Scan teacher QR codes to access their contact information and current status." }) => {
     return (
-        <header className="bg-black px-4 sm:px-6 py-4 absolute top-0 w-full z-10">
+        <header className="bg-black/20 backdrop-blur-xl border-b border-white/5 px-4 sm:px-6 py-4 absolute top-0 w-full z-10">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 max-w-7xl mx-auto">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full sm:w-auto">
                     {/* Brand */}
