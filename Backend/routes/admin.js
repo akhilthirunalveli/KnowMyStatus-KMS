@@ -110,6 +110,18 @@ router.patch('/teachers/:id/status', async (req, res) => {
     const { id } = req.params;
     const { status, status_note, status_until } = req.body;
 
+    // Get current teacher status before updating
+    const { data: currentTeacher, error: fetchError } = await supabase
+      .from('teachers')
+      .select('status, status_note, email')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) {
+      console.error('Error fetching teacher:', fetchError);
+      return res.status(500).json({ error: 'Failed to fetch teacher data' });
+    }
+
     const updateData = { status };
     if (status_note !== undefined) updateData.status_note = status_note;
     if (status_until !== undefined) updateData.status_until = status_until;
@@ -124,6 +136,24 @@ router.patch('/teachers/:id/status', async (req, res) => {
     if (error) {
       console.error('Error updating teacher status:', error);
       return res.status(500).json({ error: 'Failed to update teacher status' });
+    }
+
+    // Record status change in history if status was changed
+    if (status && status !== currentTeacher.status) {
+      try {
+        await supabase
+          .from('status_history')
+          .insert([{
+            teacher_id: id,
+            previous_status: currentTeacher.status,
+            new_status: status,
+            status_note: status_note || currentTeacher.status_note,
+            changed_by: 'admin'
+          }]);
+      } catch (historyError) {
+        console.error('Error recording status history:', historyError);
+        // Don't fail the request if history recording fails
+      }
     }
 
     res.json({ 

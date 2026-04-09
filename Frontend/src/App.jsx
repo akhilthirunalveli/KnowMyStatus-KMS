@@ -7,6 +7,7 @@ import Signup from './pages/Auth/Signup';
 import TeacherDashboard from './pages/Teacher/TeacherDashboard';
 import StudentPage from './pages/Student/StudentPage';
 import TeacherProfile from './pages/Teacher/TeacherProfile';
+import StatusHistory from './pages/Teacher/StatusHistory';
 import QRScanner from './pages/QRScanner';
 import TeacherDetails from './pages/Teacher/TeacherDetails';
 import TeacherQR from './pages/Teacher/TeacherQR';
@@ -80,6 +81,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <TeacherProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teacher/status-history"
+            element={
+              <ProtectedRoute>
+                <StatusHistory />
               </ProtectedRoute>
             }
           />

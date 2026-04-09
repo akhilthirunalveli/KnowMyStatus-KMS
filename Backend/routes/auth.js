@@ -150,6 +150,18 @@ router.put('/profile', authenticateToken, async (req, res) => {
   try {
     const { name, subject, department, phone, office, status, status_until, available_until, status_note } = req.body;
 
+    // Get current teacher data to check for status changes
+    const { data: currentTeacher, error: fetchError } = await supabase
+      .from('teachers')
+      .select('status, status_note')
+      .eq('id', req.user.id)
+      .single();
+
+    if (fetchError) {
+      console.error('Fetch error:', fetchError);
+      return res.status(500).json({ error: 'Failed to fetch current profile' });
+    }
+
     const updateData = {};
     if (name) updateData.name = name;
     if (subject) updateData.subject = subject;
@@ -174,6 +186,24 @@ router.put('/profile', authenticateToken, async (req, res) => {
       return res.status(500).json({ error: 'Failed to update profile' });
     }
 
+    // Record status change in history if status was updated
+    if (status && status !== currentTeacher.status) {
+      try {
+        await supabase
+          .from('status_history')
+          .insert([{
+            teacher_id: req.user.id,
+            previous_status: currentTeacher.status,
+            new_status: status,
+            status_note: status_note || currentTeacher.status_note,
+            changed_by: req.user.email
+          }]);
+      } catch (historyError) {
+        console.error('Error recording status history:', historyError);
+        // Don't fail the request if history recording fails
+      }
+    }
+
     // Remove password from response
     const { password: _, ...teacherWithoutPassword } = teacher;
 
@@ -188,4 +218,4 @@ router.put('/profile', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

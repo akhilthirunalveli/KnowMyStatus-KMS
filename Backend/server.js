@@ -12,6 +12,7 @@ const teacherRoutes = require('./routes/teachers');
 const studentRoutes = require('./routes/students');
 const qrRoutes = require('./routes/qr');
 const adminRoutes = require('./routes/admin');
+const statusHistoryRoutes = require('./routes/statusHistory');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -89,6 +90,7 @@ app.use('/api/teachers', teacherRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/qr', qrRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/status-history', statusHistoryRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
