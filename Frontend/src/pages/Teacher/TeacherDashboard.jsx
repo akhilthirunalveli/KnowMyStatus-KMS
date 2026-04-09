@@ -13,7 +13,8 @@ import {
   LogOut,
   ArrowUpRight,
   User,
-  Activity
+  Activity,
+  History
 } from 'lucide-react';
 import LoadingBar from '../../components/common/LoadingBar';
 
@@ -343,13 +344,22 @@ const TeacherDashboard = () => {
                   {statusNote && <p className="text-sm text-gray-400 mt-2 bg-white/5 p-3 rounded-lg border border-white/5 italic">"{statusNote}"</p>}
                 </div>
               </div>
-              <Link
-                to="/teacher/profile"
-                className="mt-8 w-full bg-white/5 text-white font-medium py-3 px-4 rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2"
-              >
-                <Settings className="h-4 w-4" />
-                Edit Profile
-              </Link>
+              <div className="mt-8 space-y-3">
+                <Link
+                  to="/teacher/status-history"
+                  className="w-full bg-[#ff3333]/10 text-[#ff3333] font-medium py-3 px-4 rounded-xl transition-all border border-[#ff3333]/20 flex items-center justify-center gap-2 hover:bg-[#ff3333]/20"
+                >
+                  <History className="h-4 w-4" />
+                  Status History
+                </Link>
+                <Link
+                  to="/teacher/profile"
+                  className="w-full bg-white/5 text-white font-medium py-3 px-4 rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2"
+                >
+                  <Settings className="h-4 w-4" />
+                  Edit Profile
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -29,15 +29,30 @@ CREATE TABLE IF NOT EXISTS qr_scans (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Status History table for tracking status changes over time
+CREATE TABLE IF NOT EXISTS status_history (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    teacher_id UUID REFERENCES teachers(id) ON DELETE CASCADE,
+    previous_status VARCHAR(32),
+    new_status VARCHAR(32) NOT NULL,
+    status_note TEXT,
+    changed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    changed_by VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_teachers_email ON teachers(email);
 CREATE INDEX IF NOT EXISTS idx_teachers_department ON teachers(department);
 CREATE INDEX IF NOT EXISTS idx_qr_scans_teacher_id ON qr_scans(teacher_id);
 CREATE INDEX IF NOT EXISTS idx_qr_scans_scanned_at ON qr_scans(scanned_at);
+CREATE INDEX IF NOT EXISTS idx_status_history_teacher_id ON status_history(teacher_id);
+CREATE INDEX IF NOT EXISTS idx_status_history_changed_at ON status_history(changed_at);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE teachers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE qr_scans ENABLE ROW LEVEL SECURITY;
+ALTER TABLE status_history ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies if they exist
 DROP POLICY IF EXISTS "Public read access to teachers" ON teachers;
@@ -66,6 +81,15 @@ CREATE POLICY "Public insert access to qr_scans" ON qr_scans
 
 -- Allow public read access to scan analytics
 CREATE POLICY "Public read access to qr_scans" ON qr_scans
+    FOR SELECT USING (true);
+
+-- RLS Policies for status_history table
+-- Allow public insert for status history tracking
+CREATE POLICY "Public insert access to status_history" ON status_history
+    FOR INSERT WITH CHECK (true);
+
+-- Allow public read access to status history
+CREATE POLICY "Public read access to status_history" ON status_history
     FOR SELECT USING (true);
 
 -- Function to update updated_at timestamp
